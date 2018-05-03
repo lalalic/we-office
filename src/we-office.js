@@ -24,6 +24,7 @@ function reducer(state={},{type,payload}){
 export default compose(
 	withProps(()=>({
 		project,
+		title:"we-office",
 		appId:project.config.appId,//get from app.qili2.com
 		reducers:{[DOMAIN]:reducer,[weDOMAIN]:weReducer},
 		persistStoreConfig:{blacklist:[weDOMAIN]}

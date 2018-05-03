@@ -10,4 +10,10 @@ import "we-edit-representation-html"
 import "we-edit-representation-text"
 import "we-edit-loader-stream-browser"
 
-QiliApp.render(<WeOffice>{<DefaultOffice/>}</WeOffice>)
+QiliApp.render(
+    <WeOffice>
+        <DefaultOffice
+            title="we-office"
+            />
+    </WeOffice>
+)
