@@ -6,14 +6,7 @@
   },
   "dependencies": {
     "qili-app": "^1.2.11",
-    "we-edit": "../we-edit/packages/we-edit",
-    "we-edit-input-docx": "../we-edit/packages/we-edit-input-docx",
-    "we-edit-loader-stream-browser": "../we-edit/packages/we-edit-loader-stream-browser",
-    "we-edit-office": "../we-edit/packages/we-edit-office",
-    "we-edit-output-svg": "../we-edit/packages/we-edit-output-svg",
-    "we-edit-representation-html": "../we-edit/packages/we-edit-representation-html",
-    "we-edit-representation-pagination": "../we-edit/packages/we-edit-representation-pagination",
-    "we-edit-representation-text": "../we-edit/packages/we-edit-representation-text"
+    "we-edit": "^3.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -44,14 +37,14 @@
   "resolutions": {
     "*/react": "^16.0.0",
     "*/react-dom": "^16.0.0",
-    "*/graphql": "^0.12.0",
+    "*/graphql": "^0.13.0",
     "*/minimatch": "^3.0.0",
     "*/recompose": "^0.27.0"
   },
   "scripts": {
     "int": "qili init",
     "build": "webpack",
-    "dev": "yarn relay && webpack-dev-server --env=dev",
+    "dev": "yarn relay && webpack-dev-server --hot --inline --env=dev",
     "cordova": "cordova create cordova --link-to=dist && cd cordova && cp www/phone.xml config.xml && cordova platform add android && cordova build android",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql",
     "persist": "qili persist src cloud",
