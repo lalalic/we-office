@@ -1,1 +1,23 @@
 @import (reference,less) "~qili-app/index.less";
+
+#app{
+	width:100%!important;
+	
+	.nav {
+		a {
+			text-decoration:none;
+			padding-right:10px;
+		}
+	}
+	
+	#portal{
+		width:100%;
+	}
+}
+
+@media screen and (min-width:@maxWidth){
+    #portal{
+		width:@maxWidth!important;
+		margin:0px auto!important;
+	}
+}
