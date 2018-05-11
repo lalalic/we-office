@@ -3,15 +3,16 @@ const TransactionPagination=Cloud.buildPagination("Transaction")
 const PluginPagination=Cloud.buildPagination("Plugin")
 
 Cloud.typeDefs=`
+	
 	type Plugin implements Node{
 		id:ID!
 		name: String!
-		description: String!
-		version: String!
-		code: String!
+		desc: String!
+		ver: String!
 		author: User!
-		free: Boolean!
 		conf: JSON
+		code: URL!
+		history: [Plugin]
 		comments(parent: ObjectID, last: Int, before: JSON): PluginCommentConnection
 	}
 	
@@ -28,8 +29,7 @@ Cloud.typeDefs=`
 	}
 	
 	extend type Mutation{
-		plugin_create(code:String!):Plugin
-		plugin_update(_id:ObjectID!,code:String!):Plugin
+		plugin_update(_id:ObjectID!,code:URL!,name:String,desc:String,ver:String,conf:JSON):Plugin
 		transaction_create(plugin:ObjectID!, type:String!, metrics: JSON!, amount:Float!):Boolean
 		config_extensions(plugin:ObjectID!):User
 	}
@@ -82,16 +82,30 @@ Cloud.resolver=Cloud.merge(
 	Mutation:{
 		plugin_create(_,{code},{app,user}){
 			try{
-				const info=require("./check")(code)
+				
 				return app.createEntity("plugins",{...info,code,author:user._id})
 			}catch(e){
 				return Promise.reject(e)
 			}
 		},
-		plugin_update(_,{code, _id},{app,user}){
+		plugin_update(_,{_id, ...info},{app,user}){
 			try{
-				const info=require("./check")(code)
-				return app.createEntity("plugins",{...info,code,author:user._id,_id})
+				
+				return app
+					.get1Entity("plugins",{_id,author:user._id})
+					.then(a=>{
+						if(a){
+							if(a.name!=info.name){
+								return Promise.reject(new Error("name can't be changed in new version"))
+							}
+							let {_id:__id,history:_history, name:_name, ...last}=a
+							let updated={...a,...info,history:[...a.history,last]}
+							return app.updateEntity("plugin",{_id,author:user._id},updated)
+						}else{
+							return app.createEntity("plugins",{...info,author:user._id,_id})
+						}
+					})
+					
 			}catch(e){
 				return Promise.reject(e)
 			}

@@ -32,6 +32,7 @@ export class Plugin extends Component{
 						
 					<BottomNavigationItem
 						label="Save"
+						onClick={()=>save(code,info)}
 						/>
 				</BottomNavigator>
 			</Fragment>
@@ -50,15 +51,13 @@ export class Plugin extends Component{
 }
 
 export default compose(
-	withFragment(graphql`fragment plugin_data on Plugin{
+	withFragment(graphql`fragment plugin_plugin on Plugin{
 		id
 		name
-		description
-		version
-		free
+		ver
 		conf
 	}`),
-	withMutation(({id},code)=>({
+	withMutation(({plugin:{id}},code)=>({
 		name:"update",
 		patch4:id,
 		variables:{id,code},
@@ -68,4 +67,11 @@ export default compose(
 				}
 			}`
 	})),
+	mapProps(({plugin,update,upload})=>{
+		save(code,info){
+			return upload(code)
+				.then(url=>update({...plugin,...info}))
+		},
+		plugin
+	})
 )(Plugin)
