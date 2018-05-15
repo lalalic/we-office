@@ -5,7 +5,7 @@ import {compose, getContext, withProps, withStateHandlers} from "recompose"
 import {Popover, Chip, Subheader} from "material-ui"
 import {blue300 as SELECTED, indigo900} from 'material-ui/styles/colors'
 
-const CAPS=["Input","Loader","Emitter","Output","Ribbon", "Representation"]
+const TYPES=["Input","Loader","Emitter","Output","Ribbon", "Representation"]
 const CONDS=[
 	{label:"自己写的",key:"mine"},
 	{label:"收藏的",key:"favorite"},
@@ -22,11 +22,10 @@ const style={
 }
 export const QuickSearch=({
 	mine,favorite,ph={mine,favorite},
-	categories=[],
-	toggle, toggleCategory, search,
+	type=[],toggle, toggleType, search,
 	...others})=>(
 	<Popover {...others} onRequestClose={()=>{
-			search({mine,favorite,tasking,tasked,categories,tags})
+			search({mine,favorite,type})
 		}}>
 		<div>
 			<Subheader>Common Used</Subheader>
@@ -44,11 +43,11 @@ export const QuickSearch=({
 		<div>
 			<Subheader>Plugin Type</Subheader>
 			<div style={style.wrapper}>
-				{CAPS.map(a=>(
+				{TYPES.map(a=>(
 					<Chip key={a}
-						backgroundColor={categories.includes(a)? SELECTED : undefined}
+						backgroundColor={type.includes(a)? SELECTED : undefined}
 						style={style.chip}
-						onClick={()=>toggleCategory(a)}>
+						onClick={()=>toggleType(a)}>
 						{a}
 					</Chip>
 				))}
@@ -57,28 +56,30 @@ export const QuickSearch=({
 	</Popover>
 )
 
-export const toText=({categories,...qs})=>{
-	let conds=[...categories]
+export const toText=({type,search,...qs})=>{
+	let conds=[...type]
 	CONDS.forEach(({key,label})=>qs[key] && conds.push(label))
+	if(search)
+		conds.push(`desc=*${search}*`)
 	return conds.join(",")
 }
 
 export default compose(
 	withStateHandlers(
-		({qs})=>({...qs}),
+		({qs:{mine,favorite,type}})=>({mine,favorite,type}),
 		{
 			toggle:(state,{})=>key=>{
 				let prev=!!state[key]
 				return {[key]:!prev}
 			},
-			toggleCategory: ({categories})=>a=>{
-				let i=categories.indexOf(a)
+			toggleType: ({type})=>a=>{
+				let i=type.indexOf(a)
 				if(i==-1){
-					return {categories:[...categories,a]}
+					return {type:[...type,a]}
 				}else{
-					let changing=[...categories]
+					let changing=[...type]
 					changing.splice(i,1)
-					return {categories:changing}
+					return {type:changing}
 				}
 			},
 		}

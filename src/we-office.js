@@ -1,10 +1,12 @@
 import React from "react"
+import PropTypes from "prop-types"
+
 import {graphql} from "react-relay"
-import {compose, withProps} from "recompose"
+import {compose, withProps,getContext} from "recompose"
 import {connect} from "react-redux"
 import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory} from "react-router"
 
-import {withInit, withQuery, QiliApp, ACTION as qiliACTION, Setting, Profile} from "qili-app"
+import {withInit, withQuery, withPagination, QiliApp, ACTION as qiliACTION, Setting, Profile,File} from "qili-app"
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
@@ -14,8 +16,10 @@ import {DefaultOffice, Ribbon} from "we-edit/office"
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Navigator from "./components/navigator"
+import {withCreator} from "./components/creator"
 import Dashboard from "./dashboard"
-import Market from "./market"
+import Market,{Creator as CreatePlugin, Plugin} from "./market"
+import PluginLoader from "./plugin-loader"
 
 export const WeOffice = compose(
 	withProps(()=>({
@@ -38,6 +42,7 @@ export const WeOffice = compose(
 					photo
 					extensions{
 						id
+						code
 						conf
 					}
 				}
@@ -46,7 +51,7 @@ export const WeOffice = compose(
 		onSuccess(response,dispatch){
 			const {me:{ token, id, extensions}}=response
 			//dispatch(qiliACTION.CURRENT_USER({id,token}))
-			//dispatch(ACTION.EXTENSIONS(extensions))
+			dispatch(ACTION.EXTENSIONS(extensions))
 			//@TODO: to initialize your qili
 		},
 		onError(error,dispatch){
@@ -63,19 +68,62 @@ export const routes=(
 						title:"we-office",
 						children:<Navigator/>
 					}}>
-					<div id="portal">{children}</div>
+					<div id="portal">
+						<PluginLoader/>
+						{children}
+					</div>
 				</DefaultOffice>
 			}>
 			<IndexRoute component={Dashboard}/>
-			<Route path="market" component={compose(
-					withQuery({
-						query:graphql`
-							query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, $favorite: Boolean, $search:String, $count:Int=20, $cursor: JSON){
-								...list_plugins
+			<Route path="home" component={Dashboard}/>
+			<Route path="market"> 
+				<IndexRoute component={compose(
+						connect(state=>({qs:state["we-office"].qs}),dispatch=>({
+							search(qs){
+								dispatch(ACTION.QUERY(qs))
 							}
-						`,
-					})
-				)(Market)}/>
+						})),
+						withPagination(({qs})=>({
+							variables:qs,
+							query:graphql`
+								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, $favorite: Boolean, $search:String, $count:Int=20, $cursor: JSON){
+									...list_plugins
+								}
+							`,
+						})),
+						withProps(({data})=>({plugins:data})),
+						getContext({router:PropTypes.object}),
+						withCreator(({router})=>({
+							mini:true,
+							onClick(){
+								router.push(`/market/create`)
+							}
+						})),
+					)(Market)}/>
+					
+				<Route path="create" component={compose(
+						getContext({router:PropTypes.object}),
+						withProps(({router})=>({
+							toPlugin: id=>router.replace(`/market/${id}`),
+							goBack: ()=>router.goBack(),
+						}))
+					)(CreatePlugin)}/>
+				
+				<Route path=":id" component={compose(
+						withQuery(({params:{id}})=>({
+							variables:{id},
+							query:graphql`query weOffice_plugin_Query($id:ObjectID){
+								me{
+									plugin(_id:$id){
+										...plugin_plugin
+									}
+								}
+							}`,
+						})),
+						withProps(({data})=>({plugin:data.me.plugin})),
+					)(Plugin)}/>
+					
+			</Route>
 			
 			<Route path="setting" component={Setting}/>
 			

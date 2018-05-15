@@ -1,40 +1,50 @@
 //generated from persisted-query.js, don't edit it
 module.exports={
 	"create_plugin_Mutation":`mutation create_plugin_Mutation(
-		  $code: String!
+		  $id: ObjectID!
+		  $code: URL!
+		  $name: String
+		  $desc: String
+		  $ver: String
+		  $conf: JSON
 		) {
-		  plugin_create(code: $code) {
-		    ...plugin_data
+		  plugin_update(_id: $id, code: $code, name: $name, desc: $desc, ver: $ver, conf: $conf) {
+		    ...plugin_plugin
 		    id
 		  }
 		}
 		
-		fragment plugin_data on Plugin {
+		fragment plugin_plugin on Plugin {
 		  id
 		  name
-		  description
-		  version
-		  free
+		  desc
+		  ver
 		  conf
+		  isMine
+		  myConf
 		}
 		`,
-	"plugin_update_Mutation":`mutation plugin_update_Mutation(
+	"plugin_create_Mutation":`mutation plugin_create_Mutation(
 		  $id: ObjectID!
-		  $code: String!
+		  $code: URL!
+		  $desc: String
+		  $ver: String
+		  $conf: JSON
 		) {
-		  plugin_update(_id: $id, code: $code) {
-		    ...plugin_data
+		  plugin_update(_id: $id, code: $code, desc: $desc, ver: $ver, conf: $conf) {
+		    ...plugin_plugin
 		    id
 		  }
 		}
 		
-		fragment plugin_data on Plugin {
+		fragment plugin_plugin on Plugin {
 		  id
 		  name
-		  description
-		  version
-		  free
+		  desc
+		  ver
 		  conf
+		  isMine
+		  myConf
 		}
 		`,
 	"weOffice_plugins_Query":`query weOffice_plugins_Query(
@@ -54,8 +64,8 @@ module.exports={
 		      node {
 		        id
 		        name
-		        description
-		        version
+		        desc
+		        ver
 		        author {
 		          username
 		          id
@@ -71,6 +81,28 @@ module.exports={
 		  }
 		}
 		`,
+	"weOffice_plugin_Query":`query weOffice_plugin_Query(
+		  $id: ObjectID
+		) {
+		  me {
+		    plugin(_id: $id) {
+		      ...plugin_plugin
+		      id
+		    }
+		    id
+		  }
+		}
+		
+		fragment plugin_plugin on Plugin {
+		  id
+		  name
+		  desc
+		  ver
+		  conf
+		  isMine
+		  myConf
+		}
+		`,
 	"weOffice_prefetch_Query":`query weOffice_prefetch_Query {
 		  me {
 		    id
@@ -79,6 +111,7 @@ module.exports={
 		    photo
 		    extensions {
 		      id
+		      code
 		      conf
 		    }
 		  }

@@ -1,51 +1,94 @@
-import React, {Component} from "react"
-import {withFragment} from "qili-app"
+import React, {Component, Fragment} from "react"
+import {compose,mapProps} from "recompose"
+
+import {withFragment,withMutation,File, CommandBar} from "qili-app"
 import {TextField} from "material-ui"
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import {install} from "../plugin-loader"
+
+const start=`//A we-edit Loader plugin to load input
+/*
+	const {Component, createElement}=require("react")
+	const PropTypes=require("prop-types")
+	const {Loader}=require("we-edit")
+	
+	class MyLoader extends Component{
+		render(){
+			return createElement("div",{},"hello Loader!")
+		}
+	}
+	MyLoader.propTypes={
+		type: PropTypes.string.isRequired
+	}
+
+	MyLoader.defaultProps={
+		type:"MyLoader"
+	}
+	
+	Loader.support(MyLoader)
+	exports.name="MyLoader"
+	exports.ver="0.0.1"
+	exports.desc="test"
+*/
+`
 
 export class Plugin extends Component{
-	state={code:"",selectedIndex:0}
+	state={code:"", info:this.props.plugin}
+	
 	render(){
-		const {state:{code},info}=this
+		const {state:{code, info},props:{save, plugin:{isMine,myConf}}}=this
 		return (
 			<Fragment>
-				<div>
-					<textarea style={{width:"100%"}} onchange={({value})=>this.setState({code:value})}>
-						{code}
-					</textarea>
+				<div style={{flex:"1 100%"}}>
+					<textarea 
+						style={{
+							width:"100%",height:"100%",
+							border:"1px solid lightgray",padding:5,
+							fontSize:"9pt",
+							lineHeight:"10pt",
+							fontFamily: "calibri"
+						}}
+						disabled={!isMine}
+						onChange={e=>this.setState({code:e.target.value})}
+						value={code||start}
+						/>
 				</div>
 				
-				{info && (
-					<div>
-						<TextField name="name" value={info.name}/>
-						<TextField name="description" value={info.description}/>
-						<TextField name="version" value={info.version}/>
-						<TextField name="free" value={info.free}/>
-						{info.conf && (<div>{JSON.stringify(info.conf)}</div>)}
-					</div>
-				)}
-				
-				<BottomNavigator selectedIndex={this.state.selectedIndex}>
-					<BottomNavigationItem
-						label="Check"
-						/>
+				<div style={{flex:1}}>
+					<TextField name="name" floatingLabelText="name" disabled={true}
+						fullWidth={true} value={info.name}/>
+					<TextField name="description" floatingLabelText="description"  disabled={true}
+						fullWidth={true} value={info.desc}/>
+					<TextField name="version" floatingLabelText="version" disabled={true}
+						fullWidth={true} value={info.ver}/>
 						
-					<BottomNavigationItem
-						label="Save"
-						onClick={()=>save(code,info)}
-						/>
-				</BottomNavigator>
+					{info.conf && (<div>{JSON.stringify(info.conf)}</div>)}
+				</div>
+				
+				<CommandBar style={{flex:1}}
+					items={[
+						"back",
+						{
+							action:"check",
+							lable:"check",
+							onSelect: ()=>this.check(code)
+						},
+						{
+							action:"save",
+							label:"save",
+							onSelect: ()=>save(code, info)
+						}
+					]}
+					/>
 			</Fragment>
 		)
 	}
 	
-	exports(){
+	check(){
 		try{
-			const module={exports:{}}
-			new Function("module,exports,require",this.state.code)();
-			this.info=module.exports
+			let info=install(this.state.code)
+			this.setState({info})
 		}catch(e){
-			
+			console.error(e)
 		}
 	}
 }
@@ -54,24 +97,29 @@ export default compose(
 	withFragment(graphql`fragment plugin_plugin on Plugin{
 		id
 		name
+		desc
 		ver
 		conf
+		
+		isMine
+		myConf
 	}`),
-	withMutation(({plugin:{id}},code)=>({
+	withMutation(({plugin:{id}})=>({
 		name:"update",
 		patch4:id,
-		variables:{id,code},
-		mutation:graphql`mutation plugin_update_Mutation($id:ObjectID!,$code:String!){
-				plugin_update(_id:$id,code:$code){
-					...plugin_data
-				}
-			}`
+		variables:{id},
+		mutation:graphql`mutation plugin_create_Mutation($id:ObjectID!,$code:URL!,$desc:String,$ver:String,$conf:JSON){
+			plugin_update(_id:$id, code:$code, desc:$desc, ver:$ver, conf:$conf){
+				...plugin_plugin
+			}
+		}`,
 	})),
-	mapProps(({plugin,update,upload})=>{
+	File.withUpload,
+	mapProps(({plugin,update,upload})=>({
 		save(code,info){
-			return upload(code)
-				.then(url=>update({...plugin,...info}))
+			return upload(code,plugin.id,`${info.ver}/index.js`)
+				.then(({url})=>update({...info,code:url}))
 		},
 		plugin
-	})
+	}))
 )(Plugin)

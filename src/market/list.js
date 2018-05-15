@@ -1,24 +1,27 @@
 import React, {Fragment,Component} from "react"
 import PropTypes from "prop-types"
+import {connect} from "react-redux"
+
 import PullToRefresh from "pull-to-refresh2"
 import {compose, mapProps} from "recompose"
 import {withFragment} from "qili-app"
+import {TextField, List, ListItem} from "material-ui"
 
 import QuickSearch,{toText} from "./quick-search"
 
 class Plugins extends Component{
-	state={title:""}
+	state={title:"",conditionAnchor:undefined}
 	render(){
 		const {plugins, refresh, loadMore, qs, search}=this.props
-		const {title}=this.state
+		const {title,conditionAnchor}=this.state
 		return (
 			<Fragment>
 				<TextField
-						hintText={`${toText(qs)}`}
+						hintText={`${toText(qs)}`||"search"}
 						name="search"
 						value={title||""}
 						onChange={(e,title)=>this.setState({title})}
-						onKeyDown={e=>e.keyCode==13 && search({title})}
+						onKeyDown={e=>e.keyCode==13 && search({search:title})}
 						onFocus={e=>this.setState({conditionAnchor:e.target})}
 						fullWidth={true}/>
 						
@@ -37,11 +40,11 @@ class Plugins extends Component{
 					
 				<PullToRefresh onRefresh={refresh} onMore={loadMore}>
 					<List>
-					{plugins.map(({id,name,description,version, author:{username}})=>(
+					{plugins.map(({id,name,desc,ver, author:{username}})=>(
 							<ListItem key={id}
 								primaryText={name}
 								secondaryTextLines={2}
-								secondaryText={`[ver:${version}] ${description}--${username}`}
+								secondaryText={`[ver:${ver}] ${desc}--${username}`}
 								
 								/>
 						))}
@@ -54,13 +57,14 @@ class Plugins extends Component{
 
 export default compose(
 	withFragment(graphql`fragment list_plugins on Query{
-		plugins(type:$type, mine:$mine, favorite:$favorite, search:$search, first:$count, after:$cursor)@connection(key:"list_plugins"){
+		plugins(type:$type, mine:$mine, favorite:$favorite, 
+			search:$search, first:$count, after:$cursor)@connection(key:"list_plugins"){
 			edges{
 				node{
 					id
 					name
-					description
-					version
+					desc
+					ver
 					author{
 						username
 					}
@@ -72,8 +76,8 @@ export default compose(
 			}
 		}
 	}`),
-	mapProps(({data:{plugins:{edges}}, relay})=>{
-		return {
+	mapProps(({plugins:{plugins:{edges}}, relay,search,qs})=>(
+		{
 			plugins:edges.map(a=>a.node),
 			refresh(ok){
 				ok()
@@ -88,7 +92,8 @@ export default compose(
 					})
 				}else
 					ok()
-			}
+			},
+			search,qs
 		}
-	})
+	))
 )(Plugins)

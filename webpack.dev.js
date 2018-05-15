@@ -1,5 +1,5 @@
 const path = require('path')
-const {ContextReplacementPlugin,IgnorePlugin} = require("webpack")
+const {ContextReplacementPlugin,IgnorePlugin, NamedModulesPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{

@@ -11,9 +11,14 @@ export const ACTION={
 	})
 }
 
-export function reducer(state={qs:{},extensions:[]},{type,payload}){
+export function reducer(state={
+		qs:{
+			type:[]
+		},
+		extensions:[]
+	},{type,payload}){
 	switch(type){
-		case `@@{DOMAIN}/extensions`:
+		case `@@${DOMAIN}/extensions`:
 			return {...state, extensions:[...payload]}
 		case `@@${DOMAIN}/QUERY`:
 			return {...state, qs:{...state.qs,...payload}}

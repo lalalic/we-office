@@ -19,9 +19,9 @@ export default compose(
 	
 )(({username,photo})=>(
 		<div className="nav">
-			<Link to="/">Dashboard</Link>
-			<Link to="/market">Market</Link>
-			<Link to="/profile">Setting</Link>
+			<Link activeClassName="primary" to="/home">Dashboard</Link>
+			<Link activeClassName="primary" to="/market">Market</Link>
+			<Link activeClassName="primary" to="/profile">Setting</Link>
 			{username && <span>{username}</span>}
 		</div>
 	)

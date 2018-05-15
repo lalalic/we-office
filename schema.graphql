@@ -53,7 +53,7 @@ type Mutation {
   requestToken(contact: String!): Boolean
   login(contact: String!, token: String!, name: String): User
   logout: Boolean
-  user_update(photo: String, username: String, birthday: Date, gender: Gender, location: String, signature: String): Date
+  user_update(photo: URL, username: String, birthday: Date, gender: Gender, location: String, signature: String): Date
   role_create(name: String): Role
   role_update(_id: ObjectID!, name: String): Date
   role_remove(_id: ObjectID!): Boolean
@@ -61,8 +61,7 @@ type Mutation {
   role_user_remove(_id: ObjectID!, users: [String!]!): Date
   file_create(_id: String!, host: ID!, bucket: String, size: Int, crc: Int, mimeType: String, imageInfo: JSON): File
   file_clean(host: ID!): Boolean
-  plugin_create(code: String!): Plugin
-  plugin_update(_id: ObjectID!, code: String!): Plugin
+  plugin_update(_id: ObjectID!, code: URL!, name: String, desc: String, ver: String, conf: JSON): Plugin
   transaction_create(plugin: ObjectID!, type: String!, metrics: JSON!, amount: Float!): Boolean
   config_extensions(plugin: ObjectID!): User
   comment_create(parent: ID, content: String!, type: CommentType, _id: ObjectID): Comment
@@ -85,13 +84,14 @@ type PageInfo {
 type Plugin implements Node {
   id: ID!
   name: String!
-  description: String!
-  version: String!
-  code: String!
+  desc: String!
+  ver: String!
   author: User!
-  free: Boolean!
   conf: JSON
-  comments(parent: ObjectID, last: Int, before: JSON): PluginCommentConnection
+  code: URL!
+  history: [Plugin]
+  myConf: JSON
+  isMine: Boolean
 }
 
 type PluginComment implements Comment & Node {
@@ -172,9 +172,11 @@ type TransactionEdge {
   cursor: JSON
 }
 
+scalar URL
+
 type User implements Node {
   id: ID!
-  photo(size: Int = 25): String
+  photo(size: Int = 25): URL
   name: String
   email: String
   phone: String
@@ -191,4 +193,5 @@ type User implements Node {
   extensions: [Plugin]!
   plugins: [Plugin]!
   balance: Float
+  plugin(_id: ObjectID): Plugin
 }

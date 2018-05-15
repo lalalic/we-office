@@ -9,11 +9,11 @@ const spy=(Target, key, wired)=>{
 	Target[key]=wired(_raw)
 }
 
-spy(File,"upload",_upload=>function(){
-	return _upload(...arguments).catch(a=>a).then(a=>"images/icon.svg")
+spy(File,"upload",_upload=>function(data){
+	return Promise.resolve(data)
 })
 
 spy(QiliApp, "render", _render=>app=>_render(React.cloneElement(app, {
 	service:project.config.service,
-	isDev:false
+	isDev:true
 })))

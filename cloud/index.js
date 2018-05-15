@@ -13,7 +13,9 @@ Cloud.typeDefs=`
 		conf: JSON
 		code: URL!
 		history: [Plugin]
-		comments(parent: ObjectID, last: Int, before: JSON): PluginCommentConnection
+		
+		myConf: JSON
+		isMine: Boolean
 	}
 	
 	enum PluginType{
@@ -39,6 +41,7 @@ Cloud.typeDefs=`
 		extensions: [Plugin]!
 		plugins:[Plugin]!
 		balance:Float
+		plugin(_id:ObjectID): Plugin
 	}
 	
 	type Transaction{
@@ -65,9 +68,9 @@ Cloud.resolver=Cloud.merge(
 		extensions(_,{},{app,user}){
 			return Promise.all(
 				(user.extensions||[])
-					.map(({id,conf})=>app
+					.map(({_id,conf})=>app
 						.getDataLoader("plugins")
-						.load(id)
+						.load(_id)
 						.then(plugin=>({...plugin,conf}))
 					)
 			)
@@ -77,17 +80,14 @@ Cloud.resolver=Cloud.merge(
 		},
 		balance(){
 			
+		},
+		plugin(_,{_id},{app,user}){
+			return app
+				.getDataLoader("plugins")
+				.load(_id)
 		}
 	},
 	Mutation:{
-		plugin_create(_,{code},{app,user}){
-			try{
-				
-				return app.createEntity("plugins",{...info,code,author:user._id})
-			}catch(e){
-				return Promise.reject(e)
-			}
-		},
 		plugin_update(_,{_id, ...info},{app,user}){
 			try{
 				
@@ -119,9 +119,6 @@ Cloud.resolver=Cloud.merge(
 	},
 	Query:{
 		plugins(_,{type,search,mine,favorite,first,after},{app,user}){
-			if(mine){
-				return Cloud.resolver.User.plugins(...arguments)
-			}
 			return app.nextPage("plugins", {first,after}, cursor=>{
 				if(type && type.length){
 					cursor=cursor.filter({type:{$all:type}})
@@ -129,6 +126,11 @@ Cloud.resolver=Cloud.merge(
 				if(search){
 					cursor=cursor.filter({description: new RegExp(`${search}.*`,"i")})
 				}
+				
+				if(mine){
+					cursor=cursor.filter({author:user._id})
+				}
+				
 				if(favorite){
 					
 				}
@@ -137,8 +139,18 @@ Cloud.resolver=Cloud.merge(
 		}
 	},
 	Plugin:{
+		id:({_id})=>`plugins:${_id}`,
 		author({author},_,{app,user}){
 			return app.getDataLoader("users").load(author)
+		},
+		isMine({author},_,{user}){
+			return user._id==author
+		},
+		myConf({_id},{},{user}){
+			let selected=(user.extensions||[]).find(a=>a._id==id)
+			if(selected)
+				return selected.conf||{}
+			return null
 		}
 	}
 })
