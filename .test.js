@@ -10,7 +10,8 @@ const spy=(Target, key, wired)=>{
 }
 
 spy(File,"upload",_upload=>function(data){
-	return Promise.resolve(data)
+	debugger
+	return Promise.resolve({url:data})
 })
 
 spy(QiliApp, "render", _render=>app=>_render(React.cloneElement(app, {

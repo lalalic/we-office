@@ -78,6 +78,7 @@ export const routes=(
 			<Route path="home" component={Dashboard}/>
 			<Route path="market"> 
 				<IndexRoute component={compose(
+						getContext({router:PropTypes.object}),
 						connect(state=>({qs:state["we-office"].qs}),dispatch=>({
 							search(qs){
 								dispatch(ACTION.QUERY(qs))
@@ -91,8 +92,12 @@ export const routes=(
 								}
 							`,
 						})),
-						withProps(({data})=>({plugins:data})),
-						getContext({router:PropTypes.object}),
+						withProps(({data,router})=>({
+							plugins:data,
+							toPlugin(id){
+								router.push(`/market/${id}`)
+							}
+						})),
 						withCreator(({router})=>({
 							mini:true,
 							onClick(){

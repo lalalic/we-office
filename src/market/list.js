@@ -12,7 +12,7 @@ import QuickSearch,{toText} from "./quick-search"
 class Plugins extends Component{
 	state={title:"",conditionAnchor:undefined}
 	render(){
-		const {plugins, refresh, loadMore, qs, search}=this.props
+		const {plugins, refresh, loadMore, qs, search,toPlugin}=this.props
 		const {title,conditionAnchor}=this.state
 		return (
 			<Fragment>
@@ -45,7 +45,7 @@ class Plugins extends Component{
 								primaryText={name}
 								secondaryTextLines={2}
 								secondaryText={`[ver:${ver}] ${desc}--${username}`}
-								
+								onClick={()=>toPlugin(id)}
 								/>
 						))}
 					</List>
@@ -76,7 +76,7 @@ export default compose(
 			}
 		}
 	}`),
-	mapProps(({plugins:{plugins:{edges}}, relay,search,qs})=>(
+	mapProps(({plugins:{plugins:{edges}}, relay,search,qs, toPlugin})=>(
 		{
 			plugins:edges.map(a=>a.node),
 			refresh(ok){
@@ -93,7 +93,7 @@ export default compose(
 				}else
 					ok()
 			},
-			search,qs
+			search,qs,toPlugin
 		}
 	))
 )(Plugins)

@@ -19,7 +19,9 @@ export default compose(
 					let id=`plugins:${_id}`
 					return upload(code,id,`${info.ver}/index.js`,token)
 						.then(({url})=>create({...info,id,code:url}))
-						.then(({id})=>toPlugin(id))
+						.then(()=>{
+							toPlugin(id)
+						})
 				})
 		},
 		plugin:{

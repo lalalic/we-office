@@ -49,7 +49,7 @@ export class Plugin extends Component{
 						}}
 						disabled={!isMine}
 						onChange={e=>this.setState({code:e.target.value})}
-						value={code||start}
+						defaultValue={code||start}
 						/>
 				</div>
 				
