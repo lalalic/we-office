@@ -15,7 +15,7 @@ const requires={
 }
 
 export function install(code){
-	const compiled=new Function("module,exports,require",code)	
+	const compiled=new Function("module,exports,require",code)
 	const module={exports:{}}
 	compiled(module, module.exports, a=>requires[a])
 	return module.exports
@@ -25,19 +25,20 @@ class PluginLoader extends PureComponent{
 	state={loading:true}
 	componentDidMount(){
 		const {plugin:{code}, onload}=this.props
-		fetch(code)
+		const isUrl=a=>a.length<512 && /^http[s]?:\/\//i.test(a)
+		(isUrl(code) ? fetch(code)
 			.then(res=>{
 				if(!res.ok){
 					throw new Error(res.statusText)
 				}
 				return res.text()
-			})
+			}) : Promise.resolve(code))
 			.then(code=>install)
 			.catch(e=>this.setState({error:e.message}))
 			.then(()=>this.setState({loading:false}))
 			.then(onload)
 	}
-	
+
 	render(){
 		const {state:{loading,error}, props:{plugin}}=this
 		if(loading){
@@ -66,9 +67,9 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 				<div style={{position:"absolute",width:"100%",height:"100%"}}>
 					<div style={{margin:"auto",width:400, height:300, background:"cadetblue"}}>
 						{
-							plugins.map(a=><PluginLoader 
-								plugin={a} 
-								key={`${a.id}-${a.ver}`} 
+							plugins.map(a=><PluginLoader
+								plugin={a}
+								key={`${a.id}-${a.ver}`}
 								onload={e=>this.setState(({loaded,errors})=>{
 									loaded++
 									if(e){

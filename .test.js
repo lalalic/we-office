@@ -10,7 +10,6 @@ const spy=(Target, key, wired)=>{
 }
 
 spy(File,"upload",_upload=>function(data){
-	debugger
 	return Promise.resolve({url:data})
 })
 

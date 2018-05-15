@@ -10,7 +10,7 @@ const start=`//A we-edit Loader plugin to load input
 	const {Component, createElement}=require("react")
 	const PropTypes=require("prop-types")
 	const {Loader}=require("we-edit")
-	
+
 	class MyLoader extends Component{
 		render(){
 			return createElement("div",{},"hello Loader!")
@@ -23,7 +23,7 @@ const start=`//A we-edit Loader plugin to load input
 	MyLoader.defaultProps={
 		type:"MyLoader"
 	}
-	
+
 	Loader.support(MyLoader)
 	exports.name="MyLoader"
 	exports.ver="0.0.1"
@@ -32,14 +32,14 @@ const start=`//A we-edit Loader plugin to load input
 `
 
 export class Plugin extends Component{
-	state={code:"", info:this.props.plugin}
-	
+	state={code:this.props.plugin.code, info:this.props.plugin}
+
 	render(){
-		const {state:{code, info},props:{save, plugin:{isMine,myConf}}}=this
+		const {state:{code, info},props:{save, plugin:{isMine,myConf,name}}}=this
 		return (
 			<Fragment>
-				<div style={{flex:"1 100%"}}>
-					<textarea 
+				<div style={{flex:"1 100%", overflow: "scroll"}}>
+					<textarea
 						style={{
 							width:"100%",height:"100%",
 							border:"1px solid lightgray",padding:5,
@@ -52,18 +52,19 @@ export class Plugin extends Component{
 						defaultValue={code||start}
 						/>
 				</div>
-				
+
 				<div style={{flex:1}}>
 					<TextField name="name" floatingLabelText="name" disabled={true}
-						fullWidth={true} value={info.name}/>
+						errorText={name && info.name!=name ? "name can't be changed" : null}
+						fullWidth={true} value={name||info.name}/>
 					<TextField name="description" floatingLabelText="description"  disabled={true}
 						fullWidth={true} value={info.desc}/>
 					<TextField name="version" floatingLabelText="version" disabled={true}
 						fullWidth={true} value={info.ver}/>
-						
+
 					{info.conf && (<div>{JSON.stringify(info.conf)}</div>)}
 				</div>
-				
+
 				<CommandBar style={{flex:1}}
 					items={[
 						"back",
@@ -82,7 +83,7 @@ export class Plugin extends Component{
 			</Fragment>
 		)
 	}
-	
+
 	check(){
 		try{
 			let info=install(this.state.code)
@@ -100,7 +101,8 @@ export default compose(
 		desc
 		ver
 		conf
-		
+		code
+
 		isMine
 		myConf
 	}`),

@@ -58,3 +58,5 @@ typings/
 .env
 
 __generated__
+cloud/persisted-query.js
+cloud/__generated.js
