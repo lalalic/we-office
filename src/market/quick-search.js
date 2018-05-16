@@ -7,6 +7,7 @@ import {blue300 as SELECTED, indigo900} from 'material-ui/styles/colors'
 
 const TYPES=["Input","Loader","Emitter","Output","Ribbon", "Representation"]
 const CONDS=[
+	{label:"我用的",key:"using"},
 	{label:"自己写的",key:"mine"},
 	{label:"收藏的",key:"favorite"},
 ]
@@ -21,11 +22,11 @@ const style={
 	  }
 }
 export const QuickSearch=({
-	mine,favorite,ph={mine,favorite},
+	mine,using,favorite,ph={mine,using,favorite},
 	type=[],toggle, toggleType, search,
 	...others})=>(
 	<Popover {...others} onRequestClose={()=>{
-			search({mine,favorite,type})
+			search({mine,favorite,using,type})
 		}}>
 		<div>
 			<Subheader>Common Used</Subheader>
@@ -56,17 +57,17 @@ export const QuickSearch=({
 	</Popover>
 )
 
-export const toText=({type,search,...qs})=>{
+export const toText=({type,searchText,...qs})=>{
 	let conds=[...type]
 	CONDS.forEach(({key,label})=>qs[key] && conds.push(label))
-	if(search)
-		conds.push(`desc=*${search}*`)
+	if(searchText)
+		conds.push(`desc=*${searchText}*`)
 	return conds.join(",")
 }
 
 export default compose(
 	withStateHandlers(
-		({qs:{mine,favorite,type}})=>({mine,favorite,type}),
+		({qs})=>({...qs}),
 		{
 			toggle:(state,{})=>key=>{
 				let prev=!!state[key]

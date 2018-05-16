@@ -14,26 +14,29 @@ const requires={
 	"prop-types":PropTypes
 }
 
+const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
+
 export function install(code){
-	const compiled=new Function("module,exports,require",code)
-	const module={exports:{}}
-	compiled(module, module.exports, a=>requires[a])
-	return module.exports
+	return (isUrl(code) ? fetch(code)
+		.then(res=>{
+			if(!res.ok){
+				throw new Error(res.statusText)
+			}
+			return res.text()
+		}) : Promise.resolve(code))
+		.then(code=>{
+			const compiled=new Function("module,exports,require",code)
+			const module={exports:{}}
+			compiled(module, module.exports, a=>requires[a])
+			return module.exports
+		})
 }
 
 class PluginLoader extends PureComponent{
 	state={loading:true}
 	componentDidMount(){
 		const {plugin:{code}, onload}=this.props
-		const isUrl=a=>a.length<512 && /^http[s]?:\/\//i.test(a)
-		(isUrl(code) ? fetch(code)
-			.then(res=>{
-				if(!res.ok){
-					throw new Error(res.statusText)
-				}
-				return res.text()
-			}) : Promise.resolve(code))
-			.then(code=>install)
+		install(code)
 			.catch(e=>this.setState({error:e.message}))
 			.then(()=>this.setState({loading:false}))
 			.then(onload)

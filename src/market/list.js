@@ -10,18 +10,18 @@ import {TextField, List, ListItem} from "material-ui"
 import QuickSearch,{toText} from "./quick-search"
 
 class Plugins extends Component{
-	state={title:"",conditionAnchor:undefined}
+	state={searchText:"",conditionAnchor:undefined}
 	render(){
 		const {plugins, refresh, loadMore, qs, search,toPlugin}=this.props
-		const {title,conditionAnchor}=this.state
+		const {searchText,conditionAnchor}=this.state
 		return (
 			<Fragment>
 				<TextField
 						hintText={`${toText(qs)}`||"search"}
 						name="search"
-						value={title||""}
-						onChange={(e,title)=>this.setState({title})}
-						onKeyDown={e=>e.keyCode==13 && search({search:title})}
+						value={searchText||""}
+						onChange={(e,searchText)=>this.setState({searchText})}
+						onKeyDown={e=>e.keyCode==13 && search({searchText})}
 						onFocus={e=>this.setState({conditionAnchor:e.target})}
 						fullWidth={true}/>
 						
@@ -44,7 +44,7 @@ class Plugins extends Component{
 							<ListItem key={id}
 								primaryText={name}
 								secondaryTextLines={2}
-								secondaryText={`[ver:${ver}] ${desc}--${username}`}
+								secondaryText={`[ver:${ver}] ${desc} ${username ? `by ${username}` : ""}`}
 								onClick={()=>toPlugin(id)}
 								/>
 						))}
@@ -57,8 +57,8 @@ class Plugins extends Component{
 
 export default compose(
 	withFragment(graphql`fragment list_plugins on Query{
-		plugins(type:$type, mine:$mine, favorite:$favorite, 
-			search:$search, first:$count, after:$cursor)@connection(key:"list_plugins"){
+		plugins(type:$type, mine:$mine, favorite:$favorite, using:$using,
+			searchText:$searchText, first:$count, after:$cursor)@connection(key:"list_plugins"){
 			edges{
 				node{
 					id
@@ -68,6 +68,7 @@ export default compose(
 					author{
 						username
 					}
+					isMine
 				}
 			}
 			pageInfo{

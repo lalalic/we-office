@@ -63,7 +63,8 @@ type Mutation {
   file_clean(host: ID!): Boolean
   plugin_update(_id: ObjectID!, code: URL!, name: String, desc: String, ver: String, conf: JSON): Plugin
   transaction_create(plugin: ObjectID!, type: String!, metrics: JSON!, amount: Float!): Boolean
-  config_extensions(plugin: ObjectID!): User
+  buy_plugin(_id: ObjectID!, ver: String, conf: JSON): Plugin
+  withdraw_plugin(_id: ObjectID!, ver: String, conf: JSON): Plugin
   comment_create(parent: ID, content: String!, type: CommentType, _id: ObjectID): Comment
 }
 
@@ -137,7 +138,7 @@ type Query {
   schema: String!
   me: User!
   file_upload_token(key: String): FileToken
-  plugins(type: [PluginType], mine: Boolean, favorite: Boolean, search: String, first: Int, after: JSON): PluginConnection
+  plugins(type: [PluginType], mine: Boolean, favorite: Boolean, using: Boolean, searchText: String, first: Int, after: JSON): PluginConnection
   plugin_comments(parent: ObjectID, last: Int, before: JSON): PluginCommentConnection
 }
 

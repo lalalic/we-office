@@ -27,13 +27,14 @@ Cloud.typeDefs=`
 	}
 	
 	extend type Query{
-		plugins(type:[PluginType], mine: Boolean, favorite: Boolean, search:String, first:Int, after:JSON):PluginConnection
+		plugins(type:[PluginType], mine: Boolean, favorite: Boolean, using:Boolean, searchText:String, first:Int, after:JSON):PluginConnection
 	}
 	
 	extend type Mutation{
 		plugin_update(_id:ObjectID!,code:URL!,name:String,desc:String,ver:String,conf:JSON):Plugin
 		transaction_create(plugin:ObjectID!, type:String!, metrics: JSON!, amount:Float!):Boolean
-		config_extensions(plugin:ObjectID!):User
+		buy_plugin(_id:ObjectID!, ver:String, conf:JSON):Plugin
+		withdraw_plugin(_id:ObjectID!, ver:String, conf:JSON):Plugin
 	}
 	
 	extend type User{
@@ -88,24 +89,27 @@ Cloud.resolver=Cloud.merge(
 		}
 	},
 	Mutation:{
-		plugin_update(_,{_id, ...info},{app,user}){
+		plugin_update(_,{_id, code, name, ...info},{app,user}){
 			try{
-				
 				return app
 					.get1Entity("plugins",{_id,author:user._id})
 					.then(a=>{
 						if(a){
-							if(a.name!=info.name){
+							if(name && a.name!=name){
 								return Promise.reject(new Error("name can't be changed in new version"))
 							}
 							let {_id:__id,history:_history, name:_name, ...last}=a
-							let updated={...a,...info,history:[...a.history,last]}
-							return app.updateEntity("plugin",{_id,author:user._id},updated)
+
+							return app
+								.patchEntity(
+									"plugin",
+									{_id,author:user._id},
+									{...info, code, history:[..._history,last]}
+								)
 						}else{
-							return app.createEntity("plugins",{...info,author:user._id,_id})
+							return app.createEntity("plugins",{...info,author:user._id,_id,code,name})
 						}
 					})
-					
 			}catch(e){
 				return Promise.reject(e)
 			}
@@ -113,18 +117,45 @@ Cloud.resolver=Cloud.merge(
 		transaction_create(){
 			
 		},
-		config_extensions(_,{extensions},{app,user}){
-			return app.patchEntity("users",{_id:user._id},{extensions})
+		buy_plugin(_,{_id,ver, conf},{app,user}){
+			let extensions=user.extensions||[]
+			let i=extensions.findIndex(a=>a._id==_id)
+			if(i==-1){
+				extensions.push({_id,ver,conf})
+			}else{
+				extensions.splice(i,1,{_id,ver,conf})
+			}
+			return app.patchEntity("users", {_id:user._id}, {extensions})
+				.then(()=>({_id,conf}))
+				
+		},
+		withdraw_plugin(_,{_id},{app,user}){
+			let extensions=user.extensions||[]
+			let i=extensions.findIndex(a=>a._id==_id)
+			if(i==-1){
+				return true
+			}else{
+				extensions.splice(i,1)
+			}
+			return app.patchEntity("users", {_id:user._id}, {extensions})
+				.then(()=>({_id,conf:null}))
 		}
 	},
 	Query:{
-		plugins(_,{type,search,mine,favorite,first,after},{app,user}){
+		plugins(_,{type,searchText,mine,favorite,using,first,after},{app,user}){
+			if(using){
+				return Cloud.resolver
+					.User
+					.extensions(user, {}, {app,user})
+					.then(edges=>({edges,hasNextPage:false}))
+			}
+			
 			return app.nextPage("plugins", {first,after}, cursor=>{
 				if(type && type.length){
 					cursor=cursor.filter({type:{$all:type}})
 				}
-				if(search){
-					cursor=cursor.filter({description: new RegExp(`${search}.*`,"i")})
+				if(searchText){
+					cursor=cursor.filter({description: new RegExp(`${searchText}.*`,"i")})
 				}
 				
 				if(mine){
@@ -147,7 +178,7 @@ Cloud.resolver=Cloud.merge(
 			return user._id==author
 		},
 		myConf({_id},{},{user}){
-			let selected=(user.extensions||[]).find(a=>a._id==id)
+			let selected=(user.extensions||[]).find(a=>a._id==_id)
 			if(selected)
 				return selected.conf||{}
 			return null

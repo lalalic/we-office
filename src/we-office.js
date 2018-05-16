@@ -27,10 +27,10 @@ export const WeOffice = compose(
 		title:"we-office",
 		appId:project.config.appId,//get from app.qili2.com
 		reducers:{[DOMAIN]:reducer,[weDOMAIN]:weReducer},
-		persistStoreConfig:{blacklist:[weDOMAIN]}
-		//supportOffline:
-		//tutorials:["",""]
-		//adUrl:""
+		persistStoreConfig:{blacklist:[weDOMAIN]},
+		//supportOffline:,
+		//tutorials:["",""],
+		adUrl:"images/splash.svg",
 	})),
 	withInit({
 		query:graphql`
@@ -87,7 +87,7 @@ export const routes=(
 						withPagination(({qs})=>({
 							variables:qs,
 							query:graphql`
-								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, $favorite: Boolean, $search:String, $count:Int=20, $cursor: JSON){
+								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, $favorite: Boolean, $using:Boolean, $searchText:String, $count:Int=20, $cursor: JSON){
 									...list_plugins
 								}
 							`,
