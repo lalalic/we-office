@@ -15,14 +15,13 @@ export default compose(
 			photo
 		}
 	}),
-	
-	
+
+
 )(({username,photo})=>(
 		<div className="nav">
 			<Link activeClassName="primary" to="/home">Dashboard</Link>
 			<Link activeClassName="primary" to="/market">Market</Link>
-			<Link activeClassName="primary" to="/profile">Setting</Link>
-			{username && <span>{username}</span>}
+			<Link activeClassName="primary" to="/my">{username||"Setting"}</Link>
 		</div>
 	)
 )

@@ -6,13 +6,13 @@ import {compose, withProps,getContext} from "recompose"
 import {connect} from "react-redux"
 import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory} from "react-router"
 
-import {withInit, withQuery, withPagination, QiliApp, ACTION as qiliACTION, Setting, Profile,File} from "qili-app"
+import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qiliACTION, Account,File} from "qili-app"
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
 import {DefaultOffice, Ribbon} from "we-edit/office"
 
-
+import {ListItem} from "material-ui"
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Navigator from "./components/navigator"
@@ -76,7 +76,7 @@ export const routes=(
 			}>
 			<IndexRoute component={Dashboard}/>
 			<Route path="home" component={Dashboard}/>
-			<Route path="market"> 
+			<Route path="market">
 				<IndexRoute component={compose(
 						getContext({router:PropTypes.object}),
 						connect(state=>({qs:state["we-office"].qs}),dispatch=>({
@@ -105,7 +105,7 @@ export const routes=(
 							}
 						})),
 					)(Market)}/>
-					
+
 				<Route path="create" component={compose(
 						getContext({router:PropTypes.object}),
 						withProps(({router})=>({
@@ -113,7 +113,7 @@ export const routes=(
 							goBack: ()=>router.goBack(),
 						}))
 					)(CreatePlugin)}/>
-				
+
 				<Route path=":id" component={compose(
 						withQuery(({params:{id}})=>({
 							variables:{id},
@@ -127,32 +127,10 @@ export const routes=(
 						})),
 						withProps(({data})=>({plugin:data.me.plugin})),
 					)(Plugin)}/>
-					
+
 			</Route>
-			
-			<Route path="setting" component={Setting}/>
-			
-			<Route path="profile" component={compose(
-					withQuery({
-						query:graphql`
-							query weOffice_profile_Query{
-								me{
-									id
-									username
-									birthday
-									gender
-									location
-									photo
-									signature
-								}
-							}
-							`,
-					}),
-					withProps(({me})=>({
-						...me,
-						birthday: me&&me.birthday ? new Date(me.birthday) : undefined
-					})),
-					)(Profile)}/>
+
+			{Account.routes()}
 		</Route>
 	</Router>
 )
