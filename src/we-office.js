@@ -6,13 +6,12 @@ import {compose, withProps,getContext} from "recompose"
 import {connect} from "react-redux"
 import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory} from "react-router"
 
-import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qiliACTION, Account,File} from "qili-app"
+import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qiliACTION,File,Account} from "qili-app"
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
 import {DefaultOffice, Ribbon} from "we-edit/office"
 
-import {ListItem} from "material-ui"
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Navigator from "./components/navigator"
@@ -20,6 +19,7 @@ import {withCreator} from "./components/creator"
 import Dashboard from "./dashboard"
 import Market,{Creator as CreatePlugin, Plugin} from "./market"
 import PluginLoader from "./plugin-loader"
+import My from "./my"
 
 export const WeOffice = compose(
 	withProps(()=>({
@@ -97,13 +97,13 @@ export const routes=(
 							toPlugin(id){
 								router.push(`/market/${id}`)
 							}
-						})),
+						})),/*
 						withCreator(({router})=>({
 							mini:true,
 							onClick(){
 								router.push(`/market/create`)
 							}
-						})),
+						})),*/
 					)(Market)}/>
 
 				<Route path="create" component={compose(
@@ -114,23 +114,50 @@ export const routes=(
 						}))
 					)(CreatePlugin)}/>
 
-				<Route path=":id" component={compose(
-						withQuery(({params:{id}})=>({
-							variables:{id},
-							query:graphql`query weOffice_plugin_Query($id:ObjectID){
-								me{
-									plugin(_id:$id){
-										...plugin_plugin
+				<Route path=":id">
+					<IndexRoute component={compose(
+							withQuery(({params:{id}})=>({
+								variables:{id},
+								query:graphql`query weOffice_plugin_Query($id:ObjectID){
+									me{
+										plugin(_id:$id){
+											...plugin_plugin
+										}
 									}
-								}
-							}`,
-						})),
-						withProps(({data})=>({plugin:data.me.plugin})),
-					)(Plugin)}/>
+								}`,
+							})),
+							withProps(({data})=>({plugin:data.me.plugin})),
+						)(Plugin)}/>
+				</Route>
 
 			</Route>
 
-			{Account.routes()}
+			{Account.routes({
+				account:withQuery({
+		            query:graphql`
+		                query weOffice_account_Query{
+		                    me{
+		                        plugins{
+		                            id
+		                            name
+		                        }
+		                        extensions{
+		                            id
+		                            name
+		                        }
+		                        ...qili_account_user
+		                    }
+		                }
+		            `
+		        })(My),
+				profileQL:graphql`
+					query weOffice_profile_Query{
+						user:me{
+							...qili_profile_user
+						}
+					}
+				`
+			})}
 		</Route>
 	</Router>
 )

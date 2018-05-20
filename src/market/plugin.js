@@ -22,32 +22,32 @@ export class Plugin extends Component{
 			onSelect: ()=>this.check(code),
 			icon: <IconApply/>
 		}
-		
+
 		const cmdSave={
 			action:"save",
 			label:"Save",
 			onSelect: ()=>save(code, info)
 		}
-		
+
 		const cmdBuy={
 			action:"buy",
 			label:"buy",
 			onSelect: ()=>buy(id)
 		}
-		
+
 		const cmdWithdraw={
 			action:"withdraw",
 			label:"withdraw",
 			onSelect: ()=>withdraw(id)
 		}
-		
+
 		if(this.crc(code)==installed){
 			cmdApply.icon=<IconApply color="green"/>
 			cmdApply.label="Applied"
 		}
-		
+
 		const actions=["back"]
-		
+
 		if(id){
 			if(myConf){
 				actions.push(cmdWithdraw)
@@ -55,15 +55,15 @@ export class Plugin extends Component{
 				actions.push(cmdBuy)
 			}
 		}
-		
+
 		if(isMine){
 			actions.push(cmdApply)
 			actions.push(cmdSave)
 		}
-		
+
 		return (
 			<Fragment>
-				{isMine && 
+				{isMine &&
 				<div style={{flex:"1 100%", overflow: "scroll"}}>
 					<textarea
 						style={{
@@ -96,10 +96,10 @@ export class Plugin extends Component{
 							/>
 					)}
 				</div>
-				
+
 				{!isMine && <div style={{flex:"1 100%", overflow: "scroll"}}></div>}
-				
-				<CommandBar 
+
+				<CommandBar
 					style={{flex:1}}
 					items={actions}
 					/>
@@ -113,12 +113,12 @@ export class Plugin extends Component{
 				if(this.props.plugin.name && info.name!=this.props.plugin.name){
 					throw new Error("name can't be changed")
 				}
-				
+
 				this.setState({info, installed:this.crc(this.state.code),error:undefined})
 			})
 			.catch(e=>this.setState({error:e.message}))
 	}
-	
+
 	crc(code){
 		return code
 	}
@@ -155,7 +155,7 @@ export default compose(
 				myConf
 			}
 		}`,
-	})),	
+	})),
 	withMutation(({plugin:{id}})=>({
 		name:"update",
 		patch4:id,
@@ -201,4 +201,3 @@ const start=`//A we-edit Loader plugin to load input
 	exports.desc="test"
 */
 `
-

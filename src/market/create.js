@@ -5,7 +5,7 @@ import {withMutation, File} from "qili-app"
 export default compose(
 	withMutation({
 		name:"create",
-		mutation:graphql`mutation create_plugin_Mutation($id:ObjectID!,$code:URL!,$name:String,$desc:String,$ver:String,$conf:JSON){
+		mutation:graphql`mutation create_plugin_Mutation($id:ObjectID!,$code:URL!,$name:String!,$desc:String,$ver:String!,$conf:JSON){
 			plugin_update(_id:$id, code:$code, name:$name, desc:$desc, ver:$ver, conf:$conf){
 				...plugin_plugin
 			}
