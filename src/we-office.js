@@ -19,7 +19,8 @@ import {withCreator} from "./components/creator"
 import Dashboard from "./dashboard"
 import Market,{Creator as CreatePlugin, Plugin} from "./market"
 import PluginLoader from "./plugin-loader"
-import My from "./my"
+import My from "./setting/my"
+import Profile from "./setting/profile"
 
 export const WeOffice = compose(
 	withProps(()=>({
@@ -64,7 +65,8 @@ export const WeOffice = compose(
 export const routes=(
 	<Router history={hashHistory}>
 		<Route path="/" component={({children})=>
-				<DefaultOffice titleBarProps={{
+				<DefaultOffice 
+					titleBarProps={{
 						title:"we-office",
 						children:<Navigator/>
 					}}>
@@ -74,8 +76,7 @@ export const routes=(
 					</div>
 				</DefaultOffice>
 			}>
-			<IndexRoute component={Dashboard}/>
-			<Route path="home" component={Dashboard}/>
+			<Route path="dashboard" component={Dashboard}/>
 			<Route path="market">
 				<IndexRoute component={compose(
 						getContext({router:PropTypes.object}),
@@ -136,7 +137,7 @@ export const routes=(
 				account:withQuery({
 		            query:graphql`
 		                query weOffice_account_Query{
-		                    me{
+		                    user:me{
 		                        plugins{
 		                            id
 		                            name
@@ -150,13 +151,15 @@ export const routes=(
 		                }
 		            `
 		        })(My),
-				profileQL:graphql`
-					query weOffice_profile_Query{
-						user:me{
-							...qili_profile_user
+				profile:withQuery({
+					query: graphql`
+						query weOffice_profile_Query{
+							user:me{
+								...profile_user
+							}
 						}
-					}
-				`
+					`
+				})(Profile)
 			})}
 		</Route>
 	</Router>

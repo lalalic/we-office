@@ -62,9 +62,9 @@ type Mutation {
   file_create(_id: String!, host: ID!, bucket: String, size: Int, crc: Int, mimeType: String, imageInfo: JSON): File
   file_clean(host: ID!): Boolean
   plugin_update(_id: ObjectID!, code: URL!, name: String, desc: String, ver: String, conf: JSON): Plugin
-  transaction_create(plugin: ObjectID!, type: String!, metrics: JSON!, amount: Float!): Boolean
   buy_plugin(_id: ObjectID!, ver: String, conf: JSON): Plugin
   withdraw_plugin(_id: ObjectID!, ver: String, conf: JSON): Plugin
+  user_setDeveloper(be: Boolean!): User
   comment_create(parent: ID, content: String!, type: CommentType, _id: ObjectID): Comment
 }
 
@@ -155,24 +155,6 @@ type Subscription {
   ping: Boolean
 }
 
-type Transaction {
-  id: ID!
-  plugin: ID!
-  type: String!
-  metrics: JSON!
-  amount: Float!
-}
-
-type TransactionConnection {
-  edges: [TransactionEdge]
-  pageInfo: PageInfo
-}
-
-type TransactionEdge {
-  node: Transaction
-  cursor: JSON
-}
-
 scalar URL
 
 type User implements Node {
@@ -190,9 +172,8 @@ type User implements Node {
   location: String
   signature: String
   roles: [Role]
-  transactions(when: Date, plugin: ObjectID, first: Int, after: JSON): [Transaction]!
   extensions: [Plugin]!
   plugins: [Plugin]!
-  balance: Float
   plugin(_id: ObjectID): Plugin
+  isDeveloper: Boolean
 }

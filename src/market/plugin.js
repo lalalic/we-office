@@ -13,7 +13,7 @@ export class Plugin extends Component{
 	render(){
 		const {
 			state:{code, info, installed, error},
-			props:{save, buy, withdraw, plugin:{id, isMine,myConf}}
+			props:{save, buy, withdraw, plugin:{isMine,myConf}, isNew}
 			}=this
 
 		const cmdApply={
@@ -26,19 +26,19 @@ export class Plugin extends Component{
 		const cmdSave={
 			action:"save",
 			label:"Save",
-			onSelect: ()=>save(code, info)
+			onSelect: ()=>save(code, info).catch(e=>this.setState({error:e.message}))
 		}
 
 		const cmdBuy={
 			action:"buy",
 			label:"buy",
-			onSelect: ()=>buy(id)
+			onSelect: buy
 		}
 
 		const cmdWithdraw={
 			action:"withdraw",
 			label:"withdraw",
-			onSelect: ()=>withdraw(id)
+			onSelect: withdraw
 		}
 
 		if(this.crc(code)==installed){
@@ -48,7 +48,7 @@ export class Plugin extends Component{
 
 		const actions=["back"]
 
-		if(id){
+		if(!isNew){
 			if(myConf){
 				actions.push(cmdWithdraw)
 			}else{
@@ -58,7 +58,9 @@ export class Plugin extends Component{
 
 		if(isMine){
 			actions.push(cmdApply)
-			actions.push(cmdSave)
+			if(code!==this.props.plugin.code){
+				actions.push(cmdSave)
+			}
 		}
 
 		return (
@@ -172,7 +174,8 @@ export default compose(
 			return upload(code,plugin.id,`${info.ver}/index.js`)
 				.then(({url})=>update({...info,code:url}))
 		},
-		plugin, buy, withdraw
+		plugin, buy, withdraw,
+		isNew: !!plugin.id
 	}))
 )(Plugin)
 

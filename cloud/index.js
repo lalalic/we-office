@@ -1,9 +1,7 @@
 const PluginComment=Cloud.buildComment("Plugin")
-const TransactionPagination=Cloud.buildPagination("Transaction")
 const PluginPagination=Cloud.buildPagination("Plugin")
 
 Cloud.typeDefs=`
-	
 	type Plugin implements Node{
 		id:ID!
 		name: String!
@@ -32,40 +30,27 @@ Cloud.typeDefs=`
 	
 	extend type Mutation{
 		plugin_update(_id:ObjectID!,code:URL!,name:String,desc:String,ver:String,conf:JSON):Plugin
-		transaction_create(plugin:ObjectID!, type:String!, metrics: JSON!, amount:Float!):Boolean
 		buy_plugin(_id:ObjectID!, ver:String, conf:JSON):Plugin
 		withdraw_plugin(_id:ObjectID!, ver:String, conf:JSON):Plugin
+		user_setDeveloper(be:Boolean!):User
 	}
 	
 	extend type User{
-		transactions(when:Date, plugin: ObjectID, first:Int, after: JSON): [Transaction]!
 		extensions: [Plugin]!
 		plugins:[Plugin]!
-		balance:Float
 		plugin(_id:ObjectID): Plugin
+		isDeveloper: Boolean
 	}
 	
-	type Transaction{
-		id: ID!
-		plugin: ID!
-		type: String!
-		metrics: JSON!
-		amount: Float!
-	}
 	${PluginComment.typeDefs}
 	${PluginPagination.typeDefs}
-	${TransactionPagination.typeDefs}
 `
 
 Cloud.resolver=Cloud.merge(
 	PluginComment.resolver, 
-	TransactionPagination.resolver,
 	PluginPagination.resolver,
 	{
 	User:{
-		transactions(){
-			
-		},
 		extensions(_,{},{app,user}){
 			return Promise.all(
 				(user.extensions||[])
@@ -77,10 +62,9 @@ Cloud.resolver=Cloud.merge(
 			)
 		},
 		plugins(_,{},{app,user}){
+			if(!user.isDeveloper)
+				return []
 			return app.findEntity("plugins",{author:user._id})
-		},
-		balance(){
-			
 		},
 		plugin(_,{_id},{app,user}){
 			return app
@@ -90,6 +74,9 @@ Cloud.resolver=Cloud.merge(
 	},
 	Mutation:{
 		plugin_update(_,{_id, code, name, ...info},{app,user}){
+			if(!user.isDeveloper)
+				return Promise.reject()
+			
 			try{
 				return app
 					.get1Entity("plugins",{_id,author:user._id})
@@ -107,15 +94,20 @@ Cloud.resolver=Cloud.merge(
 									{...info, code, history:[..._history,last]}
 								)
 						}else{
-							return app.createEntity("plugins",{...info,author:user._id,_id,code,name})
+							return app.get1Entity("plugins",{name})
+								.then(b=>{
+									if(b){
+										return Promise.reject(`plugin[${name}] already exists.`)
+									}else{
+										return app.createEntity("plugins",{...info,author:user._id,_id,code,name})
+									}
+								})
+							
 						}
 					})
 			}catch(e){
 				return Promise.reject(e)
 			}
-		},
-		transaction_create(){
-			
 		},
 		buy_plugin(_,{_id,ver, conf},{app,user}){
 			let extensions=user.extensions||[]
@@ -139,6 +131,10 @@ Cloud.resolver=Cloud.merge(
 			}
 			return app.patchEntity("users", {_id:user._id}, {extensions})
 				.then(()=>({_id,conf:null}))
+		},
+		user_setDeveloper(_,{be},{app,user}){
+			return app.patchEntity("users",{_id:user._id},{isDeveloper:be})
+				.then(()=>({_id:user._id, isDeveloper:be}))
 		}
 	},
 	Query:{
@@ -175,7 +171,7 @@ Cloud.resolver=Cloud.merge(
 			return app.getDataLoader("users").load(author)
 		},
 		isMine({author},_,{user}){
-			return user._id==author
+			return user.isDeveloper && user._id==author
 		},
 		myConf({_id},{},{user}){
 			let selected=(user.extensions||[]).find(a=>a._id==_id)
@@ -187,5 +183,11 @@ Cloud.resolver=Cloud.merge(
 })
 
 Cloud.persistedQuery=require("./persisted-query")
+
+Cloud.indexes={
+	plugins:[
+		{name:1}
+	]
+}
 
 module.exports=Cloud
