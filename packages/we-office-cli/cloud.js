@@ -1,10 +1,11 @@
 const path=require("path")
+const fs=require('fs')
 const QiliCloud=require("qili-cli/qili-cloud")
 const semver=require("semver")
 const cwd=process.cwd()
 
 class Cloud extends QiliCloud{
-	publish(current){
+	publish(current, url, dir){
 		return this.runQL("weOffice_plugin_Query",{name:current.name})
 			.then(({data:{plugin}})=>plugin)
 			.then(latest=>{
@@ -23,13 +24,13 @@ class Cloud extends QiliCloud{
 			.then(({token,key, id,creating})=>{
 				let main=current.main||"index.js"
 				
-				return this.upload(path.resolve(cwd,main), token,key, {"x:id":id})
+				return this.upload(path.resolve(cwd,main), token,key, {"x:id":id}, url, dir)
 					.then(code=>({code,id,creating}))
 			})
 			.then(({code,id,creating})=>{
 				const {name, version, description, readme, keywords,config}=current
 				if(readme){
-					readme=file.readFileSync(path.resolve(cwd,readme),"utf-8")
+					readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
 				}
 					
 				return this.runQL(
@@ -39,7 +40,11 @@ class Cloud extends QiliCloud{
 			})
 	}
 	
-	upload(filePath, token, key, extra){
+	upload(filePath, token, key, extra, url,dir){
+		if(url && dir){
+			return this.upload4Test(...arguments)
+		}
+		
 		const qiniu = require('qiniu')
 		return new Promise((resolve,reject)=>
 			qiniu.io.putFile(token,key,filePath ,extra,(err, ret)=>{
@@ -51,6 +56,25 @@ class Cloud extends QiliCloud{
 				}
 		  })
 		)
+	}
+	
+	upload4Test(filePath, token, key, extra, url,dir){
+		try{
+			dir=path.resolve(cwd,`${dir}/${key}`)
+			let routes=dir.split("/")
+			routes.pop()
+			routes.reduce((tested,a)=>{
+				let current=[...tested,a].join("/")
+				if(!fs.existsSync(current)){
+					fs.mkdirSync(current)
+				}
+				return [...tested,a]
+			},[])
+			fs.writeFileSync(dir,fs.readFileSync(filePath))
+			return Promise.resolve(`${url}/${key}`)
+		}catch(e){
+			return Promise.reject(e)
+		}
 	}
 }
 

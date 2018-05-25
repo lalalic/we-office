@@ -69,7 +69,9 @@ program
 program
 	.command("publish")
 	.description("publish only package main file")
-	.action(async function(){
+	.options("-u, --pluginsUrl <url>","only for test, such as http://localhost:9080")
+	.options("-r, --pluginsDir <dir>","only for test, such as dist")
+	.action(async function({url,dir}){
 		if(project.scripts && project.scripts.build){
 			try{	
 				console.log('trying to build before publish')
@@ -84,7 +86,7 @@ program
 		
 		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
 			.getToken(rc)
-			.publish(project)
+			.publish(project, url, dir)
 			.then(()=>console.log(`published ${project.version}`))
 			.catch(e=>console.log(e.message))
 	})
