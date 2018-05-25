@@ -4,6 +4,9 @@ import {connect} from "react-redux"
 import MaterialUI from "material-ui"
 import * as weEdit from "we-edit"
 import weOffice from "we-edit/office"
+import Pagination from "we-edit/representation-pagination"
+import Html from "we-edit/representation-html"
+import Text from "we-edit/representation-text"
 import PropTypes from "prop-types"
 
 const requires={
@@ -11,6 +14,9 @@ const requires={
 	"material-ui":MaterialUI,
 	"we-edit":weEdit,
 	"we-edit/office":weOffice,
+	"we-edit/representation-pagination":Pagination,
+	"we-edit/representation-html":Html,
+	"we-edit/representation-text":Text,
 	"prop-types":PropTypes
 }
 

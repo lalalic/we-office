@@ -1,0 +1,6 @@
+{
+	"description":"we-office plugin"
+	"peerDependencies":{
+		"we-edit":"latest"
+	}
+}

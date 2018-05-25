@@ -61,9 +61,9 @@ type Mutation {
   role_user_remove(_id: ObjectID!, users: [String!]!): Date
   file_create(_id: String!, host: ID!, bucket: String, size: Int, crc: Int, mimeType: String, imageInfo: JSON): File
   file_clean(host: ID!): Boolean
-  plugin_update(_id: ObjectID!, code: URL!, name: String, desc: String, ver: String, conf: JSON): Plugin
-  buy_plugin(_id: ObjectID!, ver: String, conf: JSON): Plugin
-  withdraw_plugin(_id: ObjectID!, ver: String, conf: JSON): Plugin
+  plugin_update(_id: ObjectID!, code: URL!, name: String, readme: String, keywords: [String], description: String, version: String, config: JSON): Plugin
+  buy_plugin(_id: ObjectID!, version: String, config: JSON): Plugin
+  withdraw_plugin(_id: ObjectID!, version: String, config: JSON): Plugin
   user_setDeveloper(be: Boolean!): User
   comment_create(parent: ID, content: String!, type: CommentType, _id: ObjectID): Comment
 }
@@ -85,11 +85,13 @@ type PageInfo {
 type Plugin implements Node {
   id: ID!
   name: String!
-  desc: String!
-  ver: String!
+  description: String!
+  version: String!
   author: User!
-  conf: JSON
+  config: JSON
   code: URL!
+  readme: String!
+  keywords: [String]
   history: [Plugin]
   myConf: JSON
   isMine: Boolean
@@ -174,6 +176,6 @@ type User implements Node {
   roles: [Role]
   extensions: [Plugin]!
   plugins: [Plugin]!
-  plugin(_id: ObjectID): Plugin
+  plugin(_id: ObjectID, name: String): Plugin
   isDeveloper: Boolean
 }

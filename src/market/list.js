@@ -63,8 +63,8 @@ export default compose(
 				node{
 					id
 					name
-					desc
-					ver
+					description
+					version
 					author{
 						username
 					}

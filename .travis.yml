@@ -27,6 +27,9 @@ script:
  - rm dist/tv.xml
  - mv dist/index.html .
  - yarn cordova -- --storePassword=$STORE_PWD --password=$STORE_PWD
+ - yarn info we-office-cli --json > we-office-cli.json
+ - export LATEST=$(node -p "require('./we-office-cli.json').data['dist-tags'].latest")
+ - export CURRENT=$(node -p "require('./packages/we-office-cli/package.json').version") 
 
 after_success:
  - mv cordova/platforms/android/build/outputs/apk/android-release.apk ./app.apk
@@ -42,3 +45,16 @@ after_success:
  - ls $APP_NAME -l
  - travis_wait sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $APP_NAME.tgz "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
  - sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "tar xvfz $DEPLOY_PATH/$APP_NAME.tgz -C $DEPLOY_PATH && rm $DEPLOY_PATH/$APP_NAME.tgz"
+
+before_deploy:
+ - pwd
+ - cd packages/we-office-cli
+
+deploy:
+ provider: npm
+ email: "lalalic@139.com"
+ api_key: $NPM_KEY
+ skip_cleanup: true
+ on:
+  branch: master
+  condition: "$LATEST != $CURRENT"

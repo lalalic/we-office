@@ -2,7 +2,7 @@
   "config": {
     "devPort": 9083,
     "service": "http://localhost:9080/1/graphql",
-    "appId": "5ae596fb42bcda136a32fc11"
+    "appId": "5b07b8571f6cab002e832d23"
   },
   "dependencies": {
     "qili-app": "^1.2.24",
@@ -50,7 +50,8 @@
     "relay": "relay-compiler --src ./src --schema ./schema.graphql",
     "persist": "qili persist src cloud",
     "cloud": "browserify cloud/index.js -o cloud/__generated.js --node",
-    "sync": "qili publish"
+    "sync": "qili publish",
+	"wo":"wo"
   },
   "keywords": [
     "qili"
@@ -71,5 +72,9 @@
   "bugs": {
     "url": "https://github.com/lalalic/we-office/issues"
   },
-  "homepage": "https://github.com/lalalic/we-office#readme"
+  "homepage": "https://github.com/lalalic/we-office#readme",
+  "private":true,
+  "workspaces": [
+    "packages/*"
+  ]
 }

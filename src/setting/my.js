@@ -24,7 +24,7 @@ export default compose(
                             primaryText={a.name} key={a.id}/>)
                 }
             />,
-            user.plugins.length!=0 && <ListItem
+            <ListItem
                 primaryText="My Plugins" key="plugins"
                 leftIcon={<IconAdd/>}
                 initiallyOpen={true}

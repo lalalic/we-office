@@ -5,11 +5,13 @@ Cloud.typeDefs=`
 	type Plugin implements Node{
 		id:ID!
 		name: String!
-		desc: String!
-		ver: String!
+		description: String!
+		version: String!
 		author: User!
-		conf: JSON
+		config: JSON
 		code: URL!
+		readme: String!
+		keywords: [String]
 		history: [Plugin]
 		
 		myConf: JSON
@@ -29,16 +31,17 @@ Cloud.typeDefs=`
 	}
 	
 	extend type Mutation{
-		plugin_update(_id:ObjectID!,code:URL!,name:String,desc:String,ver:String,conf:JSON):Plugin
-		buy_plugin(_id:ObjectID!, ver:String, conf:JSON):Plugin
-		withdraw_plugin(_id:ObjectID!, ver:String, conf:JSON):Plugin
+		plugin_update(_id:ObjectID!,code:URL!,name:String,readme:String,keywords:[String],
+			description:String,version:String,config:JSON):Plugin
+		buy_plugin(_id:ObjectID!, version:String, config:JSON):Plugin
+		withdraw_plugin(_id:ObjectID!, version:String, config:JSON):Plugin
 		user_setDeveloper(be:Boolean!):User
 	}
 	
 	extend type User{
 		extensions: [Plugin]!
 		plugins:[Plugin]!
-		plugin(_id:ObjectID): Plugin
+		plugin(_id:ObjectID, name:String): Plugin
 		isDeveloper: Boolean
 	}
 	
@@ -66,10 +69,8 @@ Cloud.resolver=Cloud.merge(
 				return []
 			return app.findEntity("plugins",{author:user._id})
 		},
-		plugin(_,{_id},{app,user}){
-			return app
-				.getDataLoader("plugins")
-				.load(_id)
+		plugin(_,{_id,name},{app,user}){
+			return app.get1Entity("plugins",{_id,name})
 		}
 	},
 	Mutation:{
@@ -85,13 +86,15 @@ Cloud.resolver=Cloud.merge(
 							if(name && a.name!=name){
 								return Promise.reject(new Error("name can't be changed in new version"))
 							}
-							let {_id:__id,history:_history, name:_name, ...last}=a
 
 							return app
 								.patchEntity(
 									"plugin",
 									{_id,author:user._id},
-									{...info, code, history:[..._history,last]}
+									{...info, 
+										code, 
+										history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
+									}
 								)
 						}else{
 							return app.get1Entity("plugins",{name})
@@ -109,16 +112,16 @@ Cloud.resolver=Cloud.merge(
 				return Promise.reject(e)
 			}
 		},
-		buy_plugin(_,{_id,ver, conf},{app,user}){
+		buy_plugin(_,{_id,version, config},{app,user}){
 			let extensions=user.extensions||[]
 			let i=extensions.findIndex(a=>a._id==_id)
 			if(i==-1){
-				extensions.push({_id,ver,conf})
+				extensions.push({_id,version,config})
 			}else{
-				extensions.splice(i,1,{_id,ver,conf})
+				extensions.splice(i,1,{_id,version,config})
 			}
 			return app.patchEntity("users", {_id:user._id}, {extensions})
-				.then(()=>({_id,conf}))
+				.then(()=>({_id,config}))
 				
 		},
 		withdraw_plugin(_,{_id},{app,user}){
@@ -130,7 +133,7 @@ Cloud.resolver=Cloud.merge(
 				extensions.splice(i,1)
 			}
 			return app.patchEntity("users", {_id:user._id}, {extensions})
-				.then(()=>({_id,conf:null}))
+				.then(()=>({_id,config:null}))
 		},
 		user_setDeveloper(_,{be},{app,user}){
 			return app.patchEntity("users",{_id:user._id},{isDeveloper:be})
@@ -176,7 +179,7 @@ Cloud.resolver=Cloud.merge(
 		myConf({_id},{},{user}){
 			let selected=(user.extensions||[]).find(a=>a._id==_id)
 			if(selected)
-				return selected.conf||{}
+				return selected.config||{}
 			return null
 		}
 	}

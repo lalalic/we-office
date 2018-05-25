@@ -86,15 +86,15 @@ export class Plugin extends Component{
 						errorText={error}
 						fullWidth={true} value={name||info.name}/>
 					<TextField name="description" floatingLabelText="description"  disabled={true}
-						fullWidth={true} value={info.desc}/>
+						fullWidth={true} value={info.description}/>
 					<TextField name="version" floatingLabelText="version" disabled={true}
-						fullWidth={true} value={info.ver}/>
+						fullWidth={true} value={info.version}/>
 
-					{info.conf && (
-						<TextField name="conf" floatingLabelText="configuration"
+					{info.config && (
+						<TextField name="config" floatingLabelText="configuration"
 							fullWidth={true}
 							multiLine={true}
-							value={JSON.stringify(myConf||info.conf)}
+							value={JSON.stringify(myConf||info.config)}
 							/>
 					)}
 				</div>
@@ -130,9 +130,9 @@ export default compose(
 	withFragment(graphql`fragment plugin_plugin on Plugin{
 		id
 		name
-		desc
-		ver
-		conf
+		description
+		version
+		config
 		code
 
 		isMine
@@ -142,8 +142,8 @@ export default compose(
 		name:"buy",
 		patch4:id,
 		variables:{id},
-		mutation:graphql`mutation plugin_buy_Mutation($id:ObjectID!,$ver:String,$conf:JSON){
-			buy_plugin(_id:$id,ver:$ver, conf:$conf){
+		mutation:graphql`mutation plugin_buy_Mutation($id:ObjectID!,$version:String,$config:JSON){
+			buy_plugin(_id:$id,version:$version, config:$config){
 				myConf
 			}
 		}`,
@@ -152,8 +152,8 @@ export default compose(
 		name:"withdraw",
 		patch4:id,
 		variables:{id},
-		mutation:graphql`mutation plugin_withdraw_Mutation($id:ObjectID!,$ver:String,$conf:JSON){
-			withdraw_plugin(_id:$id, ver:$ver, conf:$conf){
+		mutation:graphql`mutation plugin_withdraw_Mutation($id:ObjectID!,$version:String,$config:JSON){
+			withdraw_plugin(_id:$id, version:$version, config:$config){
 				myConf
 			}
 		}`,
@@ -162,8 +162,10 @@ export default compose(
 		name:"update",
 		patch4:id,
 		variables:{id},
-		mutation:graphql`mutation plugin_create_Mutation($id:ObjectID!,$code:URL!,$desc:String,$ver:String,$conf:JSON){
-			plugin_update(_id:$id, code:$code, desc:$desc, ver:$ver, conf:$conf){
+		mutation:graphql`mutation plugin_update_Mutation($id:ObjectID!,$code:URL!,
+			$description:String,$version:String,$config:JSON,$readme:String, $keywords:[String]){
+			plugin_update(_id:$id, code:$code, 
+				description:$description, version:$version, config:$config,readme:$readme, keywords:$keywords){
 				...plugin_plugin
 			}
 		}`,
@@ -171,7 +173,7 @@ export default compose(
 	File.withUpload,
 	mapProps(({plugin,update,upload, buy, withdraw})=>({
 		save(code,info){
-			return upload(code,plugin.id,`${info.ver}/index.js`)
+			return upload(code,plugin.id,`${info.version}/index.js`)
 				.then(({url})=>update({...info,code:url}))
 		},
 		plugin, buy, withdraw,

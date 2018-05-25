@@ -5,10 +5,10 @@ import {compose, getContext, withProps, withStateHandlers} from "recompose"
 import {Popover, Chip, Subheader} from "material-ui"
 import {blue300 as SELECTED, indigo900} from 'material-ui/styles/colors'
 
-const TYPES=["Input","Loader","Emitter","Output","Ribbon", "Representation"]
+const TYPES=["Loader","Input", "Representation","Emitter","Stream","Ribbon"]
 const CONDS=[
 	{label:"我用的",key:"using"},
-	{label:"自己写的",key:"mine"},
+	//{label:"自己写的",key:"mine"},
 	{label:"收藏的",key:"favorite"},
 ]
 const style={

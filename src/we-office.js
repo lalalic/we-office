@@ -44,7 +44,7 @@ export const WeOffice = compose(
 					extensions{
 						id
 						code
-						conf
+						config
 					}
 				}
 			}
@@ -88,7 +88,9 @@ export const routes=(
 						withPagination(({qs})=>({
 							variables:qs,
 							query:graphql`
-								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, $favorite: Boolean, $using:Boolean, $searchText:String, $count:Int=20, $cursor: JSON){
+								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, 
+									$favorite: Boolean, $using:Boolean, $searchText:String, 
+									$count:Int=20, $cursor: JSON){
 									...list_plugins
 								}
 							`,
@@ -119,9 +121,9 @@ export const routes=(
 					<IndexRoute component={compose(
 							withQuery(({params:{id}})=>({
 								variables:{id},
-								query:graphql`query weOffice_plugin_Query($id:ObjectID){
+								query:graphql`query weOffice_plugin_Query($id:ObjectID, $name:String){
 									me{
-										plugin(_id:$id){
+										plugin(_id:$id, name:$name){
 											...plugin_plugin
 										}
 									}
