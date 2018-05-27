@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-const program = require('commander')
 const prompts=require("prompts")
 const chalk=require("chalk")
 const fs=require("fs")
@@ -7,24 +6,14 @@ const path=require("path")
 const merge=require("lodash.merge")
 const cwd=process.cwd()
 const Cloud=require("./cloud")
-const { execSync } = require('child_process')
-const rc=require("rc")("wo",{service:"http://qili2.com/1/graphql"})
-const tryRequire=a=>{
-	try{
-		return require(a)
-	}catch(e){
-		return {}
-	}
-}
+Cloud.RC_NAME=".worc"
 
-const project=tryRequire(path.resolve(cwd,"package.json"))
+const {getRc, getProgram, project, tryRequireProject}=require("qili-cli")
+const rc=getRc("wo")
+const program=getProgram(rc)
 
 program
-	.version(require("./package.json").version, '-v, --version')
 	.usage('[options] <command>')
-	.description(require("./package.json").description)
-
-program
 	.command("init [dest]")
 	.description("initialize this we-office plugin project, default dest=.")
 	.option("-t, --type <type>","plugin type[loader|input|representation|emitter|stream]",/^(loader|input|representation|emitter|stream)$/i,"emitter")
@@ -34,19 +23,21 @@ program
 
 		function mergePackageJson(read, write, name){
 			try{
-				let that=tryRequire("./generator/template/package.json")
-				let typed=tryRequire(`./generator/template/${type}/package.json`)
+				let that=tryRequire("./template/package.json")
+				let typed=tryRequire(`./template/${type}/package.json`)
 				let merged=merge({},that, typed, project)
-				
+
 				write.write(JSON.stringify(merged, null, 2))
 				write.end()
 			}catch(e){
 				write.write(JSON.stringify(project, null, 2))
 				write.end()
+				console.log(chalk.red("package.json merging with error"))
+				console.log(chalk.red(e.message))
 			}
 		}
 
-		copy(path.resolve(__dirname,"generator/template/"+type), dest, {
+		copy(path.resolve(__dirname,"template/"+type), dest, {
 				clobber:true,
 				transform(read,write,{name}){
 					name=path.basename(name)
@@ -57,38 +48,44 @@ program
 						default:
 							read.pipe(write)
 					}
-
 				}
 			}, error=>{
 			if(error)
 				console.log(chalk.red(error.message))
+			else {
+				console.log("done")
+			}
 		})
 	})
 
-	
+
 program
 	.command("publish")
 	.description("publish only package main file")
-	.options("-u, --pluginsUrl <url>","only for test, such as http://localhost:9080")
-	.options("-r, --pluginsDir <dir>","only for test, such as dist")
+	.option("-u, --pluginsUrl <url>","only for test, such as http://localhost:9080")
+	.option("-r, --pluginsDir <dir>","only for test, such as dist")
 	.action(async function({url,dir}){
 		if(project.scripts && project.scripts.build){
-			try{	
+			try{
 				console.log('trying to build before publish')
 				execSync("npm run build",{studio:"ignore"})
 			}catch(e){
 				console.log(chalk.yellow("build error:"+e.message))
 				console.log(chalk.blue("but we will continue publish"))
-				return 
+				return
 			}
 		}
 		console.log(chalk.yellow("no build script"))
-		
+
 		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
 			.getToken(rc)
-			.publish(project, url, dir)
+			.then(cloud=>cloud.publish(project, url, dir))
 			.then(()=>console.log(`published ${project.version}`))
 			.catch(e=>console.log(e.message))
 	})
-	
-program.parse(process.argv);
+
+program.parse(process.argv)
+
+if (!process.argv.slice(2).length) {
+  program.outputHelp()
+}

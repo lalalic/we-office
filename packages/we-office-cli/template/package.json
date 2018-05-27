@@ -1,5 +1,5 @@
 {
-	"description":"we-office plugin"
+	"description":"we-office plugin",
 	"peerDependencies":{
 		"we-edit":"latest"
 	}
