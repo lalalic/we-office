@@ -10,7 +10,7 @@ Cloud.RC_NAME=".worc"
 
 const {getRc, getProgram, project, tryRequireProject}=require("qili-cli")
 const rc=getRc("wo")
-const program=getProgram(rc)
+const program=getProgram(rc,require("./package.json"))
 
 program
 	.usage('[options] <command>')
@@ -18,13 +18,14 @@ program
 	.description("initialize this we-office plugin project, default dest=.")
 	.option("-t, --type <type>","plugin type[loader|input|representation|emitter|stream]",/^(loader|input|representation|emitter|stream)$/i,"emitter")
 	.action(function(dest=".", {type}){
+		console.log(`initing project as we-office ${chalk.blue(type)} plugin`)
 		dest=path.resolve(cwd,dest)
 		const copy=require("ncp").ncp
 
 		function mergePackageJson(read, write, name){
 			try{
-				let that=tryRequire("./template/package.json")
-				let typed=tryRequire(`./template/${type}/package.json`)
+				let that=tryRequireProject(require.resolve("./template/package.json"))
+				let typed=tryRequireProject(require.resolve(`./template/${type}/package.json`))
 				let merged=merge({},that, typed, project)
 
 				write.write(JSON.stringify(merged, null, 2))
@@ -62,9 +63,10 @@ program
 program
 	.command("publish")
 	.description("publish only package main file")
-	.option("-u, --pluginsUrl <url>","only for test, such as http://localhost:9080")
-	.option("-r, --pluginsDir <dir>","only for test, such as dist")
+	.option("-u, --url <plugin url>","only for test to set plugin url root, such as http://localhost:9080")
+	.option("-d, --dir <plugin dir>","only for test to set plugin directory, such as dist")
 	.action(async function({url,dir}){
+		debugger
 		if(project.scripts && project.scripts.build){
 			try{
 				console.log('trying to build before publish')
@@ -74,9 +76,10 @@ program
 				console.log(chalk.blue("but we will continue publish"))
 				return
 			}
+		}else{
+			console.log(chalk.yellow("no build script"))
 		}
-		console.log(chalk.yellow("no build script"))
-
+		
 		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
 			.getToken(rc)
 			.then(cloud=>cloud.publish(project, url, dir))

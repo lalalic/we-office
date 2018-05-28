@@ -2,20 +2,25 @@ const path=require("path")
 const fs=require('fs')
 const {Cloud}=require("qili-cli")
 const semver=require("semver")
+const mkdirp=require("mkdirp")
 const cwd=process.cwd()
 
 module.exports=class extends Cloud{
 	publish(current, url, dir){
 		return this.runQL("weOffice_plugin_Query",{name:current.name})
-			.then(({data:{plugin}})=>plugin)
+			.then(({me:{plugin}})=>plugin)
 			.then(latest=>{
-				if(latest && !semver.gt(current.version,latest.version)){
-					throw new Error("latest version is "+latest.version)
+				if(!semver.valid(current.version)){
+					throw new Error(`current version[${current.version}] is not  valid`)
 				}
-				semver.valid(current.version)
+				
+				if(latest && !semver.gt(current.version,latest.version)){
+					throw new Error(`current version[${current.version}] must greater than last version[${latest.version}]`)
+				}
+				
 
 				return this.runQL("file_token_Query")
-					.then(({data:{token}})=>token)
+					.then(({token})=>token)
 					.then(({token,_id})=>{
 						let id=latest ? latest.id : `plugins:${_id}`
 						return {key:`${id}/${current.version}/index.js`.replace(/\:/g,"/"),token,id, creating:!!latest}
@@ -61,15 +66,7 @@ module.exports=class extends Cloud{
 	upload4Test(filePath, token, key, extra, url,dir){
 		try{
 			dir=path.resolve(cwd,`${dir}/${key}`)
-			let routes=dir.split("/")
-			routes.pop()
-			routes.reduce((tested,a)=>{
-				let current=[...tested,a].join("/")
-				if(!fs.existsSync(current)){
-					fs.mkdirSync(current)
-				}
-				return [...tested,a]
-			},[])
+			mkdirp.sync(path.dirname(dir))
 			fs.writeFileSync(dir,fs.readFileSync(filePath))
 			return Promise.resolve(`${url}/${key}`)
 		}catch(e){
