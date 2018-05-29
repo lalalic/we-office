@@ -8,7 +8,7 @@ const cwd=process.cwd()
 const Cloud=require("./cloud")
 Cloud.RC_NAME=".worc"
 
-const {getRc, getProgram, project, tryRequireProject}=require("qili-cli")
+const {getRc, getProgram, tryRequireProject}=require("qili-cli")
 const rc=getRc("wo")
 const program=getProgram(rc,require("./package.json"))
 
@@ -20,6 +20,8 @@ program
 	.action(function(dest=".", {type}){
 		console.log(`initing project as we-office ${chalk.blue(type)} plugin`)
 		dest=path.resolve(cwd,dest)
+		
+		const project=tryRequireProject(path.resolve(dest,"package.json"))
 		const copy=require("ncp").ncp
 
 		function mergePackageJson(read, write, name){
@@ -61,12 +63,14 @@ program
 
 
 program
-	.command("publish")
+	.command("publish [dest]")
 	.description("publish only package main file")
 	.option("-u, --url <plugin url>","only for test to set plugin url root, such as http://localhost:9080")
 	.option("-d, --dir <plugin dir>","only for test to set plugin directory, such as dist")
-	.action(async function({url,dir}){
-		debugger
+	.option("-n, --name <plugin name>", "to overwrite  the plugin name in package.json")
+	.option("-m, --main <plugin code file", "to overwrite the main file in package.json")
+	.action(async function(dest=".", {url,dir,name,main}){
+		const project=tryRequireProject(path.resolve(path.resolve(cwd,dest),"package.json"))
 		if(project.scripts && project.scripts.build){
 			try{
 				console.log('trying to build before publish')
@@ -79,6 +83,12 @@ program
 		}else{
 			console.log(chalk.yellow("no build script"))
 		}
+		
+		if(name)
+			project.name=name
+		
+		if(main)
+			project.main=main
 		
 		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
 			.getToken(rc)

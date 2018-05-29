@@ -70,7 +70,15 @@ Cloud.resolver=Cloud.merge(
 			return app.findEntity("plugins",{author:user._id})
 		},
 		plugin(_,{_id,name},{app,user}){
-			return app.get1Entity("plugins",{_id,name})
+			let cond={}
+			if(_id)
+				cond._id=_id
+			else if(name)
+				cond.name=name
+			else
+				return null
+			
+			return app.get1Entity("plugins",cond)
 		}
 	},
 	Mutation:{
@@ -86,6 +94,8 @@ Cloud.resolver=Cloud.merge(
 							if(name && a.name!=name){
 								return Promise.reject(new Error("name can't be changed in new version"))
 							}
+							
+							let _history=a.history||[]
 
 							return app
 								.patchEntity(

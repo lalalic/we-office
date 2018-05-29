@@ -23,7 +23,11 @@ module.exports=class extends Cloud{
 					.then(({token})=>token)
 					.then(({token,_id})=>{
 						let id=latest ? latest.id : `plugins:${_id}`
-						return {key:`${id}/${current.version}/index.js`.replace(/\:/g,"/"),token,id, creating:!!latest}
+						return {
+							key:`${id}/${current.version}/index.js`.replace(/\:/g,"/"),
+							token,id, 
+							creating:!latest
+						}
 					})
 			})
 			.then(({token,key, id,creating})=>{
@@ -33,7 +37,7 @@ module.exports=class extends Cloud{
 					.then(code=>({code,id,creating}))
 			})
 			.then(({code,id,creating})=>{
-				const {name, version, description, readme, keywords,config}=current
+				let {name, version, description, readme, keywords,config}=current
 				if(readme){
 					readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
 				}
