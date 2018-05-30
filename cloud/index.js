@@ -83,6 +83,7 @@ Cloud.resolver=Cloud.merge(
 	},
 	Mutation:{
 		plugin_update(_,{_id, code, name, ...info},{app,user}){
+			debugger
 			if(!user.isDeveloper)
 				return Promise.reject()
 			
@@ -106,6 +107,7 @@ Cloud.resolver=Cloud.merge(
 										history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
 									}
 								)
+								.then(()=>app.get1Entity("plugins",{_id}))
 						}else{
 							return app.get1Entity("plugins",{name})
 								.then(b=>{

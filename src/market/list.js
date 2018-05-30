@@ -40,11 +40,11 @@ class Plugins extends Component{
 					
 				<PullToRefresh onRefresh={refresh} onMore={loadMore}>
 					<List>
-					{plugins.map(({id,name,desc,ver, author:{username}})=>(
+					{plugins.map(({id,name,description,version, author:{username}})=>(
 							<ListItem key={id}
 								primaryText={name}
 								secondaryTextLines={2}
-								secondaryText={`[ver:${ver}] ${desc} ${username ? `by ${username}` : ""}`}
+								secondaryText={`[${version}] ${description} ${username ? `by ${username}` : ""}`}
 								onClick={()=>toPlugin(id)}
 								/>
 						))}

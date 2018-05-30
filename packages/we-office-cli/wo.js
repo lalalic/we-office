@@ -67,25 +67,28 @@ program
 	.description("publish only package main file")
 	.option("-u, --url <plugin url>","only for test to set plugin url root, such as http://localhost:9080")
 	.option("-d, --dir <plugin dir>","only for test to set plugin directory, such as dist")
-	.option("-n, --name <plugin name>", "to overwrite  the plugin name in package.json")
+	.option("-n, --pluginName <plugin name>", "to overwrite  the plugin name in package.json")
 	.option("-m, --main <plugin code file", "to overwrite the main file in package.json")
-	.action(async function(dest=".", {url,dir,name,main}){
+	.option("--no-build","don't try to build")
+	.action(async function(dest=".", {url,dir,pluginName,main,build}){
 		const project=tryRequireProject(path.resolve(path.resolve(cwd,dest),"package.json"))
-		if(project.scripts && project.scripts.build){
-			try{
-				console.log('trying to build before publish')
-				execSync("npm run build",{studio:"ignore"})
-			}catch(e){
-				console.log(chalk.yellow("build error:"+e.message))
-				console.log(chalk.blue("but we will continue publish"))
-				return
+		if(build){
+			if(project.scripts && project.scripts.build){
+				try{
+					console.log('trying to build before publish')
+					execSync("npm run build",{studio:"ignore"})
+				}catch(e){
+					console.log(chalk.yellow("build error:"+e.message))
+					console.log(chalk.blue("but we will continue publish"))
+					return
+				}
+			}else{
+				console.log(chalk.yellow("no build script"))
 			}
-		}else{
-			console.log(chalk.yellow("no build script"))
 		}
 		
-		if(name)
-			project.name=name
+		if(pluginName)
+			project.name=pluginName
 		
 		if(main)
 			project.main=main
