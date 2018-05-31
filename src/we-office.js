@@ -148,6 +148,7 @@ export const routes=(
 		                            id
 		                            name
 		                        }
+								isDeveloper
 		                        ...qili_account_user
 		                    }
 		                }

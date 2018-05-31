@@ -1,24 +1,6 @@
 import React, {PureComponent} from "react"
 import {connect} from "react-redux"
-
-import MaterialUI from "material-ui"
-import * as weEdit from "we-edit"
-import weOffice from "we-edit/office"
-import Pagination from "we-edit/representation-pagination"
-import Html from "we-edit/representation-html"
-import Text from "we-edit/representation-text"
-import PropTypes from "prop-types"
-
-const requires={
-	"react":React,
-	"material-ui":MaterialUI,
-	"we-edit":weEdit,
-	"we-edit/office":weOffice,
-	"we-edit/representation-pagination":Pagination,
-	"we-edit/representation-html":Html,
-	"we-edit/representation-text":Text,
-	"prop-types":PropTypes
-}
+import requirex from "./require-api"
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
@@ -33,7 +15,7 @@ export function install(code){
 		.then(code=>{
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
-			compiled(module, module.exports, a=>requires[a])
+			compiled(module, module.exports, a=>requirex[a])
 			return module.exports
 		})
 }
@@ -43,6 +25,10 @@ class PluginLoader extends PureComponent{
 	componentDidMount(){
 		const {plugin:{code}, onload}=this.props
 		install(code)
+			.catch(e=>{
+				console.error(e)
+				throw e
+			})
 			.catch(e=>this.setState({error:e.message}))
 			.then(()=>this.setState({loading:false}))
 			.then(onload)

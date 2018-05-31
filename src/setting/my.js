@@ -12,7 +12,7 @@ export default compose(
     getContext({router:PropTypes.object}),
     withProps(({user,router})=>({
         children: ([
-            user.extensions.length!=0 && <ListItem
+            <ListItem
                 primaryText="My Office" key="office"
                 initiallyOpen={true}
                 insetChildren={true}
@@ -24,7 +24,7 @@ export default compose(
                             primaryText={a.name} key={a.id}/>)
                 }
             />,
-            <ListItem
+            user.isDeveloper && <ListItem
                 primaryText="My Plugins" key="plugins"
                 leftIcon={<IconAdd/>}
                 initiallyOpen={true}

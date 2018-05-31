@@ -177,7 +177,7 @@ export default compose(
 				.then(({url})=>update({...info,code:url}))
 		},
 		plugin, buy, withdraw,
-		isNew: !!plugin.id
+		isNew: !!!plugin.id
 	}))
 )(Plugin)
 

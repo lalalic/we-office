@@ -1,5 +1,5 @@
 const path = require('path')
-const {ContextReplacementPlugin,IgnorePlugin, NamedModulesPlugin} = require("webpack")
+const {ContextReplacementPlugin,IgnorePlugin,DllReferencePlugin, NamedModulesPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
@@ -18,6 +18,10 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			}
 		},
 		plugins:[
+			new DllReferencePlugin({
+				context: __dirname,
+				manifest: require("./manifest.json"),
+			}),
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),

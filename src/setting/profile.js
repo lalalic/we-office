@@ -24,7 +24,7 @@ export default compose(
 )(({setDeveloper,...props})=>(
 	<Profile {...props}>
 		<Toggle
-			label="Want to be deveooper"
+			label="Want to be developer"
 			toggled={props.user.isDeveloper}
 			onToggle={(e,be)=>setDeveloper({be})}
 			/>
