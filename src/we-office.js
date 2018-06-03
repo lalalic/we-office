@@ -65,12 +65,12 @@ export const WeOffice = compose(
 export const routes=(
 	<Router history={hashHistory}>
 		<Route path="/" component={({children})=>
-				<DefaultOffice 
+				<DefaultOffice
 					titleBarProps={{
 						title:"we-office",
 						children:<Navigator/>
 					}}>
-					<div id="portal">
+					<div id="portal" style={{overflow:"scroll"}}>
 						<PluginLoader/>
 						{children}
 					</div>
@@ -88,8 +88,8 @@ export const routes=(
 						withPagination(({qs})=>({
 							variables:qs,
 							query:graphql`
-								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean, 
-									$favorite: Boolean, $using:Boolean, $searchText:String, 
+								query  weOffice_plugins_Query($type:[PluginType],$mine: Boolean,
+									$favorite: Boolean, $using:Boolean, $searchText:String,
 									$count:Int=20, $cursor: JSON){
 									...list_plugins
 								}

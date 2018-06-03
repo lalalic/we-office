@@ -1,9 +1,11 @@
 import React, {Component, Fragment} from "react"
-import {compose,mapProps, branch, renderComponent} from "recompose"
+import PropTypes from "prop-types"
+import {compose,mapProps, branch, renderComponent,getContext} from "recompose"
 
 import {withFragment,withMutation,File, CommandBar} from "qili-app"
 import {TextField} from "material-ui"
 import {install} from "../plugin-loader"
+import {ACTION} from "../state"
 
 import IconApply from "material-ui/svg-icons/content/add"
 
@@ -142,9 +144,14 @@ export default compose(
 		name:"buy",
 		patch4:id,
 		variables:{id},
+		promise:true,
 		mutation:graphql`mutation plugin_buy_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			buy_plugin(_id:$id,version:$version, config:$config){
-				myConf
+				extensions{
+					id
+					code
+					config
+				}
 			}
 		}`,
 	})),
@@ -152,9 +159,14 @@ export default compose(
 		name:"withdraw",
 		patch4:id,
 		variables:{id},
+		promise:true,
 		mutation:graphql`mutation plugin_withdraw_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			withdraw_plugin(_id:$id, version:$version, config:$config){
-				myConf
+				extensions{
+					id
+					code
+					config
+				}
 			}
 		}`,
 	})),
@@ -162,21 +174,30 @@ export default compose(
 		name:"update",
 		patch4:id,
 		variables:{id},
-		mutation:graphql`mutation plugin_update_Mutation($id:ObjectID!,$code:URL!,
+		mutation:graphql`mutation plugin_update_Mutation($id:ObjectID!,$code:URL!,$type:[PluginType],
 			$description:String,$version:String,$config:JSON,$readme:String, $keywords:[String]){
-			plugin_update(_id:$id, code:$code, 
+			plugin_update(_id:$id, code:$code,type:$type,
 				description:$description, version:$version, config:$config,readme:$readme, keywords:$keywords){
 				...plugin_plugin
 			}
 		}`,
 	})),
+	getContext({store:PropTypes.object}),
 	File.withUpload,
-	mapProps(({plugin,update,upload, buy, withdraw})=>({
+	mapProps(({plugin,update,upload, buy, withdraw,store, dispatch=store.dispatch})=>({
 		save(code,info){
 			return upload(code,plugin.id,`${info.version}/index.js`)
 				.then(({url})=>update({...info,code:url}))
 		},
-		plugin, buy, withdraw,
+		plugin,
+		buy(){
+			return buy(...arguments)
+				.then(data=>dispatch(ACTION.EXTENSIONS(data.extensions)))
+		},
+		withdraw(){
+			return withdraw(...arguments)
+				.then(data=>dispatch(ACTION.EXTENSIONS(data.extensions)))
+		},
 		isNew: !!!plugin.id
 	}))
 )(Plugin)

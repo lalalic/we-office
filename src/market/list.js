@@ -24,7 +24,7 @@ class Plugins extends Component{
 						onKeyDown={e=>e.keyCode==13 && search({searchText})}
 						onFocus={e=>this.setState({conditionAnchor:e.target})}
 						fullWidth={true}/>
-						
+
 				<QuickSearch
 					qs={qs}
 					style={{opacity:0.9}}
@@ -37,19 +37,20 @@ class Plugins extends Component{
 						search(condition)
 					}}
 					/>
-					
-				<PullToRefresh onRefresh={refresh} onMore={loadMore}>
-					<List>
-					{plugins.map(({id,name,description,version, author:{username}})=>(
-							<ListItem key={id}
-								primaryText={name}
-								secondaryTextLines={2}
-								secondaryText={`[${version}] ${description} ${username ? `by ${username}` : ""}`}
-								onClick={()=>toPlugin(id)}
-								/>
-						))}
-					</List>
-				</PullToRefresh>
+				<div style={{overflow:"scroll"}}>
+					<PullToRefresh onRefresh={refresh} onMore={loadMore}>
+						<List>
+						{plugins.map(({id,name,description,version, author:{username}})=>(
+								<ListItem key={id}
+									primaryText={name}
+									secondaryTextLines={2}
+									secondaryText={`[${version}] ${description} ${username ? `by ${username}` : ""}`}
+									onClick={()=>toPlugin(id)}
+									/>
+							))}
+						</List>
+					</PullToRefresh>
+				</div>
 			</Fragment>
 		)
 	}

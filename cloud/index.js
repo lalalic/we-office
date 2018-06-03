@@ -13,56 +13,63 @@ Cloud.typeDefs=`
 		readme: String!
 		keywords: [String]
 		history: [Plugin]
-		
+		type:[PluginType]
+
 		myConf: JSON
 		isMine: Boolean
 	}
-	
+
 	enum PluginType{
-		Loader
-		Emitter
-		Output
-		Representation
-		Ribbon
+		input
+		loader
+		emitter
+		output
+		representation
+		ribbon
 	}
-	
+
 	extend type Query{
 		plugins(type:[PluginType], mine: Boolean, favorite: Boolean, using:Boolean, searchText:String, first:Int, after:JSON):PluginConnection
 	}
-	
+
 	extend type Mutation{
-		plugin_update(_id:ObjectID!,code:URL!,name:String,readme:String,keywords:[String],
+		plugin_update(_id:ObjectID!,code:URL!,name:String,readme:String,keywords:[String],type:[PluginType],
 			description:String,version:String,config:JSON):Plugin
-		buy_plugin(_id:ObjectID!, version:String, config:JSON):Plugin
-		withdraw_plugin(_id:ObjectID!, version:String, config:JSON):Plugin
+		buy_plugin(_id:ObjectID!, version:String, config:JSON):User
+		withdraw_plugin(_id:ObjectID!, version:String, config:JSON):User
 		user_setDeveloper(be:Boolean!):User
 	}
-	
+
 	extend type User{
 		extensions: [Plugin]!
 		plugins:[Plugin]!
 		plugin(_id:ObjectID, name:String): Plugin
 		isDeveloper: Boolean
 	}
-	
+
 	${PluginComment.typeDefs}
 	${PluginPagination.typeDefs}
 `
 
 Cloud.resolver=Cloud.merge(
-	PluginComment.resolver, 
+	PluginComment.resolver,
 	PluginPagination.resolver,
 	{
 	User:{
 		extensions(_,{},{app,user}){
 			return Promise.all(
 				(user.extensions||[])
-					.map(({_id,conf})=>app
+					.map(({_id,config})=>app
 						.getDataLoader("plugins")
 						.load(_id)
-						.then(plugin=>({...plugin,conf}))
+						.then(plugin=>{
+							if(plugin){
+								return {...plugin,config}
+							}
+						})
 					)
 			)
+			.then(all=>all.filter(a=>!!a))
 		},
 		plugins(_,{},{app,user}){
 			if(!user.isDeveloper)
@@ -77,16 +84,15 @@ Cloud.resolver=Cloud.merge(
 				cond.name=name
 			else
 				return null
-			
+
 			return app.get1Entity("plugins",cond)
 		}
 	},
 	Mutation:{
 		plugin_update(_,{_id, code, name, ...info},{app,user}){
-			debugger
 			if(!user.isDeveloper)
-				return Promise.reject()
-			
+				return Promise.reject(new Error("you are not developer"))
+
 			try{
 				return app
 					.get1Entity("plugins",{_id,author:user._id})
@@ -95,15 +101,15 @@ Cloud.resolver=Cloud.merge(
 							if(name && a.name!=name){
 								return Promise.reject(new Error("name can't be changed in new version"))
 							}
-							
+
 							let _history=a.history||[]
 
 							return app
 								.patchEntity(
 									"plugin",
 									{_id,author:user._id},
-									{...info, 
-										code, 
+									{...info,
+										code,
 										history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
 									}
 								)
@@ -117,7 +123,7 @@ Cloud.resolver=Cloud.merge(
 										return app.createEntity("plugins",{...info,author:user._id,_id,code,name})
 									}
 								})
-							
+
 						}
 					})
 			}catch(e){
@@ -133,8 +139,10 @@ Cloud.resolver=Cloud.merge(
 				extensions.splice(i,1,{_id,version,config})
 			}
 			return app.patchEntity("users", {_id:user._id}, {extensions})
-				.then(()=>({_id,config}))
-				
+				.then(()=>{
+					user.extensions=extensions
+					return user
+				})
 		},
 		withdraw_plugin(_,{_id},{app,user}){
 			let extensions=user.extensions||[]
@@ -145,7 +153,10 @@ Cloud.resolver=Cloud.merge(
 				extensions.splice(i,1)
 			}
 			return app.patchEntity("users", {_id:user._id}, {extensions})
-				.then(()=>({_id,config:null}))
+				.then(()=>{
+					user.extensions=extensions
+					return user
+				})
 		},
 		user_setDeveloper(_,{be},{app,user}){
 			return app.patchEntity("users",{_id:user._id},{isDeveloper:be})
@@ -160,7 +171,7 @@ Cloud.resolver=Cloud.merge(
 					.extensions(user, {}, {app,user})
 					.then(edges=>({edges,hasNextPage:false}))
 			}
-			
+
 			return app.nextPage("plugins", {first,after}, cursor=>{
 				if(type && type.length){
 					cursor=cursor.filter({type:{$all:type}})
@@ -168,13 +179,13 @@ Cloud.resolver=Cloud.merge(
 				if(searchText){
 					cursor=cursor.filter({description: new RegExp(`${searchText}.*`,"i")})
 				}
-				
+
 				if(mine){
 					cursor=cursor.filter({author:user._id})
 				}
-				
+
 				if(favorite){
-					
+
 				}
 				return cursor
 			})

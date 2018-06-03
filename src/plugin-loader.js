@@ -15,8 +15,7 @@ export function install(code){
 		.then(code=>{
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
-			compiled(module, module.exports, a=>requirex[a])
-			return module.exports
+			compiled(module, module.exports, requirex)
 		})
 }
 
@@ -26,11 +25,13 @@ class PluginLoader extends PureComponent{
 		const {plugin:{code}, onload}=this.props
 		install(code)
 			.catch(e=>{
-				console.error(e)
-				throw e
+				this.setState({error:e.message})
+				return e
 			})
-			.catch(e=>this.setState({error:e.message}))
-			.then(()=>this.setState({loading:false}))
+			.then(a=>{
+				this.setState({loading:false})
+				return a
+			})
 			.then(onload)
 	}
 
@@ -47,17 +48,9 @@ class PluginLoader extends PureComponent{
 
 export default connect(state=>({plugins: state["we-office"].extensions}))(
 	class PluginLoaders extends PureComponent{
-		state={loaded:0, errors:0}
-		componentWillReceiveProps({plugins}){
-			if(plugins!=this.props.plugins){
-				this.setState({loaded:0,errors:0})
-			}
-		}
+		state={loaded:0, errors:[]}
 		render(){
-			const {props:{plugins}, state:{loaded}}=this
-			if(loaded==plugins.length){
-				return null
-			}
+			const {props:{plugins}, state:{loaded, errors}}=this
 			return (
 				<div style={{position:"absolute",width:"100%",height:"100%"}}>
 					<div style={{margin:"auto",width:400, height:300, background:"cadetblue"}}>
@@ -68,7 +61,7 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 								onload={e=>this.setState(({loaded,errors})=>{
 									loaded++
 									if(e){
-										errors++
+										errors=[...errors,a]
 									}
 									return {loaded,errors}
 								})}
@@ -77,6 +70,19 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 					</div>
 				</div>
 			)
+		}
+
+		shouldComponentUpdate({plugins}, {loaded, errors}){
+			if(plugins!=this.props.plugins){
+				this.setState({loaded:0,errors:[]})
+				return true
+			}
+
+			if(loaded+errors.length==this.props.plugins.length && errors.length>0){
+				return true
+			}
+
+			return false
 		}
 	}
 )

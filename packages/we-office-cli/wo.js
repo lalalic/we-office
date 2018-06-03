@@ -20,7 +20,7 @@ program
 	.action(function(dest=".", {type}){
 		console.log(`initing project as we-office ${chalk.blue(type)} plugin`)
 		dest=path.resolve(cwd,dest)
-		
+
 		const project=tryRequireProject(path.resolve(dest,"package.json"))
 		const copy=require("ncp").ncp
 
@@ -65,11 +65,10 @@ program
 program
 	.command("publish [dest]")
 	.description("publish only package main file")
-	.option("-u, --url <plugin url>","only for test to set plugin url root, such as http://localhost:9080")
-	.option("-d, --dir <plugin dir>","only for test to set plugin directory, such as dist")
-	.option("-n, --pluginName <plugin name>", "to overwrite  the plugin name in package.json")
+	.option("-u, --url <plugin url>","only for test to set plugin url root, such as http://localhost:9080", rc.u||rc.url)
+	.option("-d, --dir <plugin dir>","only for test to set plugin directory, such as dist",rc.d||rc.dir)
 	.option("-m, --main <plugin code file", "to overwrite the main file in package.json")
-	.option("--no-build","don't try to build")
+	.option("--no-build","don't try to build",rc.build!==false)
 	.action(async function(dest=".", {url,dir,pluginName,main,build}){
 		const project=tryRequireProject(path.resolve(path.resolve(cwd,dest),"package.json"))
 		if(build){
@@ -86,13 +85,9 @@ program
 				console.log(chalk.yellow("no build script"))
 			}
 		}
-		
-		if(pluginName)
-			project.name=pluginName
-		
-		if(main)
-			project.main=main
-		
+
+		project.main=main||path.resolve(dest, project.main||"./index.js")
+
 		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
 			.getToken(rc)
 			.then(cloud=>cloud.publish(project, url, dir))

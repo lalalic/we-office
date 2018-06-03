@@ -13,11 +13,11 @@ module.exports=class extends Cloud{
 				if(!semver.valid(current.version)){
 					throw new Error(`current version[${current.version}] is not  valid`)
 				}
-				
+
 				if(latest && !semver.gt(current.version,latest.version)){
 					throw new Error(`current version[${current.version}] must greater than last version[${latest.version}]`)
 				}
-				
+
 
 				return this.runQL("file_token_Query")
 					.then(({token})=>token)
@@ -25,7 +25,7 @@ module.exports=class extends Cloud{
 						let id=latest ? latest.id : `plugins:${_id}`
 						return {
 							key:`${id}/${current.version}/index.js`.replace(/\:/g,"/"),
-							token,id, 
+							token,id,
 							creating:!latest
 						}
 					})
@@ -37,6 +37,7 @@ module.exports=class extends Cloud{
 					.then(code=>({code,id,creating}))
 			})
 			.then(({code,id,creating})=>{
+				let wo=current["we-office"]||{}
 				let {name, version, description, readme, keywords,config}=current
 				if(readme){
 					readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
@@ -44,7 +45,7 @@ module.exports=class extends Cloud{
 
 				return this.runQL(
 					creating ? "create_plugin_Mutation" : "plugin_update_Mutation",
-					{code,id,name, version, description,readme,keywords,config}
+					{code,id,name, version, description,readme,keywords,config, ...wo}
 				)
 			})
 	}
