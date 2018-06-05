@@ -77,6 +77,7 @@ Cloud.resolver=Cloud.merge(
 			return app.findEntity("plugins",{author:user._id})
 		},
 		plugin(_,{_id,name},{app,user}){
+			debugger
 			let cond={}
 			if(_id)
 				cond._id=_id

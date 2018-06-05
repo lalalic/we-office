@@ -43,8 +43,10 @@ export const WeOffice = compose(
 					photo
 					extensions{
 						id
+						name
 						code
 						config
+						version
 					}
 				}
 			}

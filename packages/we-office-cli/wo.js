@@ -68,7 +68,7 @@ program
 	.option("-u, --url <plugin url>","only for test to set plugin url root, such as http://localhost:9080", rc.u||rc.url)
 	.option("-d, --dir <plugin dir>","only for test to set plugin directory, such as dist",rc.d||rc.dir)
 	.option("-m, --main <plugin code file", "to overwrite the main file in package.json")
-	.option("--no-build","don't try to build",rc.build!==false)
+	.option("--no-build","don't try to build",rc.build===false)
 	.action(async function(dest=".", {url,dir,pluginName,main,build}){
 		const project=tryRequireProject(path.resolve(path.resolve(cwd,dest),"package.json"))
 		if(build){

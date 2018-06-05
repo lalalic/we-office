@@ -7,7 +7,9 @@ const cwd=process.cwd()
 
 module.exports=class extends Cloud{
 	publish(current, url, dir){
-		return this.runQL("weOffice_plugin_Query",{name:current.name})
+		const wo=current["we-office"]||{}
+		const pluginName=wo.name||current.name
+		return this.runQL("weOffice_plugin_Query",{name:pluginName})
 			.then(({me:{plugin}})=>plugin)
 			.then(latest=>{
 				if(!semver.valid(current.version)){
@@ -37,7 +39,6 @@ module.exports=class extends Cloud{
 					.then(code=>({code,id,creating}))
 			})
 			.then(({code,id,creating})=>{
-				let wo=current["we-office"]||{}
 				let {name, version, description, readme, keywords,config}=current
 				if(readme){
 					readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
@@ -45,7 +46,7 @@ module.exports=class extends Cloud{
 
 				return this.runQL(
 					creating ? "create_plugin_Mutation" : "plugin_update_Mutation",
-					{code,id,name, version, description,readme,keywords,config, ...wo}
+					{code,id,name:pluginName, version, description,readme,keywords,config, ...wo}
 				)
 			})
 	}

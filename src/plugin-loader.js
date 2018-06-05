@@ -1,4 +1,4 @@
-import React, {PureComponent} from "react"
+import React, {PureComponent, Component} from "react"
 import {connect} from "react-redux"
 import requirex from "./require-api"
 
@@ -51,13 +51,16 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 		state={loaded:0, errors:[]}
 		render(){
 			const {props:{plugins}, state:{loaded, errors}}=this
+			if(plugins.length==0 || plugins.length==loaded)
+				return null
+			
 			return (
 				<div style={{position:"absolute",width:"100%",height:"100%"}}>
 					<div style={{margin:"auto",width:400, height:300, background:"cadetblue"}}>
 						{
 							plugins.map(a=><PluginLoader
 								plugin={a}
-								key={`${a.id}-${a.ver}`}
+								key={`${a.id}-${a.version}`}
 								onload={e=>this.setState(({loaded,errors})=>{
 									loaded++
 									if(e){
@@ -70,19 +73,6 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 					</div>
 				</div>
 			)
-		}
-
-		shouldComponentUpdate({plugins}, {loaded, errors}){
-			if(plugins!=this.props.plugins){
-				this.setState({loaded:0,errors:[]})
-				return true
-			}
-
-			if(loaded+errors.length==this.props.plugins.length && errors.length>0){
-				return true
-			}
-
-			return false
 		}
 	}
 )
