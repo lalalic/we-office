@@ -42,13 +42,18 @@ export const WeOffice = compose(
 					username
 					photo
 					extensions{
-						id
-						name
-						code
-						config
-						version
+						...weOffice_extension @relay(mask: false)
 					}
 				}
+			}
+		`,
+		_fragment:graphql`
+			fragment weOffice_extension on Plugin{
+				id
+				name
+				code
+				config
+				version
 			}
 		`,
 		onSuccess(response,dispatch){

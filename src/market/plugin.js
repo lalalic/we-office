@@ -148,9 +148,7 @@ export default compose(
 		mutation:graphql`mutation plugin_buy_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			buy_plugin(_id:$id,version:$version, config:$config){
 				extensions{
-					id
-					code
-					config
+					...weOffice_extension @relay(mask: false)
 				}
 			}
 		}`,
@@ -163,9 +161,7 @@ export default compose(
 		mutation:graphql`mutation plugin_withdraw_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			withdraw_plugin(_id:$id, version:$version, config:$config){
 				extensions{
-					id
-					code
-					config
+					...weOffice_extension @relay(mask: false)
 				}
 			}
 		}`,

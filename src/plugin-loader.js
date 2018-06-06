@@ -4,7 +4,7 @@ import requirex from "./require-api"
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
-export function install(code){
+export function install(code,name){
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
 			if(!res.ok){
@@ -13,66 +13,68 @@ export function install(code){
 			return res.text()
 		}) : Promise.resolve(code))
 		.then(code=>{
+			code=`${code}\r\n//# sourceURL=plugins/${name}.js`
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
 			compiled(module, module.exports, requirex)
 		})
 }
 
-class PluginLoader extends PureComponent{
-	state={loading:true}
-	componentDidMount(){
-		const {plugin:{code}, onload}=this.props
-		install(code)
-			.catch(e=>{
-				this.setState({error:e.message})
-				return e
-			})
-			.then(a=>{
-				this.setState({loading:false})
-				return a
-			})
-			.then(onload)
-	}
-
-	render(){
-		const {state:{loading,error}, props:{plugin}}=this
-		if(loading){
-			return <div>loading plugin {plugin.name}...</div>
-		}else if(error){
-			return <div style={{color:"red"}}>{plugin.name}: {error} </div>
-		}else
-			return null
-	}
-}
-
 export default connect(state=>({plugins: state["we-office"].extensions}))(
 	class PluginLoaders extends PureComponent{
-		state={loaded:0, errors:[]}
+		constructor(){
+			super(...arguments)
+			this.state={loading:null}			
+			this.loaded=[]
+			this.tried=0
+		}
+		
+		componentDidMount(){
+			this.tryInstall(this.props.plugins)
+		}
+		
+		tryInstall(plugins){
+			plugins
+				.filter(a=>!this.loaded.find(b=>b.id==a.id))
+				.reduce((p, a)=>{
+					return p
+						.finally(()=>{
+							this.setState({loading:a})
+							return install(a.code, a.name)
+								.then(()=>{
+									console.debug(`loaded ${a.name}`)
+									this.loaded.push(a)
+								})
+								.catch(a=>void(0))
+								.finally(()=>this.setState({loading:null}))
+						})
+				}, Promise.resolve())
+				.then(()=>this.tried++)
+				.then(()=>{
+					if(this.tried<2 && this.loaded.length<this.props.plugins.length){
+						this.tryInstall(plugins)
+					}
+				})
+		}
+
 		render(){
-			const {props:{plugins}, state:{loaded, errors}}=this
-			if(plugins.length==0 || plugins.length==loaded)
+			const {state:{loading}, tried}=this
+			
+			if(!loading)
 				return null
 			
 			return (
 				<div style={{position:"absolute",width:"100%",height:"100%"}}>
 					<div style={{margin:"auto",width:400, height:300, background:"cadetblue"}}>
-						{
-							plugins.map(a=><PluginLoader
-								plugin={a}
-								key={`${a.id}-${a.version}`}
-								onload={e=>this.setState(({loaded,errors})=>{
-									loaded++
-									if(e){
-										errors=[...errors,a]
-									}
-									return {loaded,errors}
-								})}
-							/>)
-						}
+						loading {loading.name}...
 					</div>
 				</div>
 			)
+		}
+		
+		componentWillReceiveProps({plugins}){
+			this.tried=0
+			this.tryInstall(plugins)
 		}
 	}
 )
