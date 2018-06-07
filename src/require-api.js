@@ -11,3 +11,11 @@ const requires={
 module.exports=window.require=function(a){
 	return requires[a]
 }
+
+module.exports.extend=function(name, m){
+	if(m){
+		requires[m]=name
+	}else{
+		delete requires[m]
+	}
+}

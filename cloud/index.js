@@ -200,11 +200,8 @@ Cloud.resolver=Cloud.merge(
 		isMine({author},_,{user}){
 			return user.isDeveloper && user._id==author
 		},
-		myConf({_id},{},{user}){
-			let selected=(user.extensions||[]).find(a=>a._id==_id)
-			if(selected)
-				return selected.config||{}
-			return null
+		myConf({_id},{},{user:{extensions}}){
+			return (extensions||[]).find(a=>a._id==_id)
 		}
 	}
 })

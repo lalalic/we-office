@@ -78,7 +78,7 @@ export class Plugin extends Component{
 							fontFamily: "calibri"
 						}}
 						onChange={e=>this.setState({code:e.target.value})}
-						defaultValue={code||start}
+						defaultValue={code}
 						/>
 				</div>
 				}
@@ -197,29 +197,3 @@ export default compose(
 		isNew: !!!plugin.id
 	}))
 )(Plugin)
-
-const start=`//A we-edit Loader plugin to load input
-/*
-	const {Component, createElement}=require("react")
-	const PropTypes=require("prop-types")
-	const {Loader}=require("we-edit")
-
-	class MyLoader extends Component{
-		render(){
-			return createElement("div",{},"hello Loader!")
-		}
-	}
-	MyLoader.propTypes={
-		type: PropTypes.string.isRequired
-	}
-
-	MyLoader.defaultProps={
-		type:"MyLoader"
-	}
-
-	Loader.support(MyLoader)
-	exports.name="MyLoader"
-	exports.ver="0.0.1"
-	exports.desc="test"
-*/
-`
