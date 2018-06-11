@@ -9,9 +9,18 @@ module.exports=class extends Cloud{
 	publish(current, url, dir){
 		const wo=current["we-office"]||{}
 		const pluginName=wo.name||current.name
+		const main=path.resolve(cwd,current.main||"index.js")
 		return this.runQL("weOffice_plugin_Query",{name:pluginName})
 			.then(({me:{plugin}})=>plugin)
 			.then(latest=>{
+				if(url && dir){
+					return {
+						key:`plugins/${pluginName}/${current.version}/index.js`,
+						id:"plugins:"+pluginName,
+						creating:!latest
+					}
+				}
+				
 				if(!semver.valid(current.version)){
 					throw new Error(`current version[${current.version}] is not  valid`)
 				}
@@ -33,9 +42,7 @@ module.exports=class extends Cloud{
 					})
 			})
 			.then(({token,key, id,creating})=>{
-				let main=current.main||"index.js"
-
-				return this.upload(path.resolve(cwd,main), token,key, {"x:id":id}, url, dir)
+				return this.upload(main, token,key, {"x:id":id}, url, dir)
 					.then(code=>({code,id,creating}))
 			})
 			.then(({code,id,creating})=>{
