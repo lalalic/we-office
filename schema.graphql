@@ -129,12 +129,12 @@ type PluginEdge {
 }
 
 enum PluginType {
-  input
-  loader
-  emitter
-  output
-  representation
-  ribbon
+  Input
+  Loader
+  Emitter
+  Stream
+  Representation
+  Ribbon
 }
 
 type Query {

@@ -4,7 +4,7 @@ import requirex from "./require-api"
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
-export function install(code,name){
+export function install({code,name,config}){
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
 			if(!res.ok){
@@ -17,7 +17,9 @@ export function install(code,name){
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
 			compiled(module, module.exports, requirex)
+			return module.exports
 		})
+		.then(exports=>exports.install(config))
 }
 
 export default connect(state=>({plugins: state["we-office"].extensions}))(
@@ -40,7 +42,7 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 					return p
 						.finally(()=>{
 							this.setState({loading:a})
-							return install(a.code, a.name)
+							return install(a)
 								.then(()=>{
 									console.debug(`loaded ${a.name}`)
 									this.loaded.push(a)

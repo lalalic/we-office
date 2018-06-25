@@ -67,7 +67,7 @@ export class Plugin extends Component{
 
 		return (
 			<Fragment>
-				{isMine &&
+				{false &&
 				<div style={{flex:"1 100%", overflow: "scroll"}}>
 					<textarea
 						style={{
@@ -101,7 +101,7 @@ export class Plugin extends Component{
 					)}
 				</div>
 
-				{!isMine && <div style={{flex:"1 100%", overflow: "scroll"}}></div>}
+				<div style={{flex:"1 100%", overflow: "scroll"}}></div>
 
 				<CommandBar
 					style={{flex:1}}

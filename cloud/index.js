@@ -17,15 +17,16 @@ Cloud.typeDefs=`
 
 		myConf: JSON
 		isMine: Boolean
+		bought: Boolean
 	}
 
 	enum PluginType{
-		input
-		loader
-		emitter
-		output
-		representation
-		ribbon
+		Input
+		Loader
+		Emitter
+		Stream
+		Representation
+		Ribbon
 	}
 
 	extend type Query{
@@ -70,6 +71,10 @@ Cloud.resolver=Cloud.merge(
 					)
 			)
 			.then(all=>all.filter(a=>!!a))
+			.then(all=>{
+				const i=a=>(a.type||[]).findIndex(t=>t=="representation")
+				return all.sort((a,b)=>i(b)-i(a))
+			})
 		},
 		plugins(_,{},{app,user}){
 			if(!user.isDeveloper)
@@ -201,7 +206,13 @@ Cloud.resolver=Cloud.merge(
 			return user.isDeveloper && user._id==author
 		},
 		myConf({_id},{},{user:{extensions}}){
-			return (extensions||[]).find(a=>a._id==_id)
+			let found=(extensions||[]).find(a=>a._id==_id)
+			if(found)
+				return found.conf
+			return null
+		},
+		bought({_id},{},{user:{extensions}}){
+			return (extensions||[]).includes(a=>a._id==_id)
 		}
 	}
 })
