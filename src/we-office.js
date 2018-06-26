@@ -52,7 +52,7 @@ export const WeOffice = compose(
 				id
 				name
 				code
-				config
+				myConf
 				version
 			}
 		`,

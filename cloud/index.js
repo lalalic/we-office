@@ -65,15 +65,24 @@ Cloud.resolver=Cloud.merge(
 						.load(_id)
 						.then(plugin=>{
 							if(plugin){
-								return {...plugin,config}
+								return {...plugin,myConf:config}
 							}
 						})
 					)
 			)
 			.then(all=>all.filter(a=>!!a))
 			.then(all=>{
-				const i=a=>(a.type||[]).findIndex(t=>t=="representation")
+				const i=a=>(a.type||[]).findIndex(t=>t=="Representation")
 				return all.sort((a,b)=>i(b)-i(a))
+			})
+			.then(all=>{
+				if(user.isDeveloper){
+					return [
+						{author:user._id,code:"//your code",name:"Test",_id:"test"},
+						...all
+					]
+				}
+				return all
 			})
 		},
 		plugins(_,{},{app,user}){
@@ -212,7 +221,7 @@ Cloud.resolver=Cloud.merge(
 			return null
 		},
 		bought({_id},{},{user:{extensions}}){
-			return (extensions||[]).includes(a=>a._id==_id)
+			return (extensions||[]).find(a=>a._id==_id)
 		}
 	}
 })

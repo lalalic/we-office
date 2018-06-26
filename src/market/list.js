@@ -70,6 +70,7 @@ export default compose(
 						username
 					}
 					isMine
+					bought
 				}
 			}
 			pageInfo{

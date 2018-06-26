@@ -4,7 +4,10 @@ import requirex from "./require-api"
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
-export function install({code,name,config}){
+const imported={}
+
+export function install(plugin){
+	const {code,name,config}=plugin
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
 			if(!res.ok){
@@ -13,16 +16,27 @@ export function install({code,name,config}){
 			return res.text()
 		}) : Promise.resolve(code))
 		.then(code=>{
-			code=`${code}\r\n//# sourceURL=plugins/${name}.js`
+			code=`return ${code}\r\n//# sourceURL=plugins/${name}.js`
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
-			compiled(module, module.exports, requirex)
+			let  returned=compiled(module, module.exports, requirex)
+			if(returned){
+				if(returned.default)
+					return returned.default
+				return returned
+			}
 			return module.exports
 		})
-		.then(exports=>exports.install(config))
+		.then(exports=>{
+			exports.install(config)
+			imported[plugin.name]=exports
+		})
 }
 
-export default connect(state=>({plugins: state["we-office"].extensions}))(
+export default connect(state=>({
+	plugins: state["we-office"].extensions,
+	isDeveloper:state.qili.user.isDeveloper
+}))(
 	class PluginLoaders extends PureComponent{
 		constructor(){
 			super(...arguments)
@@ -47,7 +61,9 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 									console.debug(`loaded ${a.name}`)
 									this.loaded.push(a)
 								})
-								.catch(a=>void(0))
+								.catch(a=>{
+									console.error(a)
+								})
 								.finally(()=>this.setState({loading:null}))
 						})
 				}, Promise.resolve())
@@ -76,6 +92,13 @@ export default connect(state=>({plugins: state["we-office"].extensions}))(
 		
 		componentWillReceiveProps({plugins}){
 			this.tried=0
+			this.props.plugins
+				.forEach(a=>{
+					if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id)){
+						imported[a.name].uninstall()
+						delete imported[a.name]
+					}
+				})
 			this.tryInstall(plugins)
 		}
 	}

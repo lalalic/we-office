@@ -96,6 +96,7 @@ type Plugin implements Node {
   type: [PluginType]
   myConf: JSON
   isMine: Boolean
+  bought: Boolean
 }
 
 type PluginComment implements Comment & Node {

@@ -10,26 +10,21 @@ import {ACTION} from "../state"
 import IconApply from "material-ui/svg-icons/content/add"
 
 export class Plugin extends Component{
-	state={code:this.props.plugin.code, info:this.props.plugin}
+	state={info:this.props.plugin}
 
 	render(){
 		const {
-			state:{code, info, installed, error},
-			props:{save, buy, withdraw, plugin:{isMine,myConf}, isNew}
+			state:{info, installed, error},
+			props:{save, buy, withdraw, plugin:{isMine,myConf, bought}, isNew}
 			}=this
 
 		const cmdApply={
 			action:"check",
 			label:"Test",
-			onSelect: ()=>this.check(code),
+			onSelect: ()=>this.test(),
 			icon: <IconApply/>
 		}
 
-		const cmdSave={
-			action:"save",
-			label:"Save",
-			onSelect: ()=>save(code, info).catch(e=>this.setState({error:e.message}))
-		}
 
 		const cmdBuy={
 			action:"buy",
@@ -43,15 +38,10 @@ export class Plugin extends Component{
 			onSelect: withdraw
 		}
 
-		if(this.crc(code)==installed){
-			cmdApply.icon=<IconApply color="green"/>
-			cmdApply.label="Applied"
-		}
-
 		const actions=["back"]
 
 		if(!isNew){
-			if(myConf){
+			if(bought){
 				actions.push(cmdWithdraw)
 			}else{
 				actions.push(cmdBuy)
@@ -60,29 +50,10 @@ export class Plugin extends Component{
 
 		if(isMine){
 			actions.push(cmdApply)
-			if(code!==this.props.plugin.code){
-				actions.push(cmdSave)
-			}
 		}
 
 		return (
 			<Fragment>
-				{false &&
-				<div style={{flex:"1 100%", overflow: "scroll"}}>
-					<textarea
-						style={{
-							width:"100%",height:"100%",
-							border:"1px solid lightgray",padding:5,
-							fontSize:"9pt",
-							lineHeight:"10pt",
-							fontFamily: "calibri"
-						}}
-						onChange={e=>this.setState({code:e.target.value})}
-						defaultValue={code}
-						/>
-				</div>
-				}
-
 				<div style={{flex:1}}>
 					<TextField name="name" floatingLabelText="name" disabled={true}
 						errorText={error}
@@ -111,20 +82,10 @@ export class Plugin extends Component{
 		)
 	}
 
-	check(){
-		install(this.state.code)
-			.then(info=>{
-				if(this.props.plugin.name && info.name!=this.props.plugin.name){
-					throw new Error("name can't be changed")
-				}
-
-				this.setState({info, installed:this.crc(this.state.code),error:undefined})
-			})
+	test(){
+		File.selectTextFile()
+			.then(code=>install({...this.props.plugin,code}))
 			.catch(e=>this.setState({error:e.message}))
-	}
-
-	crc(code){
-		return code
 	}
 }
 
@@ -139,12 +100,14 @@ export default compose(
 
 		isMine
 		myConf
+		bought
 	}`),
 	withMutation(({plugin:{id}})=>({
 		name:"buy",
 		patch4:id,
 		variables:{id},
-		promise:true,
+		patch4:id,
+		patchData:{bought:true},
 		mutation:graphql`mutation plugin_buy_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			buy_plugin(_id:$id,version:$version, config:$config){
 				extensions{
@@ -155,9 +118,9 @@ export default compose(
 	})),
 	withMutation(({plugin:{id}})=>({
 		name:"withdraw",
-		patch4:id,
 		variables:{id},
-		promise:true,
+		patch4:id,
+		patchData:{bought:false},
 		mutation:graphql`mutation plugin_withdraw_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			withdraw_plugin(_id:$id, version:$version, config:$config){
 				extensions{
@@ -168,7 +131,6 @@ export default compose(
 	})),
 	withMutation(({plugin:{id}})=>({
 		name:"update",
-		patch4:id,
 		variables:{id},
 		mutation:graphql`mutation plugin_update_Mutation($id:ObjectID!,$code:URL!,$type:[PluginType],
 			$description:String,$version:String,$config:JSON,$readme:String, $keywords:[String]){
