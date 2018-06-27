@@ -75,15 +75,6 @@ Cloud.resolver=Cloud.merge(
 				const i=a=>(a.type||[]).findIndex(t=>t=="Representation")
 				return all.sort((a,b)=>i(b)-i(a))
 			})
-			.then(all=>{
-				if(user.isDeveloper){
-					return [
-						{author:user._id,code:"//your code",name:"Test",_id:"test"},
-						...all
-					]
-				}
-				return all
-			})
 		},
 		plugins(_,{},{app,user}){
 			if(!user.isDeveloper)

@@ -2,9 +2,8 @@ import React, {Component, Fragment} from "react"
 import PropTypes from "prop-types"
 import {compose,mapProps, branch, renderComponent,getContext} from "recompose"
 
-import {withFragment,withMutation,File, CommandBar} from "qili-app"
+import {withFragment,withMutation, CommandBar} from "qili-app"
 import {TextField} from "material-ui"
-import {install} from "../plugin-loader"
 import {ACTION} from "../state"
 
 import IconApply from "material-ui/svg-icons/content/add"
@@ -15,15 +14,8 @@ export class Plugin extends Component{
 	render(){
 		const {
 			state:{info, installed, error},
-			props:{save, buy, withdraw, plugin:{isMine,myConf, bought}, isNew}
+			props:{save, buy, withdraw, plugin:{isMine,myConf, name, bought}, isNew}
 			}=this
-
-		const cmdApply={
-			action:"check",
-			label:"Test",
-			onSelect: ()=>this.test(),
-			icon: <IconApply/>
-		}
 
 
 		const cmdBuy={
@@ -46,10 +38,6 @@ export class Plugin extends Component{
 			}else{
 				actions.push(cmdBuy)
 			}
-		}
-
-		if(isMine){
-			actions.push(cmdApply)
 		}
 
 		return (
@@ -80,12 +68,6 @@ export class Plugin extends Component{
 					/>
 			</Fragment>
 		)
-	}
-
-	test(){
-		File.selectTextFile()
-			.then(code=>install({...this.props.plugin,code}))
-			.catch(e=>this.setState({error:e.message}))
 	}
 }
 

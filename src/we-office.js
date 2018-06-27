@@ -41,6 +41,7 @@ export const WeOffice = compose(
 					token
 					username
 					photo
+					isDeveloper
 					extensions{
 						...weOffice_extension @relay(mask: false)
 					}
