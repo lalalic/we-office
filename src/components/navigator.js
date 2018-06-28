@@ -9,23 +9,23 @@ export default compose(
 	setDisplayName("Navigator"),
 	getContext({client:PropTypes.object}),
 	connect(({qili:{user:{id}}})=>({user:id})),
-	mapProps(({client,user})=>{
+	mapProps(({client,user,dispatch})=>{
 		const {username, photo,isDeveloper}=client.get(user)
 		return {
 			username,
 			photo,
-			isDeveloper
+			isDeveloper,
+			dispatch
 		}
 	}),
 
 
-)(({username,photo,isDeveloper})=>(
+)(({username,photo,isDeveloper,dispatch})=>(
 		<div className="nav">
-			{isDeveloper && <Creator mini={true}/>}
 			<Link activeClassName="primary" to="/">Home</Link>
-			<Link activeClassName="primary" to="/dashboard">Dashboard</Link>
 			<Link activeClassName="primary" to="/market">Market</Link>
 			<Link activeClassName="primary" to="/my">{username||"Setting"}</Link>
+			{isDeveloper && <Creator mini={true} dispatch={dispatch}/>}
 		</div>
 	)
 )

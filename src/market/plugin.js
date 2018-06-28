@@ -1,21 +1,14 @@
 import React, {Component, Fragment} from "react"
 import PropTypes from "prop-types"
-import {compose,mapProps, branch, renderComponent,getContext} from "recompose"
+import {compose,mapProps,getContext} from "recompose"
 
 import {withFragment,withMutation, CommandBar} from "qili-app"
 import {TextField} from "material-ui"
 import {ACTION} from "../state"
 
-import IconApply from "material-ui/svg-icons/content/add"
-
 export class Plugin extends Component{
-	state={info:this.props.plugin}
-
 	render(){
-		const {
-			state:{info, installed, error},
-			props:{save, buy, withdraw, plugin:{isMine,myConf, name, bought}, isNew}
-			}=this
+		const {buy, withdraw, plugin:{isMine,using, name,description,version}}=this.props
 
 
 		const cmdBuy={
@@ -32,31 +25,32 @@ export class Plugin extends Component{
 
 		const actions=["back"]
 
-		if(!isNew){
-			if(bought){
-				actions.push(cmdWithdraw)
-			}else{
-				actions.push(cmdBuy)
-			}
+		if(using){
+			actions.push(cmdWithdraw)
+		}else{
+			actions.push(cmdBuy)
 		}
 
 		return (
 			<Fragment>
 				<div style={{flex:1}}>
 					<TextField name="name" floatingLabelText="name" disabled={true}
-						errorText={error}
-						fullWidth={true} value={name||info.name}/>
+						fullWidth={true} value={name}/>
 					<TextField name="description" floatingLabelText="description"  disabled={true}
-						fullWidth={true} value={info.description}/>
-					<TextField name="version" floatingLabelText="version" disabled={true}
-						fullWidth={true} value={info.version}/>
+						fullWidth={true} value={description}/>
+					<TextField name="version" floatingLabelText="latest version" disabled={true}
+						fullWidth={true} value={version}/>
 
-					{info.config && (
-						<TextField name="config" floatingLabelText="configuration"
-							fullWidth={true}
-							multiLine={true}
-							value={JSON.stringify(myConf||info.config)}
-							/>
+					{using && (
+						<Fragment>
+							<TextField 
+								name="using" 
+								floatingLabelText={`using ${using.version||'latest version'}`}
+								fullWidth={true}
+								multiLine={true}
+								value={using.config ? JSON.stringify(using.config) : ""}
+								/>
+						</Fragment>
 					)}
 				</div>
 
@@ -79,17 +73,18 @@ export default compose(
 		version
 		config
 		code
+		history{
+			version
+		}
 
 		isMine
-		myConf
-		bought
+		using
 	}`),
-	withMutation(({plugin:{id}})=>({
+	withMutation(({plugin:{id,version}}, data)=>({
 		name:"buy",
 		patch4:id,
 		variables:{id},
-		patch4:id,
-		patchData:{bought:true},
+		patchData:{using:true},
 		mutation:graphql`mutation plugin_buy_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			buy_plugin(_id:$id,version:$version, config:$config){
 				extensions{
@@ -102,7 +97,7 @@ export default compose(
 		name:"withdraw",
 		variables:{id},
 		patch4:id,
-		patchData:{bought:false},
+		patchData:{using:null},
 		mutation:graphql`mutation plugin_withdraw_Mutation($id:ObjectID!,$version:String,$config:JSON){
 			withdraw_plugin(_id:$id, version:$version, config:$config){
 				extensions{
@@ -111,24 +106,8 @@ export default compose(
 			}
 		}`,
 	})),
-	withMutation(({plugin:{id}})=>({
-		name:"update",
-		variables:{id},
-		mutation:graphql`mutation plugin_update_Mutation($id:ObjectID!,$code:URL!,$type:[PluginType],
-			$description:String,$version:String,$config:JSON,$readme:String, $keywords:[String]){
-			plugin_update(_id:$id, code:$code,type:$type,
-				description:$description, version:$version, config:$config,readme:$readme, keywords:$keywords){
-				...plugin_plugin
-			}
-		}`,
-	})),
 	getContext({store:PropTypes.object}),
-	File.withUpload,
-	mapProps(({plugin,update,upload, buy, withdraw,store, dispatch=store.dispatch})=>({
-		save(code,info){
-			return upload(code,plugin.id,`${info.version}/index.js`)
-				.then(({url})=>update({...info,code:url}))
-		},
+	mapProps(({plugin, buy, withdraw,store, dispatch=store.dispatch})=>({
 		plugin,
 		buy(){
 			return buy(...arguments)
@@ -137,7 +116,6 @@ export default compose(
 		withdraw(){
 			return withdraw(...arguments)
 				.then(data=>dispatch(ACTION.EXTENSIONS(data.extensions)))
-		},
-		isNew: !!!plugin.id
+		}
 	}))
 )(Plugin)

@@ -1,4 +1,4 @@
-import React from "react"
+import React,{Fragment} from "react"
 import PropTypes from "prop-types"
 
 import {graphql} from "react-relay"
@@ -15,12 +15,12 @@ import {DefaultOffice, Ribbon} from "we-edit/office"
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Navigator from "./components/navigator"
-import {withCreator} from "./components/creator"
 import Dashboard from "./dashboard"
 import Market,{Creator as CreatePlugin, Plugin} from "./market"
-import PluginLoader from "./plugin-loader"
 import My from "./setting/my"
 import Profile from "./setting/profile"
+
+import PluginLoader from "./plugin-loader"
 
 export const WeOffice = compose(
 	withProps(()=>({
@@ -53,7 +53,7 @@ export const WeOffice = compose(
 				id
 				name
 				code
-				myConf
+				config
 				version
 			}
 		`,
@@ -76,10 +76,14 @@ export const routes=(
 				<DefaultOffice
 					titleBarProps={{
 						title:"we-office",
-						children:<Navigator/>
+						children:(
+							<Fragment>
+								<PluginLoader/>
+								<Navigator/>
+							</Fragment>
+							)
 					}}>
 					<div id="portal" style={{overflow:"scroll"}}>
-						<PluginLoader/>
 						{children}
 					</div>
 				</DefaultOffice>
@@ -155,6 +159,7 @@ export const routes=(
 		                        extensions{
 		                            id
 		                            name
+									version
 		                        }
 								isDeveloper
 		                        ...qili_account_user

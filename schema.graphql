@@ -94,9 +94,8 @@ type Plugin implements Node {
   keywords: [String]
   history: [Plugin]
   type: [PluginType]
-  myConf: JSON
+  using: JSON
   isMine: Boolean
-  bought: Boolean
 }
 
 type PluginComment implements Comment & Node {

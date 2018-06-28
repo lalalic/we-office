@@ -6,6 +6,8 @@ import PullToRefresh from "pull-to-refresh2"
 import {compose, mapProps} from "recompose"
 import {withFragment} from "qili-app"
 import {TextField, List, ListItem} from "material-ui"
+import IconUsing from "material-ui/svg-icons/navigation/check"
+
 
 import QuickSearch,{toText} from "./quick-search"
 
@@ -40,8 +42,9 @@ class Plugins extends Component{
 				<div style={{overflow:"scroll"}}>
 					<PullToRefresh onRefresh={refresh} onMore={loadMore}>
 						<List>
-						{plugins.map(({id,name,description,version, author:{username}})=>(
+						{plugins.map(({id,name,description,version, using, isMine, author:{username}})=>(
 								<ListItem key={id}
+									leftIcon={using ? <IconUsing/> : <span/>}
 									primaryText={name}
 									secondaryTextLines={2}
 									secondaryText={`[${version}] ${description} ${username ? `by ${username}` : ""}`}
@@ -70,7 +73,7 @@ export default compose(
 						username
 					}
 					isMine
-					bought
+					using
 				}
 			}
 			pageInfo{

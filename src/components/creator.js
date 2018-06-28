@@ -1,19 +1,23 @@
 import React, {Fragment} from "react"
 import {FloatingActionButton} from "material-ui"
-import IconAdd from "material-ui/svg-icons/content/add"
-import {File}  from "qili-app"
+import IconTest from "material-ui/svg-icons/notification/adb"
+import {File,ACTION}  from "qili-app"
 import {install} from  "../plugin-loader"
 
-export const Creator=props=>(
+export const Creator=({dispatch,...props})=>(
 	<FloatingActionButton
 		{...props}
-		className="floating sticky bottom right">
-		<IconAdd onClick={()=>{
-					File
-						.selectTextFile()
-						.then(a=>install({code:a.data,name:"test"}))
-				}
-			}/>
+		className="floating sticky bottom right"
+		onClick={()=>{
+				File
+					.selectTextFile(".js")
+					.then(a=>install({code:a.data,name:"test"}))
+					.then(e=>dispatch(ACTION.MESSAGE("Your plugin installed!")))
+					.catch(e=>dispatch(ACTION.MESSAGE({type:"error", message:e.message})))
+			}
+		}
+		>
+		<IconTest />
 	</FloatingActionButton>
 )
 

@@ -15,9 +15,8 @@ Cloud.typeDefs=`
 		history: [Plugin]
 		type:[PluginType]
 
-		myConf: JSON
+		using: JSON
 		isMine: Boolean
-		bought: Boolean
 	}
 
 	enum PluginType{
@@ -58,16 +57,23 @@ Cloud.resolver=Cloud.merge(
 	{
 	User:{
 		extensions(_,{},{app,user}){
+			const loader=app.getDataLoader("plugins")
 			return Promise.all(
 				(user.extensions||[])
-					.map(({_id,config})=>app
-						.getDataLoader("plugins")
-						.load(_id)
-						.then(plugin=>{
-							if(plugin){
-								return {...plugin,myConf:config}
-							}
-						})
+					.map(({_id,version,config})=>
+						loader
+							.load(_id)
+							.then(a=>{
+								debugger
+								if(a){
+									if(version && version!==a.version){
+										a.code=a.code.replace(a.version,version)
+									}
+									a.version=version||a.version
+									a.config=config||a.config
+								}
+								return a
+							})
 					)
 			)
 			.then(all=>all.filter(a=>!!a))
@@ -172,9 +178,9 @@ Cloud.resolver=Cloud.merge(
 	Query:{
 		plugins(_,{type,searchText,mine,favorite,using,first,after},{app,user}){
 			if(using){
-				return Cloud.resolver
-					.User
-					.extensions(user, {}, {app,user})
+				const loader=app.getDataLoader("plugins")
+				return Promise.all((user.extensions||[]).map(({_id})=>loader.load(_id)))
+					.then(all=>all.filter(a=>!!a))
 					.then(edges=>({edges,hasNextPage:false}))
 			}
 
@@ -205,14 +211,15 @@ Cloud.resolver=Cloud.merge(
 		isMine({author},_,{user}){
 			return user.isDeveloper && user._id==author
 		},
-		myConf({_id},{},{user:{extensions}}){
+		using({_id},{},{user:{extensions}}){
 			let found=(extensions||[]).find(a=>a._id==_id)
-			if(found)
-				return found.conf
+			if(found){
+				return {
+					config:found.config,
+					version:found.version
+				}
+			}
 			return null
-		},
-		bought({_id},{},{user:{extensions}}){
-			return (extensions||[]).find(a=>a._id==_id)
 		}
 	}
 })

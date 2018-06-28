@@ -14,22 +14,21 @@ export default compose(
         children: ([
             <ListItem
                 primaryText="My Office" key="office"
-                initiallyOpen={true}
+                initiallyOpen={false}
                 insetChildren={true}
                 nestedItems={
                     user.extensions.map(a=><ListItem
                             leftIcon={<span/>}
                             rightIcon={<IconItem/>}
                             onClick={()=>router.push(`/market/${a.id}`)}
-                            primaryText={a.name} key={a.id}/>)
+                            primaryText={`${a.name}/${a.version}`} key={a.id}/>)
                 }
             />,
             user.isDeveloper && <ListItem
                 primaryText="My Plugins" key="plugins"
-                leftIcon={<IconAdd/>}
-                initiallyOpen={true}
+                leftIcon={<span />}
+                initiallyOpen={false}
                 insetChildren={true}
-                onClick={()=>router.push(`/market/create`)}
                 nestedItems={
                     user.plugins.map(a=><ListItem
                             leftIcon={<span/>}

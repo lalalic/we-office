@@ -1,6 +1,7 @@
 import React, {PureComponent, Component} from "react"
 import {connect} from "react-redux"
 import requirex from "./require-api"
+import {Dialog} from "material-ui"
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
@@ -29,7 +30,7 @@ export function install(plugin){
 		})
 		.then(exports=>{
 			exports.install(config)
-			imported[plugin.name]=exports
+			return exports
 		})
 }
 
@@ -57,36 +58,36 @@ export default connect(state=>({
 						.finally(()=>{
 							this.setState({loading:a})
 							return install(a)
+								.then(exports=>{
+									imported[a.name]=exports
+								})
 								.then(()=>{
-									console.debug(`loaded ${a.name}`)
 									this.loaded.push(a)
 								})
 								.catch(a=>{
 									console.error(a)
 								})
-								.finally(()=>this.setState({loading:null}))
 						})
 				}, Promise.resolve())
 				.then(()=>this.tried++)
 				.then(()=>{
 					if(this.tried<2 && this.loaded.length<this.props.plugins.length){
-						this.tryInstall(plugins)
+						return this.tryInstall(plugins)
 					}
 				})
+				.finally(()=>this.setState({loading:null}))
 		}
 
 		render(){
 			const {state:{loading}, tried}=this
 			
-			if(!loading)
-				return null
-			
 			return (
-				<div style={{position:"absolute",width:"100%",height:"100%"}}>
-					<div style={{margin:"auto",width:400, height:300, background:"cadetblue"}}>
-						loading {loading.name}...
-					</div>
-				</div>
+				<Dialog 
+					modal={true}
+					open={!!loading}
+					>
+					{loading ? `${loading.name}...` : ""}
+				</Dialog>
 			)
 		}
 		
@@ -97,6 +98,7 @@ export default connect(state=>({
 					if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id)){
 						imported[a.name].uninstall()
 						delete imported[a.name]
+						this.loaded.splice(this.loaded.findIndex(b=>b.id==a.id),1)
 					}
 				})
 			this.tryInstall(plugins)
