@@ -24,7 +24,6 @@ script:
  - rm dist/index.js
  - rm dist/tv.xml
  - mv dist/index.html .
- - yarn cordova -- --storePassword=$STORE_PWD --password=$STORE_PWD
  - yarn info we-office-cli --json > we-office-cli.json
  - export LATEST=$(node -p "require('./we-office-cli.json').data['dist-tags'].latest")
  - export CURRENT=$(node -p "require('./packages/we-office-cli/package.json').version") 
