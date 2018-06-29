@@ -63,13 +63,6 @@ module.exports=env=>{
 				inlineSource: 'index.js$'
 			}),
 
-			new HtmlWebpackPlugin({
-				...HTML,
-				extra:'<script type="text/javascript" src="cordova.js"></script>',
-				inlineSource: 'index.js$',
-				filename:"cordova.html",
-			}),
-
 			new HtmlWebpackInlineSourcePlugin(),
 
 			//new IgnorePlugin(/^react-router$/)

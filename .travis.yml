@@ -1,8 +1,6 @@
-language: android
-android:
- components:
-  - build-tools-23.0.2
-  - android-22
+language: node_js
+node_js:
+ - 8
 
 addons:
  apt:
@@ -32,11 +30,6 @@ script:
  - export CURRENT=$(node -p "require('./packages/we-office-cli/package.json').version") 
 
 after_success:
- - mv cordova/platforms/android/build/outputs/apk/android-release.apk ./app.apk
- - travis_wait sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ./app.apk "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/$APP_NAME"
-
- - rm dist/config.xml
- - rm dist/cordova.html
  - mv index.html dist
 
  - node -p "require('./package.json').version" > dist/app.apk.version
