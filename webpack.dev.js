@@ -6,7 +6,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	return {
 		...base,
 		entry:{
-			index: ["babel-polyfill",require.resolve("./.test.js"),require.resolve("./src/index.js")],
+			index: ["babel-polyfill",require.resolve("./.dev.js"),require.resolve("./src/index.js")],
 		},
 		devtool: 'source-map',
 		devServer:{
