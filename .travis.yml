@@ -33,7 +33,7 @@ after_success:
  - travis_wait sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $APP_NAME.tgz "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
  - sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "tar xvfz $DEPLOY_PATH/$APP_NAME.tgz -C $DEPLOY_PATH && rm $DEPLOY_PATH/$APP_NAME.tgz"
 #sync cloud code to qili2.com
- - yarn sync --service "$QILI_SERVICE" --token "$QILI_TOKEN" --appId "$QILI_APPID" --contact "$QILI_CONTACT"
+ - yarn sync --service "$QILI" --token "$QILI_TOKEN" --appId "$QILI_APPID" --contact "$QILI_CONTACT"
 
 #deploy cli
 before_deploy:
