@@ -8,12 +8,7 @@ addons:
    - sshpass
 
 before_install:
- - echo "install nodejs"
- - nvm install 8
  - npm install yarn -g
- - node --version
- - npm --version
- - nvm --version
 
 install:
  - yarn install
