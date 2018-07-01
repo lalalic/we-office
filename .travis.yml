@@ -29,14 +29,18 @@ script:
 
 after_success:
  - mv index.html dist
-
+#upload web pages
  - node -p "require('./package.json').version" > dist/app.apk.version
+ - rm dist/config.xml
  - mv dist $APP_NAME
  - tar cvfz $APP_NAME.tgz $APP_NAME
  - ls $APP_NAME -l
  - travis_wait sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $APP_NAME.tgz "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
  - sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "tar xvfz $DEPLOY_PATH/$APP_NAME.tgz -C $DEPLOY_PATH && rm $DEPLOY_PATH/$APP_NAME.tgz"
+#sync cloud code to qili2.com
+ - yarn sync --service "$QILI_SERVICE" --token "$QILI_TOKEN" --appId "$QILI_APPID" --contact "$QILI_CONTACT"
 
+#deploy cli
 before_deploy:
  - pwd
  - cd packages/we-office-cli
