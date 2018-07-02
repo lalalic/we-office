@@ -87,6 +87,9 @@ program
 		}
 
 		project.main=main||path.resolve(dest, project.main||"./index.js")
+		if(project.readme){
+			project.readme=path.resolve(dest, project.readme)
+		}
 
 		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
 			.getToken(rc)

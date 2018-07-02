@@ -2662,10 +2662,6 @@ elliptic@^6.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-emitter-component@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/emitter-component/-/emitter-component-1.1.1.tgz#065e2dbed6959bf470679edabeaf7981d1003ab6"
-
 emojis-list@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
@@ -3105,14 +3101,14 @@ fbjs@^0.8.1, fbjs@^0.8.14, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.6, fbjs@^0.8.9:
     ua-parser-js "^0.7.9"
 
 fetch-any@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/fetch-any/-/fetch-any-1.0.2.tgz#8cb334b7bbcaadfd5e98b039ec0e34c4f5318246"
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/fetch-any/-/fetch-any-1.0.4.tgz#ea9d9e3de3648d20d64d0f82ee627b97e132a26c"
   dependencies:
     isomorphic-fetch "^2.2.1"
 
 fetchable@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fetchable/-/fetchable-1.0.0.tgz#35cfcdfd4d6295305ceaf59d8aebb3d2590bb1db"
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/fetchable/-/fetchable-1.0.1.tgz#1cbeacd50f4d573d997710c03bab070df6713226"
   dependencies:
     fetch-any "^1.0.0"
 
@@ -7757,12 +7753,6 @@ stream-splicer@^2.0.0:
     inherits "^2.0.1"
     readable-stream "^2.0.2"
 
-stream@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/stream/-/stream-0.0.2.tgz#7f5363f057f6592c5595f00bc80a27f5cec1f0ef"
-  dependencies:
-    emitter-component "^1.1.1"
-
 strict-uri-encode@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
@@ -8441,8 +8431,8 @@ wcwidth@^1.0.0:
     defaults "^1.0.3"
 
 we-edit@^3.0.3:
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/we-edit/-/we-edit-3.0.4.tgz#bc2e70ed752afe49edb9176f64000af4ee5b8fab"
+  version "3.0.5"
+  resolved "https://registry.npmjs.org/we-edit/-/we-edit-3.0.5.tgz#dedf45d6c1fbc9d44992acc759f4730160d3f179"
   dependencies:
     fetch-any "^1.0.0"
     immutable "^3.8.1"
@@ -8458,10 +8448,8 @@ we-edit@^3.0.3:
     redux "^3.7.2"
     redux-thunk "^2.2.0"
     shortid "^2.2.8"
-    stream "^0.0.2"
   optionalDependencies:
     docx4js "^3.1.12"
-    events "^2.0.0"
     fetchable "^1.0.0"
     get-system-fonts "^1.0.0"
     htmlparser2 "^3.9.2"

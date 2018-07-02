@@ -48,7 +48,11 @@ module.exports=class extends Cloud{
 			.then(({code,id,creating})=>{
 				let {name, version, description, readme, keywords,config}=current
 				if(readme){
-					readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
+					try{
+						readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
+					}catch(e){
+						console.warn(`readme: ${e.message}`)
+					}
 				}
 
 				return this.runQL(
