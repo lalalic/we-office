@@ -6390,9 +6390,9 @@ qili-app@^1.2.24:
   optionalDependencies:
     react-router "^3.0.0"
 
-qili-cli@^1.2.26:
-  version "1.2.30"
-  resolved "https://registry.yarnpkg.com/qili-cli/-/qili-cli-1.2.30.tgz#a3feb2674ec6ebf65ef7cc346bb436c31c83e408"
+qili-cli@^1.2.30:
+  version "1.2.31"
+  resolved "https://registry.npmjs.org/qili-cli/-/qili-cli-1.2.31.tgz#7fdff04c69e999f1834c6468eea892bdb91df07d"
   dependencies:
     chalk "^2.4.0"
     commander "^2.15.1"

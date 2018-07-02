@@ -67,8 +67,10 @@ module.exports=class extends Cloud{
 		return new Promise((resolve,reject)=>
 			qiniu.io.putFile(token,key,filePath ,extra,(err, ret)=>{
 				if (!err) {
-					let url=JSON.parse(ret.returnBody).data.file_create.url
-					resolve(url)
+					if(ret.data.errors)
+						reject(ret.data.errors)
+					else
+						resolve(ret.data.file_create.url)
 				} else {
 					reject(err)
 				}
