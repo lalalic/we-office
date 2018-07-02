@@ -71,7 +71,7 @@
   "bugs": {
     "url": "https://github.com/lalalic/we-office/issues"
   },
-  "homepage": "https://github.com/lalalic/we-office#readme",
+  "homepage": "http://app.qili2.com/weoffice",
   "private": true,
   "workspaces": [
     "packages/*"

@@ -6361,9 +6361,9 @@ q@^1.1.2, q@^1.4.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
 
-qili-app@^1.2.24:
-  version "1.2.27"
-  resolved "https://registry.npmjs.org/qili-app/-/qili-app-1.2.27.tgz#bffa8ca7c68ceeb06687a4c0906419ed717194b1"
+qili-app@^1.2.30:
+  version "1.2.30"
+  resolved "https://registry.npmjs.org/qili-app/-/qili-app-1.2.30.tgz#7e04130f2217901ae1fa5863f81764ad378e48ad"
   dependencies:
     babel-polyfill "^6.26.0"
     graphql-tools "^3.0.0"
@@ -6877,7 +6877,16 @@ recast@^0.11.17:
     private "~0.1.5"
     source-map "~0.5.0"
 
-recompose@^0.26.0, recompose@^0.27.0:
+recompose@^0.26.0:
+  version "0.26.0"
+  resolved "https://registry.npmjs.org/recompose/-/recompose-0.26.0.tgz#9babff039cb72ba5bd17366d55d7232fbdfb2d30"
+  dependencies:
+    change-emitter "^0.1.2"
+    fbjs "^0.8.1"
+    hoist-non-react-statics "^2.3.1"
+    symbol-observable "^1.0.4"
+
+recompose@^0.27.0:
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.27.0.tgz#8230ebd651bf1159097006f79083fe224b1501cf"
   dependencies:
