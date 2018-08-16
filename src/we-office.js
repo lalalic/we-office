@@ -10,7 +10,7 @@ import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qi
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
-import {DefaultOffice, Ribbon} from "we-edit/office"
+import {DefaultOffice} from "we-edit/office"
 
 
 import {DOMAIN,ACTION,reducer} from "./state"
@@ -60,6 +60,22 @@ export const WeOffice = compose(
 		onSuccess(response,dispatch){
 			const {me:{ token, id, extensions}}=response
 			//dispatch(qiliACTION.CURRENT_USER({id,token}))
+			let raw=DefaultOffice.install
+			
+			DefaultOffice.install=function(){
+				let r=raw(...arguments)
+				dispatch(ACTION.OfficeChanged())
+				return r
+			}
+			
+			raw=DefaultOffice.uninstall
+			
+			DefaultOffice.uninstall=function(){
+				let r=raw(...arguments)
+				dispatch(ACTION.OfficeChanged())
+				return r
+			}
+			
 			dispatch(ACTION.EXTENSIONS(extensions))
 			//@TODO: to initialize your qili
 		},
@@ -72,8 +88,10 @@ export const WeOffice = compose(
 
 export const routes=(
 	<Router history={hashHistory}>
-		<Route path="/" component={({children})=>
+		<Route path="/" component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
+			({officeChanged,children})=>
 				<DefaultOffice
+					officeChanged={officeChanged}
 					titleBarProps={{
 						title:"we-office",
 						children:(
@@ -87,7 +105,7 @@ export const routes=(
 						{children}
 					</div>
 				</DefaultOffice>
-			}>
+			)}>
 			<Route path="dashboard" component={Dashboard}/>
 			<Route path="market">
 				<IndexRoute component={compose(

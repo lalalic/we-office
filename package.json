@@ -7,7 +7,7 @@
   "dependencies": {
     "qili-app": "^1.2.24",
     "react-router": "^3.0.0",
-    "we-edit": "^3.0.3"
+    "we-edit": "^3.0.5"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

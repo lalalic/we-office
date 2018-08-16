@@ -8,6 +8,11 @@ export const ACTION={
 	QUERY: payload=>({
 		type:`@@${DOMAIN}/QUERY`,
 		payload,
+	}),
+	
+	OfficeChanged: payload=>({
+		type:`@@${DOMAIN}/OfficeChanged`,
+		payload
 	})
 }
 
@@ -15,13 +20,16 @@ export function reducer(state={
 		qs:{
 			type:[]
 		},
-		extensions:[]
+		extensions:[],
+		officeChanged:0,
 	},{type,payload}){
 	switch(type){
 		case `@@${DOMAIN}/extensions`:
 			return {...state, extensions:[...payload]}
 		case `@@${DOMAIN}/QUERY`:
 			return {...state, qs:{...state.qs,...payload}}
+		case `@@${DOMAIN}/OfficeChanged`:
+			return {...state, officeChanged:Date.now()}
 	}
 
 	return state

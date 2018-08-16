@@ -4,6 +4,7 @@ const requires={
 	"prop-types":require("prop-types"),
 	"material-ui":require("material-ui"),
 	"we-edit":require("we-edit"),
+	"we-edit/office":require("we-edit/office"),
 	"react-redux":require("react-redux"),
 	"recompose":require("recompose")
 }
