@@ -1,13 +1,13 @@
 {
   "name": "we-office-cli",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "commands to help create plugin for we-office",
   "main": "index.js",
   "scripts": {},
   "dependencies": {
     "lodash.merge": "^4.6.1",
     "mkdirp": "^0.5.1",
-    "qili-cli": "^1.2.41",
+    "qili-cli": "^1.2.43",
     "qiniu": "^6.1.0",
     "semver": "^5.5.0"
   },

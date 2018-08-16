@@ -4,9 +4,11 @@ const chalk=require("chalk")
 const fs=require("fs")
 const path=require("path")
 const merge=require("lodash.merge")
-const cwd=process.cwd()
 
-const {rc, program, getCloud, tryRequireProject}=require("qili-cli").getInstance(require("./cloud"))
+const cwd=process.cwd()
+const {
+		rc, program, getCloud, tryRequireProject
+	}=require("qili-cli").getInstance(require("./cloud"),require("./package.json"))
 
 program
 	.usage('[options] <command>')
