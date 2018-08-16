@@ -5,12 +5,8 @@ const fs=require("fs")
 const path=require("path")
 const merge=require("lodash.merge")
 const cwd=process.cwd()
-const Cloud=require("./cloud")
-Cloud.RC_NAME=".worc"
 
-const {getRc, getProgram, tryRequireProject}=require("qili-cli")
-const rc=getRc("wo")
-const program=getProgram(rc,require("./package.json"))
+const {rc, program, getCloud, tryRequireProject}=require("qili-cli").getInstance(require("./cloud"))
 
 program
 	.usage('[options] <command>')
@@ -91,8 +87,7 @@ program
 			project.readme=path.resolve(dest, project.readme)
 		}
 
-		return new Cloud(program.service, "5b07b8571f6cab002e832d23")
-			.getToken(rc)
+		return getCloud()
 			.then(cloud=>cloud.publish(project, url, dir))
 			.then(()=>console.log(`published ${project.version}`))
 			.catch(e=>console.log(e.message))

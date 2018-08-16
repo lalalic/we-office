@@ -6,6 +6,10 @@ const mkdirp=require("mkdirp")
 const cwd=process.cwd()
 
 module.exports=class extends Cloud{
+	constructor(service){
+		super(service, "5b07b8571f6cab002e832d23")
+	}
+	
 	publish(current, url, dir){
 		const wo=current["we-office"]||{}
 		const pluginName=wo.name||current.name
@@ -93,3 +97,5 @@ module.exports=class extends Cloud{
 		}
 	}
 }
+
+module.exports.NAME="wo"
