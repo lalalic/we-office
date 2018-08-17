@@ -1,32 +1,16 @@
-@import (reference,less) "~qili-app/index.less";
-
-#app{
-	width:100%!important;
-	
-	.nav {
-		a {
-			text-decoration:none;
-			padding-right:10px;
-			color:black;
-		}
-		
-		.primary{
-			color:blue;
-		}
+.nav {
+	a {
+		text-decoration:none;
+		padding-right:10px;
+		color:black;
 	}
 	
-	#portal{
-		width:100%;
-		position:relative;
-		display:flex;
-		flex-direction:column;
-		height:100%;
+	.primary{
+		color:blue;
 	}
 }
 
-@media screen and (min-width:@maxWidth){
-    #portal{
-		width:@maxWidth!important;
-		margin:0px auto!important;
-	}
+#app{
+	z-index:1;
+	background:transparent;
 }

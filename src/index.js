@@ -1,4 +1,4 @@
-import "./index.less"
+//import "./index.less"
 import React from "react"
 import {QiliApp} from "qili-app"
 

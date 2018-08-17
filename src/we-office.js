@@ -4,20 +4,24 @@ import PropTypes from "prop-types"
 import {graphql} from "react-relay"
 import {compose, withProps,getContext} from "recompose"
 import {connect} from "react-redux"
-import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory} from "react-router"
+import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory, Link} from "react-router"
 
 import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qiliACTION,File,Account} from "qili-app"
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
-import {DefaultOffice} from "we-edit/office"
+import {DefaultOffice, TitleBar, Dashboard} from "we-edit/office"
+
+import {MenuItem} from "material-ui"
 
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Navigator from "./components/navigator"
-import Dashboard from "./dashboard"
+import Portal from "./components/portal"
+import {Creator} from "./components/creator"
 import Market,{Creator as CreatePlugin, Plugin} from "./market"
 import My from "./setting/my"
+import Avatar from "./dashboard"
 import Profile from "./setting/profile"
 
 import PluginLoader from "./plugin-loader"
@@ -60,21 +64,18 @@ export const WeOffice = compose(
 		onSuccess(response,dispatch){
 			const {me:{ token, id, extensions}}=response
 			//dispatch(qiliACTION.CURRENT_USER({id,token}))
-			let raw=DefaultOffice.install
-			
-			DefaultOffice.install=function(){
-				let r=raw(...arguments)
-				dispatch(ACTION.OfficeChanged())
-				return r
+			const spy=key=>{
+				let raw=DefaultOffice[key]
+				
+				DefaultOffice[key]=function(){
+					let r=raw(...arguments)
+					dispatch(ACTION.OfficeChanged())
+					return r
+				}
 			}
 			
-			raw=DefaultOffice.uninstall
-			
-			DefaultOffice.uninstall=function(){
-				let r=raw(...arguments)
-				dispatch(ACTION.OfficeChanged())
-				return r
-			}
+			spy("install")
+			spy("uninstall")
 			
 			dispatch(ACTION.EXTENSIONS(extensions))
 			//@TODO: to initialize your qili
@@ -86,27 +87,36 @@ export const WeOffice = compose(
 )(QiliApp)
 
 
+
+
 export const routes=(
 	<Router history={hashHistory}>
-		<Route path="/" component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
-			({officeChanged,children})=>
-				<DefaultOffice
-					officeChanged={officeChanged}
-					titleBarProps={{
-						title:"we-office",
-						children:(
-							<Fragment>
-								<PluginLoader/>
-								<Navigator/>
-							</Fragment>
-							)
-					}}>
-					<div id="portal" style={{overflow:"scroll"}}>
-						{children}
-					</div>
-				</DefaultOffice>
-			)}>
-			<Route path="dashboard" component={Dashboard}/>
+		<Route path="/">
+			<IndexRoute
+				component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
+					({officeChanged})=>
+						<Portal container={document.querySelector("#wo")}>
+							<DefaultOffice
+								key={officeChanged}
+								dashboard={
+									<Dashboard 
+										avatar={<Avatar link="/my"/>}
+										children={
+											<MenuItem primaryText={<Link to="/market">Market</Link>}/>
+										}
+										/>
+								}
+								titleBar={
+									<TitleBar title="we-office">
+										<PluginLoader/>
+										<Creator/>
+									</TitleBar>
+								}>
+							</DefaultOffice>
+						</Portal>
+					)}
+				/>
+			
 			<Route path="market">
 				<IndexRoute component={compose(
 						getContext({router:PropTypes.object}),

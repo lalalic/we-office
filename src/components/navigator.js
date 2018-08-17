@@ -22,7 +22,6 @@ export default compose(
 
 )(({username,photo,isDeveloper,dispatch})=>(
 		<div className="nav">
-			<Link activeClassName="primary" to="/">Home</Link>
 			<Link activeClassName="primary" to="/market">Market</Link>
 			<Link activeClassName="primary" to="/my">{username||"Setting"}</Link>
 			{isDeveloper && <Creator mini={true} dispatch={dispatch}/>}

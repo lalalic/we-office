@@ -6,7 +6,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 const HTML={
 	template:require.resolve('qili-app/index.tmpl'),
-	title:"QiLi App",
+	title:"we-office",
 	favicon: "./dist/favicon.ico",
 }
 

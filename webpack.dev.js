@@ -22,15 +22,17 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
 			new HtmlWebpackPlugin({
-				...HTML
+				...HTML,
+				extra:'<div id="wo" style="position:fixed;top:0px;left:0px;width:100%;height:100%;"/>',
 			}),
-
+			/*
 			new HtmlWebpackPlugin({
 				...HTML,
 				extra:'<script type="text/javascript" src="cordova.js"></script>',
 				filename:"cordova.html",
 			}),
-			//new IgnorePlugin(/^react-router$/)
+			new IgnorePlugin(/^react-router$/)
+			*/
 		]
 	}
 }

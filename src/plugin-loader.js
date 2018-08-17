@@ -7,7 +7,7 @@ const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
 const imported={}
 
-export function install(plugin){
+export function install(plugin, uninstall=false){
 	const {code,name,config}=plugin
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
@@ -17,11 +17,18 @@ export function install(plugin){
 			return res.text()
 		}) : Promise.resolve(code))
 		.then(code=>{
-			code=`return ${code}\r\n//# sourceURL=plugins/${name}.js`
+			if(code.indexOf("__webpack_require__")!=-1){
+				code=`return ${code}`
+			}else if(true){
+				code=`(function(){${code}})();`
+			}
+			
+			code=`${code}\r\n//# sourceURL=plugins/${name}.js`
+			
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
 			let  returned=compiled(module, module.exports, requirex)
-			if(returned){
+			if(returned){//webpack module
 				if(returned.default)
 					return returned.default
 				return returned
@@ -29,14 +36,17 @@ export function install(plugin){
 			return module.exports
 		})
 		.then(exports=>{
+			if(uninstall && imported[name]){
+				imported[name].uninstall()
+				delete imported[name]
+			}
 			exports.install(config)
 			return exports
 		})
 }
 
 export default connect(state=>({
-	plugins: state["we-office"].extensions,
-	isDeveloper:state.qili.user.isDeveloper
+	plugins: state["we-office"].extensions
 }))(
 	class PluginLoaders extends PureComponent{
 		constructor(){
