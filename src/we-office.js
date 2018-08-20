@@ -91,31 +91,46 @@ export const WeOffice = compose(
 
 export const routes=(
 	<Router history={hashHistory}>
-		<Route path="/">
-			<IndexRoute
-				component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
-					({officeChanged})=>
-						<Portal container={document.querySelector("#wo")}>
-							<DefaultOffice
-								key={officeChanged}
-								dashboard={
-									<Dashboard 
-										avatar={<Avatar link="/my"/>}
-										children={
-											<MenuItem primaryText={<Link to="/market">Market</Link>}/>
-										}
-										/>
-								}
-								titleBar={
-									<TitleBar title="we-office">
-										<PluginLoader/>
-										<Creator/>
-									</TitleBar>
-								}>
-							</DefaultOffice>
-						</Portal>
+		<Route path="/" component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
+					({officeChanged,children})=>
+						<Fragment>
+							<Portal container={document.querySelector("#wo")}>
+								<DefaultOffice
+									key={officeChanged}
+									dashboard={
+										<Dashboard 
+											avatar={
+												<Link to="/my" style={{textDecoration:"none",color:"inherit"}}>	
+													<Avatar/>
+												</Link>}
+											children={
+												<MenuItem 
+													primaryText={
+														<Link to="/market" 
+															style={{textDecoration:"none",color:"inherit"}}>
+															Market
+														</Link>
+													}
+													/>
+											}
+											/>
+									}
+									titleBar={
+										<TitleBar title="we-office">
+											<PluginLoader/>
+										</TitleBar>
+									}>
+								</DefaultOffice>	
+							</Portal>
+							<Portal.Web 
+									container={document.querySelector("#app")} 
+									children={children}/>
+							<Portal container={document.querySelector("#app").parentNode}>
+								<Creator mini={true}/>
+							</Portal>
+						</Fragment>
 					)}
-				/>
+				>
 			
 			<Route path="market">
 				<IndexRoute component={compose(
