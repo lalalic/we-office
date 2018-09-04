@@ -9,7 +9,7 @@ module.exports=class extends Cloud{
 	constructor(service){
 		super(service, "5b07b8571f6cab002e832d23")
 	}
-	
+
 	publish(current, url, dir){
 		const wo=current["we-office"]||{}
 		const pluginName=wo.name||current.name
@@ -18,13 +18,14 @@ module.exports=class extends Cloud{
 			.then(({me:{plugin}})=>plugin)
 			.then(latest=>{
 				if(url && dir){
+					console.debug("dev environment, so just upload")
 					return {
 						key:`plugins/${pluginName}/${current.version}/index.js`,
 						id:"plugins:"+pluginName,
 						creating:!latest
 					}
 				}
-				
+
 				if(!semver.valid(current.version)){
 					throw new Error(`current version[${current.version}] is not  valid`)
 				}
