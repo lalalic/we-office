@@ -92,7 +92,10 @@ program
 		return getCloud()
 			.then(cloud=>cloud.publish(project, url, dir))
 			.then(()=>console.log(`published ${project.version}`))
-			.catch(e=>console.log(chalk.red(e.message)))
+			.catch(e=>{
+				console.debug(e)
+				console.error(chalk.red(e.message))
+			})
 	})
 
 program.parse(process.argv)

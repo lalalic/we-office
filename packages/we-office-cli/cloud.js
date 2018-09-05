@@ -3,11 +3,13 @@ const fs=require('fs')
 const {Cloud}=require("qili-cli")
 const semver=require("semver")
 const mkdirp=require("mkdirp")
+const chalk=require("chalk")
 const cwd=process.cwd()
 
 module.exports=class extends Cloud{
 	constructor(service){
 		super(service, "5b07b8571f6cab002e832d23")
+		console.log(`To ${chalk.blue(service)}`)
 	}
 
 	publish(current, url, dir){

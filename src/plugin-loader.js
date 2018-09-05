@@ -41,8 +41,9 @@ export function install(plugin, uninstall=false){
 				delete imported[name]
 			}
 			exports.install(config)
+			imported[name]=exports
 			return exports
-		})
+		})	
 }
 
 export default connect(state=>({
@@ -68,9 +69,6 @@ export default connect(state=>({
 						.finally(()=>{
 							this.setState({loading:a})
 							return install(a)
-								.then(exports=>{
-									imported[a.name]=exports
-								})
 								.then(()=>{
 									this.loaded.push(a)
 								})
