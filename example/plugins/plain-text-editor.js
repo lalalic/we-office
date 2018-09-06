@@ -11,14 +11,42 @@ const Viewers={
 }
 
 const Editors={
-	Document:Object.assign(
-		({children},{store})=>React.createElement("textarea",{
-			value:children,
-			style:{width:500,height:"80%", margin:10,padding:5, fontFamily:"Arial,Helvetica,sans-serif", fontSize:"11pt", lineHeight:"140%"},
-			onChange({target:{value}}){
-				store.dispatch({type:"we-edit/content",payload:value})//type must be "we-edit/xxx"
+	Document:Object.assign(class extends React.Component{
+			render(){
+				const {children}=this.props
+				const {store}=this.context
+				
+				return React.createElement("textarea",{
+					ref={a=>this.editor=a}
+					value:children,
+					style:{
+						width:500,height:"80%", 
+						margin:10,padding:5, 
+						fontFamily:"Arial,Helvetica,sans-serif", 
+						fontSize:"11pt", 
+						lineHeight:"140%"
+					},
+					onChange({target:{value}}){
+						store.dispatch({type:"we-edit/content",payload:value})//type must be "we-edit/xxx"
+					}
+				})
 			}
-		}),
+			componentDidMount(){
+				const {width,height}=this.editor.parentNode.getBoundingClientRect()
+				this.editor.style.width=width-10
+				this.editor.style.height=height-10
+				this.editor.parentNode.style.textAlign="center"
+				this.editor.focus()
+			}
+			
+			componentDidUpdate(){
+				const {width,height}=this.editor.parentNode.getBoundingClientRect()
+				this.editor.style.width=width-10
+				this.editor.style.height=height-10
+				this.editor.parentNode.style.textAlign="center"
+				this.editor.focus()
+			}
+		},
 		{
 			displayName:"text",//must
 			contextTypes:{
