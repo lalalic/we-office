@@ -10,7 +10,7 @@ import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qi
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
-import {DefaultOffice, TitleBar, Dashboard} from "we-edit/office"
+import {Office, TitleBar, Dashboard} from "we-edit/office"
 
 import {MenuItem} from "material-ui"
 
@@ -65,9 +65,9 @@ export const WeOffice = compose(
 			const {me:{ token, id, extensions}}=response
 			//dispatch(qiliACTION.CURRENT_USER({id,token}))
 			const spy=key=>{
-				let raw=DefaultOffice[key]
+				let raw=Office[key]
 				
-				DefaultOffice[key]=function(){
+				Office[key]=function(){
 					let r=raw(...arguments)
 					dispatch(ACTION.OfficeChanged())
 					return r
@@ -95,7 +95,7 @@ export const routes=(
 					({officeChanged,children})=>
 						<Fragment>
 							<Portal container={document.querySelector("#wo")}>
-								<DefaultOffice
+								<Office
 									key={officeChanged}
 									dashboard={
 										<Dashboard 
@@ -107,7 +107,7 @@ export const routes=(
 												<MenuItem 
 													primaryText={
 														<Link to="/market" 
-															style={{textDecoration:"none",color:"inherit"}}>
+															style={{textDecoration:"none",color:"inherit",display:"block"}}>
 															Market
 														</Link>
 													}
@@ -120,13 +120,13 @@ export const routes=(
 											<PluginLoader/>
 										</TitleBar>
 									}>
-								</DefaultOffice>	
+								</Office>	
 							</Portal>
-							<Portal.Web 
-									container={document.querySelector("#app")} 
-									children={children}/>
+							<Portal.Web container={document.querySelector("#app")}>
+								{children}
+							</Portal.Web>
 							<Portal container={document.querySelector("#app").parentNode}>
-								<Creator mini={true}/>
+								<Creator mini={true} style={{position:"fixed",bottom:50,right:20}}/>
 							</Portal>
 						</Fragment>
 					)}

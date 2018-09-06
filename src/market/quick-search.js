@@ -5,7 +5,7 @@ import {compose, getContext, withProps, withStateHandlers} from "recompose"
 import {Popover, Chip, Subheader} from "material-ui"
 import {blue300 as SELECTED, indigo900} from 'material-ui/styles/colors'
 
-const TYPES=["Loader","Input", "Representation","Emitter","Stream","Ribbon"]
+const TYPES=["Loader","Input", "Representation","Emitter","Stream","Office"]
 const CONDS=[
 	{label:"我用的",key:"using"},
 	//{label:"自己写的",key:"mine"},

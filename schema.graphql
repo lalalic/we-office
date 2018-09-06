@@ -134,7 +134,7 @@ enum PluginType {
   Emitter
   Stream
   Representation
-  Ribbon
+  Office
 }
 
 type Query {

@@ -7,7 +7,7 @@
   "dependencies": {
     "material-ui": "^0.20.2",
     "pull-to-refresh2": "^1.0.2",
-    "qili-app": "^1.2.24",
+    "qili-app": "^1.2.31",
     "react-router": "^3.0.0",
     "we-edit": "^3.2.0"
   },

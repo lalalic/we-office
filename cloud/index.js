@@ -25,7 +25,7 @@ Cloud.typeDefs=`
 		Emitter
 		Stream
 		Representation
-		Ribbon
+		Office
 	}
 
 	extend type Query{

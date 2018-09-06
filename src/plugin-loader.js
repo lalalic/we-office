@@ -5,7 +5,7 @@ import {Dialog} from "material-ui"
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
 
-const imported={}
+const imported=requirex.imported={}
 
 export function install(plugin, uninstall=false){
 	const {code,name,config}=plugin

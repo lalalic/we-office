@@ -9,7 +9,6 @@ const cwd=process.cwd()
 module.exports=class extends Cloud{
 	constructor(service){
 		super(service, "5b07b8571f6cab002e832d23")
-		console.log(`To ${chalk.blue(service)}`)
 	}
 
 	publish(current, url, dir){
@@ -58,7 +57,8 @@ module.exports=class extends Cloud{
 					try{
 						readme=fs.readFileSync(path.resolve(cwd,readme),"utf-8")
 					}catch(e){
-						console.warn(`readme: ${e.message}`)
+						console.warn(chalk.yellow(`readme: ${e.message}`))
+						console.debug(e)
 					}
 				}
 

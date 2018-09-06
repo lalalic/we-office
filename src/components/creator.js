@@ -29,7 +29,10 @@ export const Creator=compose(
 					.selectTextFile(".js")
 					.then(a=>install({code:a.data,name:"test"},true))
 					.then(e=>dispatch(ACTION.MESSAGE("Your plugin installed!")))
-					.catch(e=>dispatch(ACTION.MESSAGE({type:"error", message:e.message})))
+					.catch(e=>{
+						dispatch(ACTION.MESSAGE({type:"error", message:e.message}))
+						console.error(e)
+					})
 			}
 		}
 		>

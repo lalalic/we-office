@@ -91,7 +91,7 @@ program
 
 		return getCloud()
 			.then(cloud=>cloud.publish(project, url, dir))
-			.then(()=>console.log(`published ${project.version}`))
+			.then(({plugin_update:{name,version}})=>console.log(`${chalk.blue(name)}[${chalk.blue(version)}] published`))
 			.catch(e=>{
 				console.debug(e)
 				console.error(chalk.red(e.message))
