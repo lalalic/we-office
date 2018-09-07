@@ -16,7 +16,6 @@ import {MenuItem} from "material-ui"
 
 
 import {DOMAIN,ACTION,reducer} from "./state"
-import Navigator from "./components/navigator"
 import Portal from "./components/portal"
 import {Creator} from "./components/creator"
 import Market,{Creator as CreatePlugin, Plugin} from "./market"
@@ -67,17 +66,17 @@ export const WeOffice = compose(
 			//dispatch(qiliACTION.CURRENT_USER({id,token}))
 			const spy=key=>{
 				let raw=Office[key]
-				
+
 				Office[key]=function(){
 					let r=raw(...arguments)
 					dispatch(ACTION.OfficeChanged())
 					return r
 				}
 			}
-			
+
 			spy("install")
 			spy("uninstall")
-			
+
 			dispatch(ACTION.EXTENSIONS(extensions))
 			//@TODO: to initialize your qili
 		},
@@ -99,15 +98,15 @@ export const routes=(
 								<Office
 									key={officeChanged}
 									dashboard={
-										<Dashboard 
+										<Dashboard
 											avatar={
-												<Link to="/my" style={{textDecoration:"none",color:"inherit"}}>	
+												<Link to="/my" style={{textDecoration:"none",color:"inherit"}}>
 													<Avatar/>
 												</Link>}
 											children={
-												<MenuItem 
+												<MenuItem
 													primaryText={
-														<Link to="/market" 
+														<Link to="/market"
 															style={{textDecoration:"none",color:"inherit",display:"block"}}>
 															Market
 														</Link>
@@ -121,7 +120,7 @@ export const routes=(
 											<PluginLoader/>
 										</TitleBar>
 									}>
-								</Office>	
+								</Office>
 							</Portal>
 							<Portal.Web container={document.querySelector("#app")}>
 								{children}
@@ -132,11 +131,11 @@ export const routes=(
 						</Fragment>
 					)}
 				>
-				
+
 			<Route path="developer">
 				<IndexRoute component={Developer}/>
 			</Route>
-			
+
 			<Route path="market">
 				<IndexRoute component={compose(
 						getContext({router:PropTypes.object}),
