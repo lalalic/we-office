@@ -1,7 +1,13 @@
+/**
+it's to customize docx workspace, you would see the following change after this plugin loaded:
+> when you create document, you  can see a template
+> there are tabs of Draw,Design,References,Review,View,Developer,xPression when you open a docx
+> there is input at end of tabs when you opena docx
+**/
 const React=require("react")
 const {Viewer, Editor, Representation}=require("we-edit")
 const {Office, Workspace, Ribbon:{Ribbon,Tab}}=require("we-edit/office")
-const InputDocx=require("input-docx")
+const Docx=require("input-docx")
 
 const DocxOffice={
 	workspaces:[
@@ -32,18 +38,21 @@ const DocxOffice={
 	]
 }
 
-class MyInputDocx extends InputDocx{
+class MyDocx extends Docx{
 	
 }
 
 exports.install=function(){
 	Office.install(DocxOffice)
-	MyInputDocx.install({template:"/templates/normal.docx"})
+	MyDocx.install({
+		type:"xPression docx",
+		template:"/templates/normal.docx"//when you create, you can choose this template to stare a new docx
+	})
 }
 
 exports.uninstall=function(){
 	Office.uninstall(DocxOffice)
-	MyInputDocx.uninstall()
+	MyDocx.uninstall()
 }
 
 

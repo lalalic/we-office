@@ -25,6 +25,7 @@ import Avatar from "./dashboard"
 import Profile from "./setting/profile"
 
 import PluginLoader from "./plugin-loader"
+import Developer from "./developer"
 
 export const WeOffice = compose(
 	withProps(()=>({
@@ -131,6 +132,10 @@ export const routes=(
 						</Fragment>
 					)}
 				>
+				
+			<Route path="developer">
+				<IndexRoute component={Developer}/>
+			</Route>
 			
 			<Route path="market">
 				<IndexRoute component={compose(
@@ -155,13 +160,7 @@ export const routes=(
 							toPlugin(id){
 								router.push(`/market/${id}`)
 							}
-						})),/*
-						withCreator(({router})=>({
-							mini:true,
-							onClick(){
-								router.push(`/market/create`)
-							}
-						})),*/
+						})),
 					)(Market)}/>
 
 				<Route path="create" component={compose(

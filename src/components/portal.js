@@ -12,6 +12,8 @@ export class Web extends PureComponent{
 		container.style.zIndex=""
 		container.style.background="transparent"
 		if(children){
+			const {location:{pathname}}=children.props
+			const title=pathname.split("/")[1]
 			container.style.zIndex=2
 			return createPortal(
 				<Fragment>
@@ -19,6 +21,8 @@ export class Web extends PureComponent{
 						style={{height:36}}
 						zDepth={2}
 						showMenuIconButton={false}
+						title={title}
+						titleStyle={{fontSize:"small", lineHeight:"100%", height:"auto", marginTop:"auto", marginBottom:"auto"}}		
 						{...props}
 						iconElementRight={
 							<Link to="/">

@@ -1,7 +1,9 @@
 const {Representation} = require("we-edit")
 
 class HTML extends Representation.Output.Html{	
-	
+	output(content){
+		super.output(content)
+	}
 }
 
 HTML.displayName="HTML"

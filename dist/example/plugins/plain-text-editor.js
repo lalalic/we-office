@@ -17,7 +17,7 @@ const Editors={
 				const {store}=this.context
 				
 				return React.createElement("textarea",{
-					ref={a=>this.editor=a}
+					ref:a=>this.editor=a,
 					value:children,
 					style:{
 						width:500,height:"80%", 
@@ -31,7 +31,8 @@ const Editors={
 					}
 				})
 			}
-			componentDidMount(){
+			
+			goodLook(){
 				const {width,height}=this.editor.parentNode.getBoundingClientRect()
 				this.editor.style.width=width-10
 				this.editor.style.height=height-10
@@ -39,12 +40,12 @@ const Editors={
 				this.editor.focus()
 			}
 			
+			componentDidMount(){
+				this.goodLook()
+			}
+			
 			componentDidUpdate(){
-				const {width,height}=this.editor.parentNode.getBoundingClientRect()
-				this.editor.style.width=width-10
-				this.editor.style.height=height-10
-				this.editor.parentNode.style.textAlign="center"
-				this.editor.focus()
+				this.goodLook()
 			}
 		},
 		{
