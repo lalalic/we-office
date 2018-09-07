@@ -23,7 +23,7 @@ const DocxOffice={
 			},
 			React.createElement(Editor, {
 				toolBar: React.createElement(
-						Ribbon, 
+						Ribbon,
 						{ commands: { layout: true } },
 						..."Draw,Design,References,Review,View,Developer,xPression"
 							.split(",")
@@ -39,13 +39,12 @@ const DocxOffice={
 }
 
 class MyDocx extends Docx{
-	
+
 }
 
 exports.install=function(){
 	Office.install(DocxOffice)
 	MyDocx.install({
-		type:"xPression docx",
 		template:"/templates/normal.docx"//when you create, you can choose this template to stare a new docx
 	})
 }
@@ -54,5 +53,3 @@ exports.uninstall=function(){
 	Office.uninstall(DocxOffice)
 	MyDocx.uninstall()
 }
-
-

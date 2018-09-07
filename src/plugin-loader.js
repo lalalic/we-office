@@ -22,9 +22,9 @@ export function install(plugin, uninstall=false){
 			}else if(true){
 				code=`(function(){${code}})();`
 			}
-			
+
 			code=`${code}\r\n//# sourceURL=plugins/${name}.js`
-			
+
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
 			let  returned=compiled(module, module.exports, requirex)
@@ -43,7 +43,7 @@ export function install(plugin, uninstall=false){
 			exports.install(config)
 			imported[name]=exports
 			return exports
-		})	
+		})
 }
 
 export default connect(state=>({
@@ -52,26 +52,22 @@ export default connect(state=>({
 	class PluginLoaders extends PureComponent{
 		constructor(){
 			super(...arguments)
-			this.state={loading:null}			
-			this.loaded=[]
+			this.state={loading:null}
 			this.tried=0
 		}
-		
+
 		componentDidMount(){
 			this.tryInstall(this.props.plugins)
 		}
-		
+
 		tryInstall(plugins){
 			plugins
-				.filter(a=>!this.loaded.find(b=>b.id==a.id))
+				.filter(a=>!imported[a.name])
 				.reduce((p, a)=>{
 					return p
 						.finally(()=>{
 							this.setState({loading:a})
 							return install(a)
-								.then(()=>{
-									this.loaded.push(a)
-								})
 								.catch(a=>{
 									console.error(a)
 								})
@@ -79,7 +75,7 @@ export default connect(state=>({
 				}, Promise.resolve())
 				.then(()=>this.tried++)
 				.then(()=>{
-					if(this.tried<2 && this.loaded.length<this.props.plugins.length){
+					if(this.tried<2 && this.props.plugins.find(a=>!imported[a.name])!=-1){
 						return this.tryInstall(plugins)
 					}
 				})
@@ -88,9 +84,9 @@ export default connect(state=>({
 
 		render(){
 			const {state:{loading}, tried}=this
-			
+
 			return (
-				<Dialog 
+				<Dialog
 					modal={true}
 					open={!!loading}
 					>
@@ -98,7 +94,7 @@ export default connect(state=>({
 				</Dialog>
 			)
 		}
-		
+
 		componentWillReceiveProps({plugins}){
 			this.tried=0
 			this.props.plugins
@@ -106,7 +102,6 @@ export default connect(state=>({
 					if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id)){
 						imported[a.name].uninstall()
 						delete imported[a.name]
-						this.loaded.splice(this.loaded.findIndex(b=>b.id==a.id),1)
 					}
 				})
 			this.tryInstall(plugins)
