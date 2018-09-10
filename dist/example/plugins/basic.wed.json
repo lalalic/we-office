@@ -1,0 +1,49 @@
+{
+    "type":"document",
+    "props":{
+
+    },
+    "children":[
+        {
+            "type":"section",
+            "props":{
+                "pgSz":{"width":800,"height":600}
+            },
+            "children":[
+                {
+                    "type":"paragraph",
+                    "props":{
+
+                    },
+                    "children":[
+                        {
+                            "type":"text",
+                            "props":{
+                                "fonts":"arial",
+                                "size":12
+                            },
+                            "children":"hello "
+                        },
+                        {
+                            "type":"$exp",
+                            "props":{
+                                "fonts":"arial",
+                                "size":12,
+                                "expression":"firstName+' '+lastName",
+                                "defaultValue":"Raymond"
+                            }
+                        },
+                        {
+                            "type":"text",
+                            "props":{
+                                "fonts":"arial",
+                                "size":12
+                            },
+                            "children":"!"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
