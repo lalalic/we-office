@@ -1,13 +1,15 @@
-import React, {PureComponent, Component} from "react"
+import React, {PureComponent, Component,Fragment} from "react"
 import {connect} from "react-redux"
 import requirex from "./require-api"
 import {Dialog} from "material-ui"
 
-const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())
+const isLocalTest=a=>a.startsWith("data:application/javascript;base64,")
+
+const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())||isLocalTest(a)
 
 const imported=requirex.imported={}
 
-export function install(plugin, uninstall=false){
+function install(plugin){
 	const {code,name,config}=plugin
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
@@ -36,7 +38,7 @@ export function install(plugin, uninstall=false){
 			return module.exports
 		})
 		.then(exports=>{
-			if(uninstall && imported[name]){
+			if(imported[name]){
 				imported[name].uninstall()
 				delete imported[name]
 			}
@@ -52,7 +54,7 @@ export default connect(state=>({
 	class PluginLoaders extends PureComponent{
 		constructor(){
 			super(...arguments)
-			this.state={loading:null}
+			this.state={loading:false}
 			this.tried=0
 		}
 
@@ -68,8 +70,8 @@ export default connect(state=>({
 						.finally(()=>{
 							this.setState({loading:a})
 							return install(a)
-								.catch(a=>{
-									console.error(a)
+								.catch(e=>{
+									console.error({plugin:a, error:e})
 								})
 						})
 				}, Promise.resolve())
@@ -83,8 +85,16 @@ export default connect(state=>({
 		}
 
 		render(){
-			const {state:{loading}, tried}=this
+			const {state:{loading}, props:{children}}=this
+			if(loading==null){
+				return (
+					<Fragment>
+						{children}
+					</Fragment>
+				)
+			}
 
+			
 			return (
 				<Dialog
 					modal={true}
@@ -94,12 +104,20 @@ export default connect(state=>({
 				</Dialog>
 			)
 		}
+		
+		componentDidUpdate(){
+			const {onLoaded}=this.props
+			const {loading}=this.state
+			if(onLoaded && loading===null){
+				onLoaded()
+			}
+		}
 
 		componentWillReceiveProps({plugins}){
 			this.tried=0
 			this.props.plugins
 				.forEach(a=>{
-					if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id)){
+					if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id && b.version==a.version)){
 						imported[a.name].uninstall()
 						delete imported[a.name]
 					}

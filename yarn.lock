@@ -4752,6 +4752,10 @@ mem@^1.1.0:
   dependencies:
     mimic-fn "^1.0.0"
 
+memoize-one@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-4.0.2.tgz#3fb8db695aa14ab9c0f1644e1585a8806adc1aee"
+
 memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.4.1.tgz#3a9a20b8462523e447cfbc7e8bb80ed667bfc552"
@@ -8232,15 +8236,16 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-we-edit@^3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/we-edit/-/we-edit-3.2.3.tgz#ba7058210a8d138aeaa011e940f1c9d05f853b38"
+we-edit@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/we-edit/-/we-edit-3.2.6.tgz#128f7ab23f1703c075388d20b369c3cc2448fbaf"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
     immutable "^3.8.1"
     is-node "^1.0.2"
     lodash.get "^4.4.2"
+    memoize-one "^4.0.2"
     prop-types "^15.6.0"
     react "^16.2.0"
     react-dom "^16.2.0"

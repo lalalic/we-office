@@ -9,7 +9,7 @@ import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory, Link} fro
 import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qiliACTION,File,Account} from "qili-app"
 import project from "../package.json"
 
-import {reducer as weReducer, DOMAIN as weDOMAIN} from "we-edit"
+import {reducer as weReducer, DOMAIN as weDOMAIN,  Loader} from "we-edit"
 import {Office, TitleBar, Dashboard} from "we-edit/office"
 
 import {MenuItem} from "material-ui"
@@ -17,8 +17,8 @@ import {MenuItem} from "material-ui"
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Portal from "./components/portal"
-import {Creator} from "./components/creator"
-import Market,{Creator as CreatePlugin, Plugin} from "./market"
+import PluginDebugger from "./components/plugin-debugger"
+import Market,{Creator, Plugin} from "./market"
 import My from "./setting/my"
 import Avatar from "./dashboard"
 import Profile from "./setting/profile"
@@ -62,9 +62,7 @@ export const WeOffice = compose(
 			}
 		`,
 		onSuccess(response,dispatch){
-			const {me:{ token, id, extensions}}=response
-			//dispatch(qiliACTION.CURRENT_USER({id,token}))
-			const spy=key=>{
+			const spy=key=>{//if office extended, office should be recreated
 				let raw=Office[key]
 
 				Office[key]=function(){
@@ -76,8 +74,20 @@ export const WeOffice = compose(
 
 			spy("install")
 			spy("uninstall")
+			
+			let {me:{ token, id, extensions,isDeveloper}}=response
+			//dispatch(qiliACTION.CURRENT_USER({id,token}))
 
-			dispatch(ACTION.EXTENSIONS(extensions))
+			dispatch((dispatch,getState)=>{
+				const {"we-office":{extensions:lastPlugins}}=getState()
+				if(isDeveloper){
+					let testing=lastPlugins.find(a=>a.id=="test")
+					if(testing){
+						extensions=[...extensions,testing]
+					}
+				}
+				dispatch(ACTION.EXTENSIONS(extensions))
+			})
 			//@TODO: to initialize your qili
 		},
 		onError(error,dispatch){
@@ -92,48 +102,65 @@ export const WeOffice = compose(
 export const routes=(
 	<Router history={hashHistory}>
 		<Route path="/" component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
-					({officeChanged,children})=>
-						<Fragment>
-							<Portal container={document.querySelector("#wo")}>
-								<Office
-									key={officeChanged}
-									dashboard={
-										<Dashboard
-											avatar={
-												<Link to="/my" style={{textDecoration:"none",color:"inherit"}}>
-													<Avatar/>
-												</Link>}
-											children={
-												<MenuItem
-													primaryText={
-														<Link to="/market"
-															style={{textDecoration:"none",color:"inherit",display:"block"}}>
-															Market
-														</Link>
-													}
-													/>
-											}
-											/>
-									}
-									titleBar={
-										<TitleBar title="we-office">
-											<PluginLoader/>
-										</TitleBar>
-									}>
-								</Office>
-							</Portal>
-							<Portal.Web container={document.querySelector("#app")}>
-								{children}
-							</Portal.Web>
-							<Portal container={document.querySelector("#app").parentNode}>
-								<Creator mini={true} style={{position:"fixed",bottom:50,right:20}}/>
-							</Portal>
-						</Fragment>
-					)}
+					({officeChanged,children})=>{
+						let officeWidget=null
+						if(children && children.props.route.path=="load/:type"){
+							officeWidget=children
+							children=null
+						}
+
+						return (
+							<Fragment>
+								<Portal container={document.querySelector("#wo")}>
+									
+									<Office
+										key={officeChanged}
+										dashboard={
+											<Dashboard
+												avatar={
+													<Link to="/my" style={{textDecoration:"none",color:"inherit"}}>
+														<Avatar/>
+													</Link>}
+												children={
+													<MenuItem
+														primaryText={
+															<Link to="/market"
+																style={{textDecoration:"none",color:"inherit",display:"block"}}>
+																Market
+															</Link>
+														}
+														/>
+												}
+												/>
+										}
+										titleBar={<TitleBar title="we-office"/>}
+										>
+										<PluginLoader>
+											{officeWidget}
+										</PluginLoader>
+									</Office>
+									
+								</Portal>
+								<Portal.Web container={document.querySelector("#app")}>
+									{children}
+								</Portal.Web>
+								
+								<Portal container={document.querySelector("#app").parentNode}>
+									<PluginDebugger mini={true} style={{position:"fixed",bottom:50,right:20}} />
+								</Portal>
+							</Fragment>
+						)
+					})}
 				>
 
 			<Route path="developer">
 				<IndexRoute component={Developer}/>
+			</Route>
+			
+			<Route path="load/:type" component={({params:{type}, location:{query}})=>{
+					return <Loader {...{...query,type,now:true}}/>
+				}}>
+			
 			</Route>
 
 			<Route path="market">
@@ -168,7 +195,7 @@ export const routes=(
 							toPlugin: id=>router.replace(`/market/${id}`),
 							goBack: ()=>router.goBack(),
 						}))
-					)(CreatePlugin)}/>
+					)(Creator)}/>
 
 				<Route path=":id">
 					<IndexRoute component={compose(

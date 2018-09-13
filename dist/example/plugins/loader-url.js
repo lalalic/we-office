@@ -9,18 +9,6 @@ module.exports=Object.assign(class extends Loader.Base{
 	
 	render(){
 		let elUrl
-		/*
-			<center>
-				<div>
-					<input ref={a=>elUrl=a}/>
-				</div>
-				<div>
-                  	<button onClick={e=>this.setState({url:elUrl.value},()=>this.doLoad())}>
-						submit	
-					/button>
-                </div>
-			</center>		
-		*/
 		return React.createElement(
 			  "center",
 			  null,
@@ -45,10 +33,11 @@ module.exports=Object.assign(class extends Loader.Base{
 	}
 	
 	load(){//must 
+		const {file={}}=this.props
 		const {url}=this.state
 		return fetch(url)
 			.then(res=>res.blob())
-			.then(data=>({data,name:"fetcher.docx",ext:"docx"}))
+			.then(data=>({data,name:"fetcher.docx",ext:"docx",...file}))
 	}
 },{
 	getDerivedStateFromProps({url}){
