@@ -31,7 +31,12 @@ export default compose(
 	<FloatingActionButton
 		{...props}
 		className="floating sticky bottom right"
-		onClick={()=>{
+		onClick={e=>{
+				if(e.target.type=="checkbox" && testing){
+					dispatch(ACTION.EXTENSIONS(extensions.filter(a=>a.id!="test")))
+					return
+				}
+
 				File
 					.selectTextFile(".js")
 					.then(a=>new Promise((resolve, reject)=>{
@@ -47,12 +52,14 @@ export default compose(
 					})
 			}
 		}
-		onDblClick={()=>{
-			if(testing){
-				dispatch(ACTION.EXTENSIONS(extensions.filter(a=>a.id!="test")))
-			}
-		}}
 		>
-		<IconTest style={{fill: !testing ? "" : (requirex.imported.test ? lightGreen500 : red500) }}/>
+		<IconTest
+			style={{fill: !testing ? "white" : (requirex.imported.test ? lightGreen500 : red500) }}/>
+			{testing && (
+				<span style={{position:"absolute",width:0,height:0,top:0,left:0}}>
+					<input type="checkbox" defaultChecked={!!testing} style={{margin:0}}/>
+				</span>
+			)}
+
 	</FloatingActionButton>
 ))

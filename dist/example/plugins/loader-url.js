@@ -6,7 +6,7 @@ module.exports=Object.assign(class extends Loader.Base{
 	shouldComponentUpdate(){
 		return false
 	}
-	
+
 	render(){
 		let elUrl
 		return React.createElement(
@@ -31,8 +31,8 @@ module.exports=Object.assign(class extends Loader.Base{
 			);
 
 	}
-	
-	load(){//must 
+
+	load(){//must
 		const {file={}}=this.props
 		const {url}=this.state
 		return fetch(url)
@@ -43,7 +43,7 @@ module.exports=Object.assign(class extends Loader.Base{
 	getDerivedStateFromProps({url}){
 		return url ? {url} : null
 	},
-	
+
 	defaultProps:{
 		type:"fetch",
 		name:"url loader",

@@ -74,7 +74,7 @@ export const WeOffice = compose(
 
 			spy("install")
 			spy("uninstall")
-			
+
 			let {me:{ token, id, extensions,isDeveloper}}=response
 			//dispatch(qiliACTION.CURRENT_USER({id,token}))
 
@@ -112,7 +112,7 @@ export const routes=(
 						return (
 							<Fragment>
 								<Portal container={document.querySelector("#wo")}>
-									
+
 									<Office
 										key={officeChanged}
 										dashboard={
@@ -137,17 +137,18 @@ export const routes=(
 										>
 										<PluginLoader>
 											{officeWidget}
+											<Portal container={document.querySelector("#app").parentNode}>
+												<PluginDebugger mini={true} style={{position:"fixed",bottom:50,right:20}} />
+											</Portal>
 										</PluginLoader>
 									</Office>
-									
+
 								</Portal>
 								<Portal.Web container={document.querySelector("#app")}>
 									{children}
 								</Portal.Web>
-								
-								<Portal container={document.querySelector("#app").parentNode}>
-									<PluginDebugger mini={true} style={{position:"fixed",bottom:50,right:20}} />
-								</Portal>
+
+
 							</Fragment>
 						)
 					})}
@@ -156,11 +157,11 @@ export const routes=(
 			<Route path="developer">
 				<IndexRoute component={Developer}/>
 			</Route>
-			
+
 			<Route path="load/:type" component={({params:{type}, location:{query}})=>{
 					return <Loader {...{...query,type,now:true}}/>
 				}}>
-			
+
 			</Route>
 
 			<Route path="market">
