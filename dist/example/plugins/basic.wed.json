@@ -20,26 +20,215 @@
                             "type":"text",
                             "props":{
                                 "fonts":"arial",
-                                "size":12
+                                "size":12,
+                                "color":"black"
                             },
-                            "children":"hello "
-                        },
+                            "children":"hello raymond Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. "
+                        }
+                    ]
+                },
+                {
+                    "type":"paragraph",
+                    "props":{
+
+                    },
+                    "children":[
+                        {
+                            "type":"$for",
+                            "props":{
+                                "init":"var i=children.length-1",
+                                "test":"i>=0",
+                                "update":"i--"
+                            },
+                            "children":[
+                                {
+                                    "type":"$exp",
+                                    "props":{
+                                        "expression":"children[i].name+','"
+                                    },
+                                    "children":[
+                                        {
+                                            "type":"text",
+                                            "props":{
+                                                "fonts":"calibri",
+                                                "size":20,
+                                                "color":"red"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "type":"paragraph",
+                    "props":{
+
+                    },
+                    "children":[
+                        {
+                            "type":"$for",
+                            "props":{
+                                "init":"var i=0",
+                                "test":"i<4",
+                                "update":"i++"
+                            },
+                            "children":[
+                                {
+                                    "type":"text",
+                                    "props":{
+                                        "fonts":"arial",
+                                        "size":12,
+                                        "color":"blue"
+                                    },
+                                    "children":"hello "
+                                },
+                                {
+                                    "type":"$exp",
+                                    "props":{
+                                        "expression":"`${lastName} ${i},`",
+                                    },
+                                    "children":[
+                                        {
+                                            "type":"text",
+                                            "props":{
+                                                "fonts":"arial",
+                                                "size":12,
+                                                "color":"blue"
+                                            },
+                                            "children":""
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type":"$for",
+                    "props":{
+                        "init":"var i=0",
+                        "test":"i<5",
+                        "update":"i++"
+                    },
+                    "children":[
+                        {
+                            "type":"paragraph",
+                            "props":{
+                                "id":"2"
+                            },
+                            "children":[
+                                {
+                                    "type":"$for",
+                                    "props":{
+                                        "init":"var i=0",
+                                        "test":"i<4",
+                                        "update":"i++"
+                                    },
+                                    "children":[
+                                        {
+                                            "type":"text",
+                                            "props":{
+                                                "fonts":"arial",
+                                                "size":12,
+                                                "color":"blue"
+                                            },
+                                            "children":"hello "
+                                        },
+                                        {
+                                            "type":"$exp",
+                                            "props":{
+                                                "expression":"`${lastName} ${i},`"
+                                            },
+                                            "children":[
+                                                {
+                                                    "type":"text",
+                                                    "props":{
+                                                        "fonts":"arial",
+                                                        "size":12,
+                                                        "color":"blue"
+                                                    },
+                                                    "children":""
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type":"$exp",
+                                    "props":{
+                                        "expression":"`----${i+''}`"
+                                    },
+                                    "children":[
+                                        {
+                                            "type":"text",
+                                            "props":{
+                                                "fonts":"arial",
+                                                "size":12,
+                                                "color":"blue",
+                                                "bold":true,
+                                            },
+                                            "children":""
+                                        }
+                                    ]
+                                },
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "type":"paragraph",
+                    "props":{
+                        "id":"3"
+                    },
+                    "children":[
+                        {
+                            "type":"$if",
+                            "props":{
+                                "condition":"isEmployee"
+                            },
+                            "children":[
+                                {
+                                    "type":"text",
+                                    "props":{
+                                        "fonts":"arial",
+                                        "size":12,
+                                        "color":"red"
+                                    },
+                                    "children":"hello raymond Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. "
+                                },
+                                {
+                                    "type":"text",
+                                    "props":{
+                                        "fonts":"arial",
+                                        "size":12,
+                                        "color":"yellow"
+                                    },
+                                    "children":"hello raymond Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. "
+                                }
+                            ]
+                        }
+                        ,
                         {
                             "type":"$exp",
                             "props":{
-                                "fonts":"arial",
-                                "size":12,
-                                "expression":"firstName+' '+lastName",
-                                "defaultValue":"Raymond"
-                            }
-                        },
-                        {
-                            "type":"text",
-                            "props":{
-                                "fonts":"arial",
-                                "size":12
+                                "expression":"lastName+' '+firstName",
+                                "name":"name",
                             },
-                            "children":"!"
+                            "children":[
+                                {
+                                    "type":"text",
+                                    "props":{
+                                        "fonts":"arial",
+                                        "size":12,
+                                        "color":"red"
+                                    },
+                                    "children":""
+                                }
+                            ]
                         }
                     ]
                 }
