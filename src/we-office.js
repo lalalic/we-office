@@ -114,7 +114,7 @@ export const routes=(
 								<Portal container={document.querySelector("#wo")}>
 
 									<Office
-										key={officeChanged}
+										installable={true}
 										dashboard={
 											<Dashboard
 												avatar={

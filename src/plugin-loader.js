@@ -56,6 +56,7 @@ export default connect(state=>({
 			super(...arguments)
 			this.state={loading:false}
 			this.tried=0
+			this.unmounted=false
 		}
 
 		componentDidMount(){
@@ -68,20 +69,26 @@ export default connect(state=>({
 				.reduce((p, a)=>{
 					return p
 						.finally(()=>{
-							this.setState({loading:a})
-							return install(a)
-								.catch(e=>{
-									console.error({plugin:a, error:e})
-								})
+							if(!this.unmounted){
+								this.setState({loading:a})
+								return install(a)
+									.catch(e=>{
+										console.error({plugin:a, error:e})
+									})
+							}
 						})
 				}, Promise.resolve())
 				.then(()=>this.tried++)
 				.then(()=>{
-					if(this.tried<2 && this.props.plugins.find(a=>!imported[a.name])!=-1){
+					if(!this.unmounted && this.tried<2 && this.props.plugins.find(a=>!imported[a.name])!=-1){
 						return this.tryInstall(plugins)
 					}
 				})
-				.finally(()=>this.setState({loading:null}))
+				.finally(()=>{
+					if(!this.unmounted){
+						this.setState({loading:null})
+					}
+				})
 		}
 
 		render(){
@@ -123,6 +130,10 @@ export default connect(state=>({
 					}
 				})
 			this.tryInstall(plugins)
+		}
+		
+		componentWillUnmount(){
+			this.unmounted=true
 		}
 	}
 )
