@@ -2,6 +2,7 @@ import React, {PureComponent, Component,Fragment} from "react"
 import {connect} from "react-redux"
 import requirex from "./require-api"
 import {Dialog} from "material-ui"
+import immutable from "immutable"
 
 const isLocalTest=a=>a.startsWith("data:application/javascript;base64,")
 
@@ -101,7 +102,7 @@ export default connect(state=>({
 				)
 			}
 
-			
+
 			return (
 				<Dialog
 					modal={true}
@@ -111,27 +112,30 @@ export default connect(state=>({
 				</Dialog>
 			)
 		}
-		
-		componentDidUpdate(){
-			const {onLoaded}=this.props
+
+		componentDidUpdate(prev){
 			const {loading}=this.state
-			if(onLoaded && loading===null){
+			if(loading===null){
+				const {plugins}=this.props
+				if(plugins!=prev.plugins
+					&& !immutable.List(plugins).equals(immutable.List(prev.plugins))){
+					prev.plugins
+						.forEach(a=>{
+							if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id && b.version==a.version)){
+								imported[a.name].uninstall()
+								delete imported[a.name]
+							}
+						})
+
+					this.tried=0
+					this.tryInstall(plugins)
+				}
+
+				const {onLoaded=a=>a}=this.props
 				onLoaded()
 			}
 		}
 
-		componentWillReceiveProps({plugins}){
-			this.tried=0
-			this.props.plugins
-				.forEach(a=>{
-					if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id && b.version==a.version)){
-						imported[a.name].uninstall()
-						delete imported[a.name]
-					}
-				})
-			this.tryInstall(plugins)
-		}
-		
 		componentWillUnmount(){
 			this.unmounted=true
 		}

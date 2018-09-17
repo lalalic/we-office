@@ -3830,7 +3830,7 @@ image-size@~0.5.0:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
 
-immutable@^3.8.1:
+immutable@^3.8.1, immutable@^3.8.2:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
@@ -6184,9 +6184,9 @@ q@^1.1.2, q@^1.4.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
 
-qili-app@^1.2.31:
-  version "1.2.31"
-  resolved "https://registry.yarnpkg.com/qili-app/-/qili-app-1.2.31.tgz#be3c092870b84b941b33a16e7c138b6d59dc8bfb"
+qili-app@^1.2.40:
+  version "1.2.40"
+  resolved "https://registry.yarnpkg.com/qili-app/-/qili-app-1.2.40.tgz#446312b8daec60630dcba4c06d39acfb0f274b2e"
   dependencies:
     babel-polyfill "^6.26.0"
     graphql-tools "^3.0.0"
@@ -8236,9 +8236,9 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-we-edit@^3.2.6:
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/we-edit/-/we-edit-3.2.6.tgz#128f7ab23f1703c075388d20b369c3cc2448fbaf"
+we-edit@^3.2.12:
+  version "3.2.12"
+  resolved "https://registry.yarnpkg.com/we-edit/-/we-edit-3.2.12.tgz#ea6e807151ac5f2fe3e781e8f2b8940d885e3044"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"

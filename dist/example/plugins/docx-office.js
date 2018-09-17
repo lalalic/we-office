@@ -8,35 +8,45 @@ const React=require("react")
 const {Viewer, Editor, Representation}=require("we-edit")
 const {Office, Workspace, Ribbon:{Ribbon,Tab}}=require("we-edit/office")
 const Docx=require("input-docx")
+const {}=require("variant")
 
-const DocxOffice={
-	workspaces:[
-		React.createElement(
-			Workspace,
-			{
-				accept(){
-					console.dir(arguments)
-					return true
-				},
-				key: "docx",
-				layout: "print"
-			},
-			React.createElement(Editor, {
-				toolBar: React.createElement(
-						Ribbon,
-						{ commands: { layout: true } },
-						..."Draw,Design,References,Review,View,Developer,xPression"
-							.split(",")
-							.map(label=>React.createElement(Tab,{label})),
-						React.createElement(Tab,{label:React.createElement("input",{placeholder:"Tell me what you want to do"})}),
-					),
-				layout: "print",
-				icon: null,
-				representation: "pagination"
-			})
-		)
-	]
-}
+
+const KEY="docx"
+
+const DocxOffice=React.createElement(Workspace,
+	{
+		accept(){
+			return true
+		},
+		key: "docx",
+		layout: "print",
+		reducer(state={assemble:false},{type, payload}){
+			switch(type){
+
+			}
+			return state
+		}
+	},
+	React.createElement(Editor, {
+		toolBar: React.createElement(
+				Ribbon,
+				{ commands: { layout: true } },
+				..."Draw,Design,References,Review,View,Developer"
+					.split(",")
+					.map(label=>React.createElement(Tab,{label})),
+
+				React.createElement(Tab,{label:"xPression"},
+					React.createElement("input",{type:"checkbox"})
+				),
+
+
+				React.createElement(Tab,{label:React.createElement("input",{placeholder:"Tell me what you want to do"})}),
+			),
+		layout: "print",
+		icon: null,
+		representation: "pagination"
+	})
+)
 
 class MyDocx extends Docx{
 
@@ -45,6 +55,7 @@ class MyDocx extends Docx{
 exports.install=function(){
 	Office.install(DocxOffice)
 	MyDocx.install({
+		type: "myDocx",
 		template:"/templates/normal.docx"//when you create, you can choose this template to stare a new docx
 	})
 }

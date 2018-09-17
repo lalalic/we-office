@@ -62,21 +62,8 @@ export const WeOffice = compose(
 			}
 		`,
 		onSuccess(response,dispatch){
-			const spy=key=>{//if office extended, office should be recreated
-				let raw=Office[key]
-
-				Office[key]=function(){
-					let r=raw(...arguments)
-					dispatch(ACTION.OfficeChanged())
-					return r
-				}
-			}
-
-			spy("install")
-			spy("uninstall")
-
 			let {me:{ token, id, extensions,isDeveloper}}=response
-			//dispatch(qiliACTION.CURRENT_USER({id,token}))
+			dispatch(qiliACTION.CURRENT_USER({id,token}))
 
 			dispatch((dispatch,getState)=>{
 				const {"we-office":{extensions:lastPlugins}}=getState()
@@ -101,8 +88,7 @@ export const WeOffice = compose(
 
 export const routes=(
 	<Router history={hashHistory}>
-		<Route path="/" component={connect(state=>({officeChanged:state["we-office"].officeChanged}))(
-					({officeChanged,children})=>{
+		<Route path="/" component={({officeChanged,children})=>{
 						let officeWidget=null
 						if(children && children.props.route.path=="load/:type"){
 							officeWidget=children
@@ -151,7 +137,8 @@ export const routes=(
 
 							</Fragment>
 						)
-					})}
+					}
+				}
 				>
 
 			<Route path="developer">
