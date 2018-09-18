@@ -100,7 +100,6 @@ export const routes=(
 								<Portal container={document.querySelector("#wo")}>
 
 									<Office
-										installable={true}
 										dashboard={
 											<Dashboard
 												avatar={

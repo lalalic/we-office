@@ -144,10 +144,10 @@ const PlainOffice={
 			{
 				accept:PlainInput,
 				key: "txt",
-				layout: "edit"
+				channel: "edit"
 			},
 			React.createElement(Editor, {
-				layout: "edit",
+				channel: "edit",
 				toolBar: null,
 				icon: null,
 				representation: "plain"

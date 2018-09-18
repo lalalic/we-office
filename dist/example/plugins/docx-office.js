@@ -19,7 +19,7 @@ const DocxOffice=React.createElement(Workspace,
 			return true
 		},
 		key: "docx",
-		layout: "print",
+		channel: "print",
 		reducer(state={assemble:false},{type, payload}){
 			switch(type){
 
@@ -30,7 +30,7 @@ const DocxOffice=React.createElement(Workspace,
 	React.createElement(Editor, {
 		toolBar: React.createElement(
 				Ribbon,
-				{ commands: { layout: true } },
+				{ commands: { channel: true } },
 				..."Draw,Design,References,Review,View,Developer"
 					.split(",")
 					.map(label=>React.createElement(Tab,{label})),
@@ -42,7 +42,7 @@ const DocxOffice=React.createElement(Workspace,
 
 				React.createElement(Tab,{label:React.createElement("input",{placeholder:"Tell me what you want to do"})}),
 			),
-		layout: "print",
+		channel: "print",
 		icon: null,
 		representation: "pagination"
 	})
