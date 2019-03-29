@@ -7,13 +7,27 @@
         {
             "type":"section",
             "props":{
-                "pgSz":{"width":800,"height":600}
+                "pgSz":{
+					"width":800,
+					"height":600
+				},
+				"pgMar":{
+					"left":20,
+					"right":20,
+					"top":20,
+					"bottom":20,
+					"header":15,
+					"footer":15
+				}
             },
             "children":[
                 {
                     "type":"paragraph",
                     "props":{
-
+						"defaultStyle":{
+							"fonts":"arial",
+                            "size":12
+						}
                     },
                     "children":[
                         {
@@ -30,7 +44,10 @@
                 {
                     "type":"paragraph",
                     "props":{
-
+						"defaultStyle":{
+							"fonts":"arial",
+                            "size":12
+						}
                     },
                     "children":[
                         {
@@ -53,7 +70,8 @@
                                                 "fonts":"calibri",
                                                 "size":20,
                                                 "color":"red"
-                                            }
+                                            },
+											"children":""
                                         }
                                     ]
                                 }
@@ -65,7 +83,10 @@
                 {
                     "type":"paragraph",
                     "props":{
-
+						"defaultStyle":{
+							"fonts":"arial",
+                            "size":12
+						}
                     },
                     "children":[
                         {
@@ -117,7 +138,10 @@
                         {
                             "type":"paragraph",
                             "props":{
-                                "id":"2"
+								"defaultStyle":{
+									"fonts":"arial",
+									"size":12
+								}
                             },
                             "children":[
                                 {
@@ -182,7 +206,10 @@
                 {
                     "type":"paragraph",
                     "props":{
-                        "id":"3"
+						"defaultStyle":{
+							"fonts":"arial",
+                            "size":12
+						}
                     },
                     "children":[
                         {
@@ -232,7 +259,8 @@
                         }
                     ]
                 }
-            ]
+ 
+			]
         }
     ]
 }
