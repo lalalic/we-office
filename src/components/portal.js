@@ -9,9 +9,8 @@ export const Portal=({children,container})=>createPortal(children, container)
 export class Web extends PureComponent{
 	render(){
 		const {container, children, ...props}=this.props
-		container.style.zIndex=""
-		container.style.background="transparent"
 		if(children){
+			container.classList.remove("inactive")
 			const {location:{pathname}}=children.props
 			const title=pathname.split("/")[1]
 			container.style.zIndex=2
@@ -22,7 +21,7 @@ export class Web extends PureComponent{
 						zDepth={2}
 						showMenuIconButton={false}
 						title={title}
-						titleStyle={{fontSize:"small", lineHeight:"100%", height:"auto", marginTop:"auto", marginBottom:"auto"}}		
+						titleStyle={{fontSize:"small", lineHeight:"100%", height:"auto", marginTop:"auto", marginBottom:"auto"}}
 						{...props}
 						iconElementRight={
 							<Link to="/">
@@ -38,6 +37,8 @@ export class Web extends PureComponent{
 				</Fragment>,
 				container
 			)
+		}else{
+			container.classList.add("inactive")
 		}
 		return null
 	}

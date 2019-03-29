@@ -83,9 +83,6 @@ export const WeOffice = compose(
 	}),
 )(QiliApp)
 
-
-
-
 export const routes=(
 	<Router history={hashHistory}>
 		<Route path="/" component={({officeChanged,children})=>{
@@ -98,14 +95,14 @@ export const routes=(
 						return (
 							<Fragment>
 								<Portal container={document.querySelector("#wo")}>
-
 									<Office
 										dashboard={
 											<Dashboard
 												avatar={
 													<Link to="/my" style={{textDecoration:"none",color:"inherit"}}>
 														<Avatar/>
-													</Link>}
+													</Link>
+												}
 												children={
 													<MenuItem
 														primaryText={
@@ -127,13 +124,11 @@ export const routes=(
 											</Portal>
 										</PluginLoader>
 									</Office>
-
 								</Portal>
+
 								<Portal.Web container={document.querySelector("#app")}>
 									{children}
 								</Portal.Web>
-
-
 							</Fragment>
 						)
 					}
