@@ -17,7 +17,8 @@ const requires={
 	"prop-types":require("prop-types"),
 	"material-ui":require("material-ui"),
 	"react-redux":require("react-redux"),
-	"recompose":require("recompose"),	
+	"recompose":require("recompose"),
+	"minimatch":require("minimatch"),
 	"we-edit":require("we-edit"),
 	"we-edit/office":require("we-edit/office"),
 	"we-edit/representation-pagination":require("we-edit/representation-pagination"),
@@ -26,6 +27,7 @@ const requires={
 	"we-edit/output-svg":require("we-edit/output-svg"),
 	"we-edit/loader-stream-browser":require("we-edit/loader-stream-browser"),
 	"we-edit/loader-stream-file":require("we-edit/loader-stream-file"),
+	
 }
 
 module.exports=window.require=function(a){

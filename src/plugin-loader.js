@@ -11,7 +11,7 @@ const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())||isLocalTest(a)
 const imported=requirex.imported={}
 
 function install(plugin){
-	const {code,name,config}=plugin
+	const {code,name,config,version}=plugin
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
 			if(!res.ok){
@@ -26,7 +26,7 @@ function install(plugin){
 				code=`(function(){${code}})();`
 			}
 
-			code=`${code}\r\n//# sourceURL=plugins/${name}.js`
+			code=`${code}\r\n//# sourceURL=plugins/${name}/${version}.js`
 
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
