@@ -8604,9 +8604,9 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-we-edit@^3.4.20:
-  version "3.4.20"
-  resolved "https://registry.yarnpkg.com/we-edit/-/we-edit-3.4.20.tgz#f5e3040fe20c2a842349dc2abb3887a3db5a6cad"
+we-edit@^3.4.21:
+  version "3.4.21"
+  resolved "https://registry.yarnpkg.com/we-edit/-/we-edit-3.4.21.tgz#a94270f2aa0b503b0ea936501b3536babf998fd2"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"

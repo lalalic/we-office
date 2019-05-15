@@ -51,7 +51,6 @@ module.exports=env=>{
 			fs:"empty",
 		},
 		plugins:[
-			//new UglifyJsPlugin(),
 			new DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify('production')
 			}),
