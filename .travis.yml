@@ -23,6 +23,8 @@ script:
  - export CURRENT=$(node -p "require('./packages/we-office-cli/package.json').version")
 
 after_success:
+ - cp node_modules/we-edit/font-serivce.js dist
+ - cp node_modules/we-edit/Arial dist/fonts
  - mv index.html dist
 #upload web pages
  - node -p "require('./package.json').version" > dist/app.apk.version
