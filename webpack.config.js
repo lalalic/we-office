@@ -8,6 +8,7 @@ const HTML={
 	template:require.resolve('qili-app/index.tmpl'),
 	title:"we-office",
 	favicon: "./dist/favicon.ico",
+	extra:'<div id="wo" style="position:fixed;top:0px;left:0px;width:100%;height:100%;"/>',
 }
 
 module.exports=env=>{
@@ -51,9 +52,7 @@ module.exports=env=>{
 			fs:"empty",
 		},
 		plugins:[
-			new DefinePlugin({
-				'process.env.NODE_ENV': JSON.stringify('production')
-			}),
+			new DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
