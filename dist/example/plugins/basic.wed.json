@@ -7,17 +7,17 @@
         {
             "type":"section",
             "props":{
-                "pgSz":{
+                "page":{
 					"width":800,
-					"height":600
-				},
-				"pgMar":{
-					"left":20,
-					"right":20,
-					"top":20,
-					"bottom":20,
-					"header":15,
-					"footer":15
+					"height":600,
+                    "margin":{
+                        "left":96,
+    					"right":96,
+    					"top":48,
+    					"bottom":48,
+    					"header":24,
+    					"footer":24
+                    }
 				}
             },
             "children":[
@@ -41,6 +41,7 @@
                         }
                     ]
                 },
+
                 {
                     "type":"paragraph",
                     "props":{

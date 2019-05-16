@@ -118,7 +118,7 @@ Cloud.resolver=Cloud.merge(
 
 							return app
 								.patchEntity(
-									"plugin",
+									"plugins",
 									{_id,author:user._id},
 									{...info,
 										code,

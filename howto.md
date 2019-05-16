@@ -13,3 +13,6 @@
 
 > update schema and server code to qili server
 >> qili sync
+
+> upload/update plugin to cloud
+>> we-edit$ yarn sync --service http://qili2.com/1/graphql --url=""
