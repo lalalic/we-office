@@ -12,7 +12,7 @@ const imported=requirex.imported={}
 
 function install(plugin){
 	const {code,name,config,version}=plugin
-	return (isUrl(code) ? fetch(code)
+	return (isUrl(code) ? fetch(code.replace(/^http\:/,"https:"))
 		.then(res=>{
 			if(!res.ok){
 				throw new Error(res.statusText)
