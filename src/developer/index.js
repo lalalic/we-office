@@ -1,7 +1,7 @@
 import React from "react"
 
-export default ()=>(
-	<div>
+export default ({style={}})=>(
+	<div style={style}>
 		<p>
 			There are some examples of plugins. Download it, and use bottom-right button to load it to play around.
 		</p>

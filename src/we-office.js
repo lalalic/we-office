@@ -18,10 +18,11 @@ import {MenuItem} from "material-ui"
 import {DOMAIN,ACTION,reducer} from "./state"
 import Portal from "./components/portal"
 import PluginDebugger from "./components/plugin-debugger"
+import Avatar from "./components/avatar"
 import Market,{Creator, Plugin} from "./market"
 import My from "./setting/my"
-import Avatar from "./dashboard"
 import Profile from "./setting/profile"
+import WODashboard from "./dashboard"
 
 import PluginLoader from "./plugin-loader"
 import Developer from "./developer"
@@ -117,6 +118,7 @@ export const routes=(
 										}
 										titleBar={<TitleBar title="we-office"/>}
 										>
+										<WODashboard/>
 										<PluginLoader>
 											{officeWidget}
 											<Portal container={document.querySelector("#app").parentNode}>
