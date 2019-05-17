@@ -75,7 +75,7 @@
   "bugs": {
     "url": "https://github.com/lalalic/we-office/issues"
   },
-  "homepage": "http://app.qili2.com/weoffice",
+  "homepage": "https://www.toolofdoc.com",
   "private": true,
   "workspaces": [
     "packages/*"
