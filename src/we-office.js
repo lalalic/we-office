@@ -31,6 +31,7 @@ export const WeOffice = compose(
 	withProps(()=>({
 		project,
 		title:"we-office",
+		service:"https://api.toolofdoc.com/1/graphql",
 		appId:project.config.appId,//get from app.qili2.com
 		reducers:{[DOMAIN]:reducer,[weDOMAIN]:weReducer},
 		persistStoreConfig:{blacklist:[weDOMAIN]},
