@@ -6494,9 +6494,9 @@ q@^1.1.2, q@^1.4.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
 
-qili-app@^1.2.41:
-  version "1.2.41"
-  resolved "https://registry.yarnpkg.com/qili-app/-/qili-app-1.2.41.tgz#1268613a30dc496a5995e9dcc6dc6337a86307e4"
+qili-app@^1.2.45:
+  version "1.2.45"
+  resolved "https://registry.yarnpkg.com/qili-app/-/qili-app-1.2.45.tgz#d8ca515bb9c671aa4e68715747e12c2a7d84ad37"
   dependencies:
     babel-polyfill "^6.26.0"
     graphql-tools "^3.0.0"
@@ -6519,9 +6519,9 @@ qili-app@^1.2.41:
   optionalDependencies:
     react-router "^3.0.0"
 
-qili-cli@^1.2.48:
-  version "1.2.48"
-  resolved "https://registry.yarnpkg.com/qili-cli/-/qili-cli-1.2.48.tgz#20a8f9cbe87f5e156714ea7a5e54a1fa057f42d0"
+qili-cli@^1.2.50:
+  version "1.2.50"
+  resolved "https://registry.yarnpkg.com/qili-cli/-/qili-cli-1.2.50.tgz#ffc192319346989d2771a9d4dec440c16247539e"
   dependencies:
     chalk "^2.4.0"
     commander "^2.15.1"
