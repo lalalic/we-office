@@ -1,8 +1,12 @@
-const {Stream}=require('we-edit')
-const React=require("react")
 
-// stream content to console
-module.exports=Object.assign(class extends Stream.Base{
+const React=require("react")
+const {Stream}=require('we-edit')
+
+/**
+ * it demos how to create an output stream
+ */
+class ConsoleStream extends Stream.Base{
+	static type="console stream"
 	create(){
 		return Object.assign(super.create(),{//writable stream
 			write(chunk,enc, next){
@@ -14,6 +18,6 @@ module.exports=Object.assign(class extends Stream.Base{
 	render(){
 		return "output to console"
 	}
-},{
-	type:"console stream"
-})
+}
+
+module.exports=ConsoleStream

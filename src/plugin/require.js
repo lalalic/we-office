@@ -1,7 +1,3 @@
-import Pagination from "we-edit/representation-pagination"
-import Html from "we-edit/representation-html"
-import Text from "we-edit/representation-text"
-
 import ioFile from "we-edit/loader-stream-file"
 import ioBrowser from "we-edit/loader-stream-browser"
 import SVG from "we-edit/output-svg"
@@ -9,7 +5,6 @@ import SVG from "we-edit/output-svg"
 ioFile.install()
 ioBrowser.install()
 SVG.install()
-
 
 const requires={
 	"react":require("react"),

@@ -11,7 +11,7 @@
     "pull-to-refresh2": "^1.0.2",
     "qili-app": "^1.2.45",
     "react-router": "^3.0.0",
-    "we-edit": "^3.4.21"
+    "we-edit": "^3.4.30"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

@@ -15,4 +15,5 @@
 >> qili sync
 
 > upload/update plugin to cloud
->> we-edit$ yarn sync --service http://qili2.com/1/graphql --url=""
+>> change service in .worc to cloud 
+>> we-edit$ yarn sync

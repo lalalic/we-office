@@ -1,6 +1,14 @@
 const {Representation} = require("we-edit")
 
 class PDF extends Representation.Output.Pagination{
+	static displayName="PDF"
+	static defaultProps={
+		type:"pdf",
+		name:"PDF Document",
+		ext:"pdf",
+		representation: "pagination"
+	}
+
 	constructor(){
 		super(...arguments)
 		this.inPage=false
@@ -37,14 +45,6 @@ class PDF extends Representation.Output.Pagination{
 		this.stream.end("</PDF>")
 		super.onDocumentEnd()
 	}
-}
-
-PDF.displayName="PDF"
-PDF.defaultProps={
-	type:"pdf",
-	name:"PDF Document",
-	ext:"pdf",
-	representation: "pagination"
 }
 
 module.exports=PDF

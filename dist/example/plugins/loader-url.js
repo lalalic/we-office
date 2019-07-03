@@ -1,35 +1,36 @@
+/**
+ * it demostrate how to create a document loader, so you can open a document from anywhere
+ * when it loaded, when you try to open document, you will see "fetch" in the list of loader
+ */
 const React=require("react")
 const {Loader}=require("we-edit")
+module.exports=class extends Loader.Base{
+	static getDerivedStateFromProps({url}){
+		return {url:url||undefined}
+	}
 
+	static defaultProps={
+		type:"fetch",
+		name:"url loader",
+		url:"",
+	}
 
-module.exports=Object.assign(class extends Loader.Base{
 	shouldComponentUpdate(){
 		return false
 	}
 
 	render(){
 		let elUrl
-		return React.createElement(
-			  "center",
-			  null,
-			  React.createElement(
-				"div",
-				null,
-				React.createElement("input", { ref: a => (elUrl = a) })
-			  ),
-			  React.createElement(
-				"div",
-				null,
-				React.createElement(
-				  "button",
-				  {
-					onClick: e => this.setState({ url: elUrl.value }, () => this.doLoad())//you have to call this.doLoad somewhere
-				  },
-				  "submit"
-				)
-			  )
-			);
-
+		return (
+			<center>
+				<div>
+					<input ref={a=>elUrl=a}/>
+				</div>
+				<div>
+					<button onClick={e=>this.setState({url:elUrl.value},()=>this.doLoad())}>submit</button>
+				</div>
+			</center>
+		)
 	}
 
 	load(){//must
@@ -39,14 +40,4 @@ module.exports=Object.assign(class extends Loader.Base{
 			.then(res=>res.blob())
 			.then(data=>({data,name:"fetcher.docx",ext:"docx",...file}))
 	}
-},{
-	getDerivedStateFromProps({url}){
-		return url ? {url} : null
-	},
-
-	defaultProps:{
-		type:"fetch",
-		name:"url loader",
-		url:"",
-	}
-})
+}

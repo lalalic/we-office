@@ -48,8 +48,10 @@ module.exports=env=>{
 				use: "imports-loader?Cloud=qili-app/makeOfflineSchema"//path relative to test
 			}]
 		},
-		node:{
-			fs:"empty",
+		externals:{
+			"module":"{}",
+			"net":"{}",
+			"fs":"{}"
 		},
 		plugins:[
 			new DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),

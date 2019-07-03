@@ -10,7 +10,7 @@ import IconTest from "material-ui/svg-icons/notification/adb"
 import {File}  from "qili-app"
 import {ACTION} from "../state"
 
-import requirex from "../require-api"
+import requirex from "./require"
 
 
 export default compose(

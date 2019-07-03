@@ -1,6 +1,6 @@
 import React, {PureComponent, Component,Fragment} from "react"
 import {connect} from "react-redux"
-import requirex from "./require-api"
+import requirex from "./require"
 import {Dialog} from "material-ui"
 import immutable from "immutable"
 
@@ -12,22 +12,26 @@ const imported=requirex.imported={}
 
 function install(plugin){
 	const {code,name,config,version}=plugin
-	return (isUrl(code) ? fetch(code.replace(/^http\:/,"https:"))
+	return (isUrl(code) ? fetch(code)
 		.then(res=>{
 			if(!res.ok){
 				throw new Error(res.statusText)
 			}
 			return res.text()
 		}) : Promise.resolve(code))
-		.then(code=>{
-			if(code.indexOf("__webpack_require__")!=-1){
-				code=`return ${code}`
-			}else if(true){
-				code=`(function(){${code}})();`
+		.then(raw=>{
+			const sourceFileName=`plugins/${name}/${version}.js`
+			if(raw.indexOf("__webpack_require__")==-1){
+				return import(/* webpackChunkName: "plugin-compiler" */"./transform")
+					.then(({transform})=>{
+						const {code,map}=transform(raw)
+						return `${code}\r\n//# sourceMappingURL=${map}`
+					})
+			}else{
+				return `return ${raw}\r\n//# sourceURL=${sourceFileName}`
 			}
-
-			code=`${code}\r\n//# sourceURL=plugins/${name}/${version}.js`
-
+		})
+		.then(code=>{
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
 			let  returned=compiled(module, module.exports, requirex)
@@ -121,8 +125,11 @@ export default connect(state=>({
 					&& !immutable.List(plugins).equals(immutable.List(prev.plugins))){
 					prev.plugins
 						.forEach(a=>{
-							if(imported[a.name] && -1==plugins.findIndex(b=>b.id==a.id && b.version==a.version)){
-								imported[a.name].uninstall()
+							let plugin=imported[a.name]
+							if(plugin && -1==plugins.findIndex(b=>b.id==a.id && b.version==a.version)){
+								if(plugin.uninstall){
+									plugin.uninstall()
+								}
 								delete imported[a.name]
 							}
 						})

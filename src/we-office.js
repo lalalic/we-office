@@ -11,21 +11,24 @@ import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN,  Loader} from "we-edit"
 import {Office, TitleBar, Dashboard} from "we-edit/office"
+import {FontManager} from "we-edit/representation-pagination"
 
 import {MenuItem} from "material-ui"
 
 
 import {DOMAIN,ACTION,reducer} from "./state"
 import Portal from "./components/portal"
-import PluginDebugger from "./components/plugin-debugger"
+import PluginDebugger from "./plugin/debugger"
 import Avatar from "./components/avatar"
 import Market,{Creator, Plugin} from "./market"
 import My from "./setting/my"
 import Profile from "./setting/profile"
 import WODashboard from "./dashboard"
 
-import PluginLoader from "./plugin-loader"
+import PluginLoader from "./plugin/loader"
 import Developer from "./developer"
+
+FontManager.asService()
 
 export const WeOffice = compose(
 	withProps(()=>({
