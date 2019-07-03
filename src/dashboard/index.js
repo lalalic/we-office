@@ -8,16 +8,20 @@ import Developer from "../developer"
 export default compose(
 	setDisplayName("WODashboard"),
 	getContext({client:PropTypes.object}),
-	connect(({qili:{user:{id}}})=>({user:id})),
-	mapProps(({client,user})=>{
+	connect(({qili:{user:{id}}, "we-edit":{active}})=>({user:id, hasDoc:!!active})),
+	mapProps(({client,user, hasDoc})=>{
 		const {username, photo, isDeveloper}=client.get(user)
 		return {
 			username,
 			photo,
-			isDeveloper
+			isDeveloper,
+			hasDoc,
 		}
 	}),
-)(({isDeveloper, username})=>{
+)(({isDeveloper, username,hasDoc})=>{
+	if(hasDoc){
+		return null
+	}
 	if(isDeveloper){
 		return <Developer style={{width:500,margin:"50px auto"}}/>
 	}else{
