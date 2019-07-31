@@ -57,7 +57,7 @@ Cloud.resolver=Cloud.merge(
 	{
 	User:{
 		extensions(_,{},{app,user}){
-			const loader=app.getDataLoader("plugins")
+			const loader=app.getDataLoader("Plugin")
 			return Promise.all(
 				(user.extensions||[])
 					.map(({_id,version,config})=>
@@ -85,7 +85,7 @@ Cloud.resolver=Cloud.merge(
 		plugins(_,{},{app,user}){
 			if(!user.isDeveloper)
 				return []
-			return app.findEntity("plugins",{author:user._id})
+			return app.findEntity("Plugin",{author:user._id})
 		},
 		plugin(_,{_id,name},{app,user}){
 			debugger
@@ -97,7 +97,7 @@ Cloud.resolver=Cloud.merge(
 			else
 				return null
 
-			return app.get1Entity("plugins",cond)
+			return app.get1Entity("Plugin",cond)
 		}
 	},
 	Mutation:{
@@ -107,7 +107,7 @@ Cloud.resolver=Cloud.merge(
 
 			try{
 				return app
-					.get1Entity("plugins",{_id,author:user._id})
+					.get1Entity("Plugin",{_id,author:user._id})
 					.then(a=>{
 						if(a){
 							if(name && a.name!=name){
@@ -118,21 +118,21 @@ Cloud.resolver=Cloud.merge(
 
 							return app
 								.patchEntity(
-									"plugins",
+									"Plugin",
 									{_id,author:user._id},
 									{...info,
 										code,
 										history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
 									}
 								)
-								.then(()=>app.get1Entity("plugins",{_id}))
+								.then(()=>app.get1Entity("Plugin",{_id}))
 						}else{
-							return app.get1Entity("plugins",{name})
+							return app.get1Entity("Plugin",{name})
 								.then(b=>{
 									if(b){
 										return Promise.reject(`plugin[${name}] already exists.`)
 									}else{
-										return app.createEntity("plugins",{...info,author:user._id,_id,code,name})
+										return app.createEntity("Plugin",{...info,author:user._id,_id,code,name})
 									}
 								})
 
@@ -150,7 +150,7 @@ Cloud.resolver=Cloud.merge(
 			}else{
 				extensions.splice(i,1,{_id,version,config})
 			}
-			return app.patchEntity("users", {_id:user._id}, {extensions})
+			return app.patchEntity("User", {_id:user._id}, {extensions})
 				.then(()=>{
 					user.extensions=extensions
 					return user
@@ -164,27 +164,27 @@ Cloud.resolver=Cloud.merge(
 			}else{
 				extensions.splice(i,1)
 			}
-			return app.patchEntity("users", {_id:user._id}, {extensions})
+			return app.patchEntity("User", {_id:user._id}, {extensions})
 				.then(()=>{
 					user.extensions=extensions
 					return user
 				})
 		},
 		user_setDeveloper(_,{be},{app,user}){
-			return app.patchEntity("users",{_id:user._id},{isDeveloper:be})
+			return app.patchEntity("User",{_id:user._id},{isDeveloper:be})
 				.then(()=>({_id:user._id, isDeveloper:be}))
 		}
 	},
 	Query:{
 		plugins(_,{type,searchText,mine,favorite,using,first,after},{app,user}){
 			if(using){
-				const loader=app.getDataLoader("plugins")
+				const loader=app.getDataLoader("Plugin")
 				return Promise.all((user.extensions||[]).map(({_id})=>loader.load(_id)))
 					.then(all=>all.filter(a=>!!a))
 					.then(edges=>({edges,hasNextPage:false}))
 			}
 
-			return app.nextPage("plugins", {first,after}, cursor=>{
+			return app.nextPage("Plugin", {first,after}, cursor=>{
 				if(type && type.length){
 					cursor=cursor.filter({type:{$all:type}})
 				}
@@ -204,9 +204,9 @@ Cloud.resolver=Cloud.merge(
 		}
 	},
 	Plugin:{
-		id:({_id})=>`plugins:${_id}`,
+		id:Cloud.ID,
 		author({author},_,{app,user}){
-			return app.getDataLoader("users").load(author)
+			return app.getDataLoader("User").load(author)
 		},
 		isMine({author},_,{user}){
 			return user.isDeveloper && user._id==author
@@ -260,7 +260,7 @@ Cloud.persistedQuery=Object.assign({
 	},require("./persisted-query"))
 
 Cloud.indexes={
-	plugins:[
+	Plugin:[
 		{name:1}
 	]
 }
