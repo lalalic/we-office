@@ -25,7 +25,8 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 					res.set({ 'Content-Type': 'font' });
                 	res.send(require("fs").readFileSync(path.join(__dirname, 'node_modules/we-edit/Arial')));
 				})
-			}
+			},
+			historyApiFallback:true,
 		},
 		plugins:[
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),

@@ -25,6 +25,6 @@ export default compose(
 	if(isDeveloper){
 		return <Developer style={{width:500,margin:"50px auto"}}/>
 	}else{
-		return <div>Hello, ${username}!</div>
+		return <center>Hello {username}!</center>
 	}
 })

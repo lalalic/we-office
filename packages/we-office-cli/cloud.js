@@ -22,7 +22,7 @@ module.exports=class extends Cloud{
 					console.debug("dev environment, so just upload")
 					return {
 						key:`plugins/${pluginName}/${current.version}/index.js`,
-						id:"plugins:"+pluginName,
+						id:"Plugin:"+pluginName,
 						creating:!latest
 					}
 				}
@@ -39,7 +39,7 @@ module.exports=class extends Cloud{
 				return this.runQL("file_token_Query")
 					.then(({token})=>token)
 					.then(({token,_id})=>{
-						let id=latest ? latest.id : `plugins:${_id}`
+						let id=latest ? latest.id : `Plugin:${_id}`
 						return {
 							key:`${id}/${current.version}/index.js`.replace(/\:/g,"/"),
 							token,id,

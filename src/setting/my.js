@@ -27,7 +27,7 @@ export default compose(
             }
         `
     }),
-    withProps(({user,router})=>({
+    withProps(({user,router, toPlugin})=>({
         children: ([
             <ListItem
                 primaryText="My Office" key="office"
@@ -37,7 +37,7 @@ export default compose(
                     user.extensions.map(a=><ListItem
                             leftIcon={<span/>}
                             rightIcon={<IconItem/>}
-                            onClick={()=>router.push(`/market/${a.id}`)}
+                            onClick={()=>router.push(toPlugin(a.id))}
                             primaryText={`${a.name}/${a.version}`} key={a.id}/>)
                 }
             />,
@@ -50,7 +50,7 @@ export default compose(
                     user.plugins.map(a=><ListItem
                             leftIcon={<span/>}
                             rightIcon={<IconItem/>}
-                            onClick={()=>router.push(`/market/${a.id}`)}
+                            onClick={()=>router.push(toPlugin(a.id))}
                             primaryText={a.name} key={a.id}/>)
                 }
             />

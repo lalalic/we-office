@@ -1,6 +1,6 @@
 {
   "name": "we-office-cli",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "commands to help create plugin for we-office",
   "main": "index.js",
   "scripts": {},

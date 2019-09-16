@@ -46,6 +46,7 @@ module.exports={
 	},
 	Mutation:{
 		plugin_update(_,{_id, code, name, ...info},{app,user}){
+			debugger
 			if(!user.isDeveloper)
 				return Promise.reject(new Error("you are not developer"))
 

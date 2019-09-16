@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import {graphql} from "react-relay"
 import {compose, withProps,getContext} from "recompose"
 import {connect} from "react-redux"
-import {Router, Route, IndexRoute, hashHistory, Link} from "react-router"
+import {Router, Route, IndexRoute, browserHistory, Link} from "react-router"
 
 import {QiliApp, ACTION as qiliACTION} from "qili-app"
 import Account from "qili-app/components/account"
@@ -82,8 +82,10 @@ export const WeOffice = compose(
 	}),
 )(QiliApp)
 
+const _=id=>id.split(":").pop()
+
 export const routes=(
-	<Router history={hashHistory}>
+	<Router history={browserHistory}>
 		<Route path="/" component={({officeChanged,children})=>{
 						let officeWidget=null
 						if(children && children.props.route.path=="load/:type"){
@@ -166,7 +168,7 @@ export const routes=(
 						withProps(({data,router})=>({
 							plugins:data,
 							toPlugin(id){
-								router.push(`/market/${id}`)
+								router.push(`/market/${_(id)}`)
 							}
 						})),
 					)(Market)}/>
@@ -174,7 +176,7 @@ export const routes=(
 				<Route path="create" component={compose(
 						getContext({router:PropTypes.object}),
 						withProps(({router})=>({
-							toPlugin: id=>router.replace(`/market/${id}`),
+							toPlugin: id=>router.replace(`/market/${_(id)}`),
 							goBack: ()=>router.goBack(),
 						}))
 					)(Creator)}/>
@@ -208,7 +210,10 @@ export const routes=(
 							}
 						`
 					}),
-					withProps(({data:{user}})=>({user})),
+					withProps(({data:{user}})=>({
+						user,
+						toPlugin: id=>`/market/${_(id)}`
+					})),
 				)(My),
 				profile:compose(
 					withQuery({

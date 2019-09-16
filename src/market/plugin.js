@@ -67,7 +67,7 @@ export class Plugin extends Component{
 }
 
 export default compose(
-	withFragment({plufin:graphql`fragment plugin_plugin on Plugin{
+	withFragment({plugin:graphql`fragment plugin_plugin on Plugin{
 		id
 		name
 		description

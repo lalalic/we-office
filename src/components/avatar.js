@@ -20,6 +20,6 @@ export default compose(
 	if(photo){
 		return <Avatar src={photo}/>
 	}else{
-		return <Avatar children={username||"Z"}/>
+		return <Avatar size={40} style={{fontSize:10,whiteSpace:"nowrap"}}>{username||"Z"}</Avatar>
 	}
 })
