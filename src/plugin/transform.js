@@ -1,7 +1,7 @@
-import * as babel from 'babel-core'
-import rest from "babel-plugin-transform-object-rest-spread"
-import jsx from "babel-plugin-transform-react-jsx"
-import props from "babel-plugin-transform-class-properties"
+import * as babel from '@babel/core'
+import rest from "@babel/plugin-proposal-object-rest-spread"
+import props from "@babel/plugin-proposal-class-properties"
+import jsx from "@babel/plugin-transform-react-jsx"
 
 export function transform(src){
     const {code}=babel.transform(src,{

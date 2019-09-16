@@ -5,9 +5,9 @@ import {compose, getContext,withProps, branch, renderNothing, setDisplayName} fr
 import {connect} from "react-redux"
 import {red500,lightGreen500} from 'material-ui/styles/colors'
 
-import {FloatingActionButton} from "material-ui"
+import FloatingActionButton from "material-ui/FloatingActionButton"
 import IconTest from "material-ui/svg-icons/notification/adb"
-import {File}  from "qili-app"
+import File from "qili-app/components/file"
 import {ACTION} from "../state"
 
 import requirex from "./require"

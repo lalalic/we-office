@@ -32,9 +32,6 @@ enum Gender {
   boy
 }
 
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
 scalar JSON
 
 type Log implements Node {
@@ -61,11 +58,11 @@ type Mutation {
   role_user_remove(_id: ObjectID!, users: [String!]!): Date
   file_create(_id: String!, host: ID!, bucket: String, size: Int, crc: Int, mimeType: String, imageInfo: JSON): File
   file_clean(host: ID!): Boolean
+  comment_create(parent: ID, content: String!, type: CommentType, _id: ObjectID): Comment
   plugin_update(_id: ObjectID!, code: URL!, name: String, readme: String, keywords: [String], type: [PluginType], description: String, version: String, config: JSON): Plugin
   buy_plugin(_id: ObjectID!, version: String, config: JSON): User
   withdraw_plugin(_id: ObjectID!, version: String, config: JSON): User
   user_setDeveloper(be: Boolean!): User
-  comment_create(parent: ID, content: String!, type: CommentType, _id: ObjectID): Comment
 }
 
 interface Node {

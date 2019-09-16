@@ -2,15 +2,16 @@ import React from "react"
 import {compose} from "recompose"
 import {Toggle} from "material-ui"
 
-import {Profile, withFragment, withMutation} from "qili-app"
+import {withFragment, withMutation} from "qili-app/graphql"
+import Profile from "qili-app/components/profile"
 
 export default compose(
-	withFragment(graphql`
+	withFragment({user:graphql`
 		fragment profile_user on User{
 			...qili_profile_user
 			isDeveloper
 		}
-	`),
+	`}),
 	withMutation({
 		name:"setDeveloper",
 		mutation:graphql`

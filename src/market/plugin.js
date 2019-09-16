@@ -2,8 +2,9 @@ import React, {Component, Fragment} from "react"
 import PropTypes from "prop-types"
 import {compose,mapProps,getContext} from "recompose"
 
-import {withFragment,withMutation, CommandBar} from "qili-app"
-import {TextField} from "material-ui"
+import {withFragment,withMutation} from "qili-app/graphql"
+import CommandBar from "qili-app/components/command-bar"
+import TextField from "material-ui/TextField"
 import {ACTION} from "../state"
 
 export class Plugin extends Component{
@@ -66,7 +67,7 @@ export class Plugin extends Component{
 }
 
 export default compose(
-	withFragment(graphql`fragment plugin_plugin on Plugin{
+	withFragment({plufin:graphql`fragment plugin_plugin on Plugin{
 		id
 		name
 		description
@@ -79,7 +80,7 @@ export default compose(
 
 		isMine
 		using
-	}`),
+	}`}),
 	withMutation(({plugin:{id,version}}, data)=>({
 		name:"buy",
 		patch4:id,

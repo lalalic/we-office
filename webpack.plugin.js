@@ -1,6 +1,5 @@
 const path = require('path')
-const {ContextReplacementPlugin, DllPlugin, DefinePlugin} = require("webpack")
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const {DllPlugin} = require("webpack")
 
 module.exports=(base)=>{
 	return {
@@ -24,15 +23,11 @@ module.exports=(base)=>{
 		},
 		module:base.module,
 		plugins:[
-			new DefinePlugin({
-				'process.env.NODE_ENV': JSON.stringify('production')
-			}),
 			new DllPlugin({
 				context: __dirname,
 				name: "[name]_[hash]",
 				path: path.join(__dirname, "manifest.json"),				
 			})
-			//new IgnorePlugin(/^react-router$/)
 		]
 	}
 }

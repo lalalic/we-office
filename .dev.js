@@ -1,6 +1,7 @@
 import React from "react"
 import project from "./package.json"
-import {QiliApp, File} from "qili-app"
+import {QiliApp} from "qili-app"
+import File from "qili-app/components/file"
 
 const _upload=File.upload
 File.upload=function(){

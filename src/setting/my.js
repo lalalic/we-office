@@ -1,15 +1,32 @@
 import React from "react"
 import PropTypes from "prop-types"
 import {compose,getContext,withProps} from "recompose"
-import {Account} from "qili-app"
+import Account from "qili-app/components/account"
 
-import {ListItem} from "material-ui"
-import IconAdd from "material-ui/svg-icons/content/add-circle-outline"
+import {ListItem} from "material-ui/List"
 import IconItem from "material-ui/svg-icons/hardware/keyboard-arrow-right"
 
+import {withFragment} from "qili-app/graphql"
 
 export default compose(
     getContext({router:PropTypes.object}),
+    withFragment({
+        user:graphql`
+            fragment my_user on User{
+                plugins{
+                    id
+                    name
+                }
+                extensions{
+                    id
+                    name
+                    version
+                }
+                isDeveloper
+                ...qili_account_user
+            }
+        `
+    }),
     withProps(({user,router})=>({
         children: ([
             <ListItem

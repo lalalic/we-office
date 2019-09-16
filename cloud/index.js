@@ -1,268 +1,56 @@
 const PluginComment=Cloud.buildComment("Plugin")
 const PluginPagination=Cloud.buildPagination("Plugin")
 
-Cloud.typeDefs=`
-	type Plugin implements Node{
-		id:ID!
-		name: String!
-		description: String!
-		version: String!
-		author: User!
-		config: JSON
-		code: URL!
-		readme: String!
-		keywords: [String]
-		history: [Plugin]
-		type:[PluginType]
+Cloud.addModule({
+	typeDefs:`
+		${require("./schema")}
+		${PluginComment.typeDefs}
+		${PluginPagination.typeDefs}
+	`,
 
-		using: JSON
-		isMine: Boolean
-	}
+	resolver:Cloud.merge(
+		PluginComment.resolver,
+		PluginPagination.resolver,
+		require("./resolver"),
+	),
 
-	enum PluginType{
-		Input
-		Loader
-		Emitter
-		Stream
-		Representation
-		Office
-	}
-
-	extend type Query{
-		plugins(type:[PluginType], mine: Boolean, favorite: Boolean, using:Boolean, searchText:String, first:Int, after:JSON):PluginConnection
-	}
-
-	extend type Mutation{
-		plugin_update(_id:ObjectID!,code:URL!,name:String,readme:String,keywords:[String],type:[PluginType],
-			description:String,version:String,config:JSON):Plugin
-		buy_plugin(_id:ObjectID!, version:String, config:JSON):User
-		withdraw_plugin(_id:ObjectID!, version:String, config:JSON):User
-		user_setDeveloper(be:Boolean!):User
-	}
-
-	extend type User{
-		extensions: [Plugin]!
-		plugins:[Plugin]!
-		plugin(_id:ObjectID, name:String): Plugin
-		isDeveloper: Boolean
-	}
-
-	${PluginComment.typeDefs}
-	${PluginPagination.typeDefs}
-`
-
-Cloud.resolver=Cloud.merge(
-	PluginComment.resolver,
-	PluginPagination.resolver,
-	{
-	User:{
-		extensions(_,{},{app,user}){
-			const loader=app.getDataLoader("Plugin")
-			return Promise.all(
-				(user.extensions||[])
-					.map(({_id,version,config})=>
-						loader
-							.load(_id)
-							.then(a=>{
-								debugger
-								if(a){
-									if(version && version!==a.version){
-										a.code=a.code.replace(a.version,version)
-									}
-									a.version=version||a.version
-									a.config=config||a.config
-								}
-								return a
-							})
-					)
-			)
-			.then(all=>all.filter(a=>!!a))
-			.then(all=>{
-				const i=a=>(a.type||[]).findIndex(t=>t=="Representation")
-				return all.sort((a,b)=>i(b)-i(a))
-			})
-		},
-		plugins(_,{},{app,user}){
-			if(!user.isDeveloper)
-				return []
-			return app.findEntity("Plugin",{author:user._id})
-		},
-		plugin(_,{_id,name},{app,user}){
-			debugger
-			let cond={}
-			if(_id)
-				cond._id=_id
-			else if(name)
-				cond.name=name
-			else
-				return null
-
-			return app.get1Entity("Plugin",cond)
-		}
-	},
-	Mutation:{
-		plugin_update(_,{_id, code, name, ...info},{app,user}){
-			if(!user.isDeveloper)
-				return Promise.reject(new Error("you are not developer"))
-
-			try{
-				return app
-					.get1Entity("Plugin",{_id,author:user._id})
-					.then(a=>{
-						if(a){
-							if(name && a.name!=name){
-								return Promise.reject(new Error("name can't be changed in new version"))
-							}
-
-							let _history=a.history||[]
-
-							return app
-								.patchEntity(
-									"Plugin",
-									{_id,author:user._id},
-									{...info,
-										code,
-										history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
-									}
-								)
-								.then(()=>app.get1Entity("Plugin",{_id}))
-						}else{
-							return app.get1Entity("Plugin",{name})
-								.then(b=>{
-									if(b){
-										return Promise.reject(`plugin[${name}] already exists.`)
-									}else{
-										return app.createEntity("Plugin",{...info,author:user._id,_id,code,name})
-									}
-								})
-
-						}
-					})
-			}catch(e){
-				return Promise.reject(e)
+	persistedQuery:Object.assign({
+		"plugin_update_Mutation":`mutation plugin_update_Mutation(
+			  $id: ObjectID!
+			  $code: URL!
+			  $name: String
+			  $readme: String
+			  $keywords: [String]
+			  $type: [PluginType]
+			  $description: String
+			  $version: String
+			  $config: JSON
+			) {
+			  plugin_update(_id: $id, code: $code, name: $name, readme: $readme, keywords: $keywords, type: $type, description: $description, version: $version, config: $config) {
+				...plugin_plugin
+				id
+			  }
 			}
-		},
-		buy_plugin(_,{_id,version, config},{app,user}){
-			let extensions=user.extensions||[]
-			let i=extensions.findIndex(a=>a._id==_id)
-			if(i==-1){
-				extensions.push({_id,version,config})
-			}else{
-				extensions.splice(i,1,{_id,version,config})
+	
+			fragment plugin_plugin on Plugin {
+			  id
+			  name
+			  description
+			  version
+			  config
+			  code
+			  history {
+				version
+				id
+			  }
+			  isMine
+			  using
 			}
-			return app.patchEntity("User", {_id:user._id}, {extensions})
-				.then(()=>{
-					user.extensions=extensions
-					return user
-				})
-		},
-		withdraw_plugin(_,{_id},{app,user}){
-			let extensions=user.extensions||[]
-			let i=extensions.findIndex(a=>a._id==_id)
-			if(i==-1){
-				return true
-			}else{
-				extensions.splice(i,1)
-			}
-			return app.patchEntity("User", {_id:user._id}, {extensions})
-				.then(()=>{
-					user.extensions=extensions
-					return user
-				})
-		},
-		user_setDeveloper(_,{be},{app,user}){
-			return app.patchEntity("User",{_id:user._id},{isDeveloper:be})
-				.then(()=>({_id:user._id, isDeveloper:be}))
-		}
-	},
-	Query:{
-		plugins(_,{type,searchText,mine,favorite,using,first,after},{app,user}){
-			if(using){
-				const loader=app.getDataLoader("Plugin")
-				return Promise.all((user.extensions||[]).map(({_id})=>loader.load(_id)))
-					.then(all=>all.filter(a=>!!a))
-					.then(edges=>({edges,hasNextPage:false}))
-			}
-
-			return app.nextPage("Plugin", {first,after}, cursor=>{
-				if(type && type.length){
-					cursor=cursor.filter({type:{$all:type}})
-				}
-				if(searchText){
-					cursor=cursor.filter({description: new RegExp(`${searchText}.*`,"i")})
-				}
-
-				if(mine){
-					cursor=cursor.filter({author:user._id})
-				}
-
-				if(favorite){
-
-				}
-				return cursor
-			})
-		}
-	},
-	Plugin:{
-		id:Cloud.ID,
-		author({author},_,{app,user}){
-			return app.getDataLoader("User").load(author)
-		},
-		isMine({author},_,{user}){
-			return user.isDeveloper && user._id==author
-		},
-		using({_id},{},{user:{extensions}}){
-			let found=(extensions||[]).find(a=>a._id==_id)
-			if(found){
-				return {
-					config:found.config,
-					version:found.version
-				}
-			}
-			return null
-		}
+			`,
+		},require("./persisted-query")),
+	indexes:{
+		Plugin:[{name:1}],
 	}
 })
-
-Cloud.persistedQuery=Object.assign({
-	"plugin_update_Mutation":`mutation plugin_update_Mutation(
-		  $id: ObjectID!
-		  $code: URL!
-		  $name: String
-		  $readme: String
-		  $keywords: [String]
-		  $type: [PluginType]
-		  $description: String
-		  $version: String
-		  $config: JSON
-		) {
-		  plugin_update(_id: $id, code: $code, name: $name, readme: $readme, keywords: $keywords, type: $type, description: $description, version: $version, config: $config) {
-		    ...plugin_plugin
-		    id
-		  }
-		}
-
-		fragment plugin_plugin on Plugin {
-		  id
-		  name
-		  description
-		  version
-		  config
-		  code
-		  history {
-		    version
-		    id
-		  }
-		  isMine
-		  using
-		}
-		`,
-	},require("./persisted-query"))
-
-Cloud.indexes={
-	Plugin:[
-		{name:1}
-	]
-}
 
 module.exports=Cloud

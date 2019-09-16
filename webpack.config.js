@@ -1,8 +1,7 @@
 const path = require('path')
-const {ContextReplacementPlugin, DefinePlugin, IgnorePlugin} = require("webpack")
+const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 const HTML={
 	template:require.resolve('qili-app/index.tmpl'),
@@ -14,7 +13,7 @@ const HTML={
 module.exports=env=>{
 	const base={
 		entry:{
-			index:["babel-polyfill",require.resolve("./src/index.js")],
+			index:["@babel/polyfill",require.resolve("./src/index.js")],
 		},
 		output:{
 			filename:"[name].js",
@@ -54,7 +53,6 @@ module.exports=env=>{
 			"fs":"{}"
 		},
 		plugins:[
-			new DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
@@ -63,9 +61,7 @@ module.exports=env=>{
 				inlineSource: 'index.js$'
 			}),
 
-			new HtmlWebpackInlineSourcePlugin(),
-
-			//new IgnorePlugin(/^react-router$/)
+			new HtmlWebpackInlineSourcePlugin()
 		]
 	}
 

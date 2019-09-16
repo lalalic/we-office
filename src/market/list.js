@@ -1,10 +1,8 @@
 import React, {Fragment,Component} from "react"
-import PropTypes from "prop-types"
-import {connect} from "react-redux"
 
-import PullToRefresh from "pull-to-refresh2"
+import PullToRefresh from "qili-app/components/pull-to-refresh"
 import {compose, mapProps} from "recompose"
-import {withFragment} from "qili-app"
+import {withFragment} from "qili-app/graphql"
 import {TextField, List, ListItem} from "material-ui"
 import IconUsing from "material-ui/svg-icons/navigation/check"
 
@@ -60,28 +58,30 @@ class Plugins extends Component{
 }
 
 export default compose(
-	withFragment(graphql`fragment list_plugins on Query{
-		plugins(type:$type, mine:$mine, favorite:$favorite, using:$using,
-			searchText:$searchText, first:$count, after:$cursor)@connection(key:"list_plugins"){
-			edges{
-				node{
-					id
-					name
-					description
-					version
-					author{
-						username
+	withFragment({
+		plugins:graphql`fragment list_plugins on Query{
+			plugins(type:$type, mine:$mine, favorite:$favorite, using:$using,
+				searchText:$searchText, first:$count, after:$cursor)@connection(key:"list_plugins"){
+				edges{
+					node{
+						id
+						name
+						description
+						version
+						author{
+							username
+						}
+						isMine
+						using
 					}
-					isMine
-					using
+				}
+				pageInfo{
+					hasNextPage
+					endCursor
 				}
 			}
-			pageInfo{
-				hasNextPage
-				endCursor
-			}
-		}
-	}`),
+		}`
+	}),
 	mapProps(({plugins:{plugins:{edges}}, relay,search,qs, toPlugin})=>(
 		{
 			plugins:edges.map(a=>a.node),

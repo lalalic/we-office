@@ -1,6 +1,7 @@
 import {Plugin} from "./plugin"
 import {compose, mapProps} from "recompose"
-import {withMutation, File} from "qili-app"
+import {withMutation} from "qili-app/graphql"
+import File from "qili-app/components/file"
 
 export default compose(
 	withMutation({

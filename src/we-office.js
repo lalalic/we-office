@@ -4,9 +4,11 @@ import PropTypes from "prop-types"
 import {graphql} from "react-relay"
 import {compose, withProps,getContext} from "recompose"
 import {connect} from "react-redux"
-import {Router, Route, IndexRoute, Direct, IndexRedirect, hashHistory, Link} from "react-router"
+import {Router, Route, IndexRoute, hashHistory, Link} from "react-router"
 
-import {withInit, withQuery, withPagination, withFragment, QiliApp, ACTION as qiliACTION,File,Account} from "qili-app"
+import {QiliApp, ACTION as qiliACTION} from "qili-app"
+import Account from "qili-app/components/account"
+import {withInit, withQuery, withPagination} from "qili-app/graphql"
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN,  Loader} from "we-edit"
@@ -31,16 +33,17 @@ import Developer from "./developer"
 FontManager.asService()
 
 export const WeOffice = compose(
-	withProps(()=>({
+	withProps(props=>({
 		project,
 		title:"we-office",
-		service:"https://api.toolofdoc.com/1/graphql",
+		service:"https://api.wenshubu.com/1/graphql",
 		appId:project.config.appId,//get from app.qili2.com
 		reducers:{[DOMAIN]:reducer,[weDOMAIN]:weReducer},
 		persistStoreConfig:{blacklist:[weDOMAIN]},
 		//supportOffline:,
 		//tutorials:["",""],
 		adUrl:"images/splash.svg",
+		...props
 	})),
 	withInit({
 		query:graphql`
@@ -55,15 +58,6 @@ export const WeOffice = compose(
 						...weOffice_extension @relay(mask: false)
 					}
 				}
-			}
-		`,
-		_fragment:graphql`
-			fragment weOffice_extension on Plugin{
-				id
-				name
-				code
-				config
-				version
 			}
 		`,
 		onSuccess(response,dispatch){
@@ -204,35 +198,42 @@ export const routes=(
 			</Route>
 
 			{Account.routes({
-				account:withQuery({
-		            query:graphql`
-		                query weOffice_account_Query{
-		                    user:me{
-		                        plugins{
-		                            id
-		                            name
-		                        }
-		                        extensions{
-		                            id
-		                            name
-									version
-		                        }
-								isDeveloper
-		                        ...qili_account_user
-		                    }
-		                }
-		            `
-		        })(My),
-				profile:withQuery({
-					query: graphql`
-						query weOffice_profile_Query{
-							user:me{
-								...profile_user
+				account:compose(
+					withQuery({
+						query:graphql`
+							query weOffice_account_Query{
+								user:me{
+									...my_user
+								}
 							}
-						}
-					`
-				})(Profile)
+						`
+					}),
+					withProps(({data:{user}})=>({user})),
+				)(My),
+				profile:compose(
+					withQuery({
+						query: graphql`
+							query weOffice_profile_Query{
+								user:me{
+									...profile_user
+								}
+							}
+						`
+					}),
+					withProps(({data:{user}})=>({user})),
+				)(Profile)
 			})}
 		</Route>
 	</Router>
 )
+
+
+const Fragment_weOffice_extension=graphql`
+	fragment weOffice_extension on Plugin{
+		id
+		name
+		code
+		config
+		version
+	}
+`

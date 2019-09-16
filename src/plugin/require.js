@@ -25,6 +25,6 @@ const requires={
 	
 }
 
-module.exports=window.require=function(a){
+export default window.require=function(a){
 	return requires[a]||window.require.imported[a]
 }

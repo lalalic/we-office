@@ -1,12 +1,12 @@
 const path = require('path')
-const {ContextReplacementPlugin,IgnorePlugin, NamedModulesPlugin} = require("webpack")
+const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	return {
 		...base,
 		entry:{
-			index: ["babel-polyfill",require.resolve("./.dev.js"),require.resolve("./src/index.js")],
+			index: ["@babel/polyfill","./.dev.js","./src/index.js"],
 		},
 		devtool: 'source-map',
 		devServer:{
@@ -38,7 +38,6 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 				extra:'<script type="text/javascript" src="cordova.js"></script>',
 				filename:"cordova.html",
 			}),
-			new IgnorePlugin(/^react-router$/)
 			*/
 		]
 	}
