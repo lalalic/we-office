@@ -39,10 +39,12 @@
     "webpack-dev-server": "^3.8.0"
   },
   "resolutions": {
-    "*/react": "16.5.1",
-    "*/react-dom": "16.5.1",
-    "*/graphql": "^14.0.0",
-    "*/minimatch": "^3.0.0"
+    "react": "16.5.1",
+    "react-dom": "16.5.1",
+    "graphql": "^14.0.0",
+    "immutable": "3.8.2",
+    "htmlparser2": "3.3.0",
+    "readable-stream":"2.0.2"
   },
   "scripts": {
     "int": "qili init",
