@@ -19,7 +19,6 @@ const requires={
 	"we-edit/representation-pagination":require("we-edit/representation-pagination"),
 	"we-edit/representation-html": require("we-edit/representation-html"),
 	"we-edit/representation-text":require("we-edit/representation-text"),
-	"we-edit/output-svg":require("we-edit/output-svg"),
 	"we-edit/loader-stream-browser":require("we-edit/loader-stream-browser"),
 	"we-edit/loader-stream-file":require("we-edit/loader-stream-file"),
 	
