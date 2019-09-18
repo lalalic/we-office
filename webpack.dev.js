@@ -6,9 +6,9 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	return {
 		...base,
 		entry:{
-			index: ["@babel/polyfill","./.dev.js","./src/index.js"],
+			index: ["./.dev.js","./src/index.js"],
 		},
-		devtool: 'source-map',
+		devtool: 'inline-source-map',
 		devServer:{
 			contentBase: path.join(__dirname, "dist"),
 			port,

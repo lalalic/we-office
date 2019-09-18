@@ -9,17 +9,18 @@ export default compose(
 	setDisplayName("WODashboard"),
 	getContext({client:PropTypes.object}),
 	connect(({qili:{user:{id}}, "we-edit":{active}})=>({user:id, hasDoc:!!active})),
-	mapProps(({client,user, hasDoc})=>{
+	mapProps(({client,user, hasDoc, hasActiveWorkspace})=>{
 		const {username, photo, isDeveloper}=client.get(user)
 		return {
 			username,
 			photo,
 			isDeveloper,
 			hasDoc,
+			hasActiveWorkspace
 		}
 	}),
-)(({isDeveloper, username,hasDoc})=>{
-	if(hasDoc){
+)(({isDeveloper, username,hasDoc,hasActiveWorkspace})=>{
+	if(hasDoc||hasActiveWorkspace){
 		return null
 	}
 	if(isDeveloper){

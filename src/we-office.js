@@ -86,7 +86,7 @@ const _=id=>id.split(":").pop()
 
 export const routes=(
 	<Router history={browserHistory}>
-		<Route path="/" component={({officeChanged,children})=>{
+		<Route path="/" component={({children})=>{
 						let officeWidget=null
 						if(children && children.props.route.path=="load/:type"){
 							officeWidget=children

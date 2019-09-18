@@ -13,7 +13,7 @@ const HTML={
 module.exports=env=>{
 	const base={
 		entry:{
-			index:["@babel/polyfill",require.resolve("./src/index.js")],
+			index:"./src/index.js",
 		},
 		output:{
 			filename:"[name].js",

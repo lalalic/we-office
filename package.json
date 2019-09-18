@@ -19,6 +19,7 @@
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
@@ -44,7 +45,7 @@
     "graphql": "^14.0.0",
     "immutable": "3.8.2",
     "htmlparser2": "3.3.0",
-    "readable-stream":"2.0.2"
+    "readable-stream": "2.0.2"
   },
   "scripts": {
     "int": "qili init",
