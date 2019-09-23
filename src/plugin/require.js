@@ -1,10 +1,8 @@
 import ioFile from "we-edit/loader-stream-file"
 import ioBrowser from "we-edit/loader-stream-browser"
-import SVG from "we-edit/output-svg"
 
 ioFile.install()
 ioBrowser.install()
-SVG.install()
 
 const requires={
 	"react":require("react"),
@@ -19,11 +17,17 @@ const requires={
 	"we-edit/representation-pagination":require("we-edit/representation-pagination"),
 	"we-edit/representation-html": require("we-edit/representation-html"),
 	"we-edit/representation-text":require("we-edit/representation-text"),
+	"we-edit/representation-plain":require("we-edit/representation-plain"),
 	"we-edit/loader-stream-browser":require("we-edit/loader-stream-browser"),
 	"we-edit/loader-stream-file":require("we-edit/loader-stream-file"),
-	
+	"stream":require("readable-stream"),
+	"readable-stream":require("readable-stream"),
 }
 
 export default window.require=function(a){
-	return requires[a]||window.require.imported[a]
+	const required=requires[a]||window.require.imported[a]
+	if(!required){
+		throw new Error(`are you depend on plugin ${a}, but you don't buy it?`)
+	}
+	return required
 }

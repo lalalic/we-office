@@ -1,5 +1,4 @@
 import * as babel from '@babel/core'
-import rest from "@babel/plugin-proposal-object-rest-spread"
 import props from "@babel/plugin-proposal-class-properties"
 import jsx from "@babel/plugin-transform-react-jsx"
 
@@ -10,7 +9,6 @@ export function transform(src){
         sourceType:"module",
         sourceMaps:"inline",
         plugins:[
-            rest,
             jsx,
             props,
         ]

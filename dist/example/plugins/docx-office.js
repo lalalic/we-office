@@ -5,6 +5,7 @@ it's to customize docx workspace, you would see the following change after this 
 > there is input at end of tabs when you open a docx
 > a document tree shown at right side
 **/
+
 const React=require("react")
 const {Editor,DocumentTree}=require("we-edit")
 const {Office, Workspace, Ribbon}=require("we-edit/office")
