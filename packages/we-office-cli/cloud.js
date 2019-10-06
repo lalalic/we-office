@@ -18,7 +18,7 @@ module.exports=class extends Cloud{
 		return this.runQL("weOffice_plugin_Query",{name:pluginName})
 			.then(({me:{plugin}})=>plugin)
 			.then(latest=>{
-				if(url && dir){
+				if(this.service.indexOf("localhost")!=-1 && url && dir){
 					console.debug("dev environment, so just upload")
 					return {
 						key:`plugins/${pluginName}/${current.version}/index.js`,
@@ -70,7 +70,7 @@ module.exports=class extends Cloud{
 	}
 
 	upload(filePath, token, key, extra, url,dir){
-		if(url && dir){
+		if(this.service.indexOf("localhost")!=-1 && url && dir){
 			return this.upload4Test(...arguments)
 		}
 
