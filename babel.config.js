@@ -5,7 +5,7 @@ module.exports={
     ],
     "plugins": [
         "babel-plugin-relay",
-        ["@babel/plugin-transform-runtime",{}],
+        //["@babel/plugin-transform-runtime",{}],
         ["@babel/plugin-transform-spread",{loose:true}],
         "@babel/plugin-proposal-object-rest-spread",
         "@babel/plugin-proposal-class-properties",

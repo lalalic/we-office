@@ -120,7 +120,7 @@ const VariantEditor=connect(state=>state[KEY])(({data,assemble, pilcrow, ...prop
 })
 
 const Pilcrow=connect(state=>state[KEY])(({dispatch,pilcrow})=>(
-    <Ribbon.Components.CheckIconButton
+    <Ribbon.CheckIconButton
         onClick={e=>dispatch({type:`${KEY}/pilcrow`})}
         status={pilcrow ? "checked" : "unchecked"}
         children={
