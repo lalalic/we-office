@@ -133,6 +133,29 @@ const Pilcrow=connect(state=>state[KEY])(({dispatch,pilcrow})=>(
         />
 ))
 
+class DocTree extends React.Component{
+    constructor(){
+        super(...arguments)
+        this.state={filter:""}
+    }
+
+    render(){
+        var {filter}=this.state
+        filter=filter.trim()
+        return (
+            <Fragment>
+                <input type="text" 
+                    style={{width:"80%",border:"none"}}
+                    placeholder="filter:paragraph,..." 
+                    onChange={e=>this.setState({filter:e.target.value})}/>
+                <DocumentTree 
+                    filter={({type})=>!filter || !!filter.split(",").find(a=>type.indexOf(a)!=-1)}
+                    toNodeProps={({id,type})=>({name:type})} />
+            </Fragment>
+        )
+    }
+}
+
 const DocxOffice=(
     <Workspace
         debug={true}
@@ -171,7 +194,7 @@ const DocxOffice=(
                         <div style={{width:210}}>
                             <Tabs>
                                 <Tab label="Document">
-                                    <DocumentTree toNodeProps={({id,type})=>({name:`${type}(${id})`})} />
+                                    <DocTree/>
                                 </Tab>
                                 <Tab label="Assemble">
                                     <FileSelector />
