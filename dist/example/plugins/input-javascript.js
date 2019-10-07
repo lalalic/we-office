@@ -102,14 +102,10 @@ const PlainRepresentation=Object.assign(class extends Representation.Base{
 
 module.exports={
 	install(){
-		//PlainRepresentation.install()
-		//Javascript.install()
 		Office.install(JavascriptWorkspace)
 	},
 
 	uninstall(){
-		//PlainRepresentation.uninstall()
-		//Javascript.uninstall()
 		Office.install(JavascriptWorkspace)
 	}
 }
