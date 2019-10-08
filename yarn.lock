@@ -4890,9 +4890,9 @@ punycode@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/punycode/download/punycode-2.1.0.tgz#5f863edc89b96db09074bad7947bf09056ca4e7d"
 
-qili-app@^1.7.2:
-  version "1.7.2"
-  resolved "https://registry.npm.taobao.org/qili-app/download/qili-app-1.7.2.tgz#5f4d4c611b80510fa00194d04692b5826889b9b5"
+qili-app@^1.7.3:
+  version "1.7.3"
+  resolved "https://registry.npm.taobao.org/qili-app/download/qili-app-1.7.3.tgz#8dcabd327f7f6b2fa5a6b66b47aa84fb5d47455b"
   dependencies:
     graphql-tools "^4.0.0"
     graphql-type-json "^0.3.0"

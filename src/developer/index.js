@@ -15,5 +15,12 @@ export default ({style={}})=>(
 			<li><a href="/example/plugins/input-javascript.js" target="_plugin_viewer">javascript  file</a></li>
 			<li><a href="/example/plugins/docx-office.js" target="_plugin_viewer">docx (Input, Office)</a></li>
 		</ol>
+		<p>
+			Most importantly for big plugin with bundle tools, such as webpack, the following libraries should be externals: 
+			<strong>react,react-dom,material-ui,prop-types,we-edit,react-redux,recompose,stream, readable-stream</strong>.
+		</p>
+		<p>
+			Installed plugins can be required too in your plugin code, such as require("input-docx").
+		</p>
 	</div>
 )
