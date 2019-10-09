@@ -11,7 +11,7 @@ const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())||isLocalTest(a)
 const imported=requirex.imported={}
 
 function install(plugin){
-	const {code,name,config,version}=plugin
+	const {code,name,id, config,version, localName}=plugin
 	return (isUrl(code) ? fetch(code)
 		.then(res=>{
 			if(!res.ok){
@@ -20,15 +20,14 @@ function install(plugin){
 			return res.text()
 		}) : Promise.resolve(code))
 		.then(raw=>{
-			const sourceFileName=`plugins/${name}/${version}.js`
-			if(raw.indexOf("__webpack_require__")==-1){
+			if(name==="test" && id==="test"){
 				return import(/* webpackChunkName: "plugin-compiler" */"./transform")
 					.then(({transform})=>{
-						const {code,map}=transform(raw)
+						const {code,map}=transform(raw,{sourceFileName:`debugging/${localName}`})
 						return `${code}\r\n//# sourceMappingURL=${map}`
 					})
 			}else{
-				return `return ${raw}\r\n//# sourceURL=${sourceFileName}`
+				return `return ${raw}\r\n//# sourceURL=plugins/${name}/${version}.js`
 			}
 		})
 		.then(code=>{

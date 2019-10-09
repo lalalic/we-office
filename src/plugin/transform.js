@@ -2,8 +2,9 @@ import * as babel from '@babel/core'
 import props from "@babel/plugin-proposal-class-properties"
 import jsx from "@babel/plugin-transform-react-jsx"
 
-export function transform(src){
+export function transform(src,options={}){
     const {code}=babel.transform(src,{
+        ...options,
         ast:false,
         babelrc:false,
         sourceType:"module",

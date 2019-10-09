@@ -24,6 +24,10 @@ module.exports=env=>{
 		module:{
 			rules:[{
 				test: /.js?$/,
+				use: 'source-map-loader',
+				enforce:"pre",
+			},{
+				test: /.js?$/,
 				use: 'babel-loader',
 				exclude: /node_modules/,
 				include: /src/,

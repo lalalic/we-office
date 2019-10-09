@@ -41,13 +41,13 @@ export default compose(
 					.selectTextFile(".js")
 					.then(a=>new Promise((resolve, reject)=>{
 							let reader=new FileReader()
-							reader.onload=e=>resolve(e.target.result)
+							reader.onload=e=>resolve({url:e.target.result,name:a.name})
 							reader.readAsDataURL(new Blob([a.data],{type:"application/javascript"}))
 					}))
-					.then(url=>{
+					.then(({url,name})=>{
 						dispatch(ACTION.EXTENSIONS([
 							...extensions.filter(a=>a.id!="test"),
-							{name:"test",id:"test",version:Date.now()+"",code:url}
+							{name:"test",id:"test",version:Date.now()+"",code:url, localName:name}
 						]))
 					})
 			}
