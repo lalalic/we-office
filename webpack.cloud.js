@@ -17,8 +17,23 @@ module.exports=()=>({
         path:`${__dirname}/cloud`,
         filename:"__generated.js",
     },
+    mode:"development",
+    //devtool:"inline-source-map",
+    plugins:[
+        //must not have devtool on options, and mode must be development
+        new (require("webpack").SourceMapDevToolPlugin)({
+            filename:'../dist/cloud.js.map',
+            module:false,
+            append: `\n//# sourceMappingURL=http://localhost:${require("./package.json").config.devPort}/cloud.js.map`
+        })
+    ],
     module: {
         rules: [
+            {
+                test: /.js?$/,
+                use: ['source-map-loader'],
+                enforce:"pre",
+            },
           { test: /\.(js)$/, use: 'babel-loader' },
           {
             test:/.less?$/,
