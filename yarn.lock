@@ -4925,6 +4925,17 @@ qili-cli@^1.4.3:
     prompts "^0.1.8"
     rc "^1.2.6"
 
+qili-cli@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.npm.taobao.org/qili-cli/download/qili-cli-1.4.5.tgz#f7515a869b00cb19eb3fbac76218dd159a6b10ae"
+  dependencies:
+    chalk "^2.4.0"
+    commander "^2.15.1"
+    ncp "^2.0.0"
+    node-fetch "^2.1.2"
+    prompts "^0.1.8"
+    rc "^1.2.6"
+
 qiniu@^6.1.0:
   version "6.1.13"
   resolved "https://registry.npmjs.org/qiniu/-/qiniu-6.1.13.tgz#57f5d60974c64d8871d80f27df7d43211ae34f03"
