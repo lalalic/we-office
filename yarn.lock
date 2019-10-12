@@ -4925,9 +4925,9 @@ qili-cli@^1.4.3:
     prompts "^0.1.8"
     rc "^1.2.6"
 
-qili-cli@^1.4.5:
-  version "1.4.5"
-  resolved "https://registry.npm.taobao.org/qili-cli/download/qili-cli-1.4.5.tgz#f7515a869b00cb19eb3fbac76218dd159a6b10ae"
+qili-cli@^1.4.9:
+  version "1.4.9"
+  resolved "https://registry.npm.taobao.org/qili-cli/download/qili-cli-1.4.9.tgz#44e58e4f3619c3faaad65e175d78c1591ec684b1"
   dependencies:
     chalk "^2.4.0"
     commander "^2.15.1"

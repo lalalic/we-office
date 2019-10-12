@@ -15,27 +15,26 @@ module.exports=()=>({
     ],
     output:{
         path:`${__dirname}/cloud`,
-        filename:"__generated.js",
+        filename:"__generated.js"
     },
     mode:"production",
-    //devtool:"eval-source-map",
     module: {
-        rules: [
-            {
-                test: /.js?$/,
-                use: ['source-map-loader'],
-                enforce:"pre",
-            },
-          { test: /\.(js)$/, use: 'babel-loader' },
-          {
+        rules: [{
+            test: /\.js$/,
+            use: 'source-map-loader',
+            enforce:"pre",
+            include: /qili\-app/
+        },
+        { 
+            test: /\.(js)$/, 
+            use: "babel-loader",
+            exclude: /node_modules/, 
+        },{
             test:/.less?$/,
             use: [
                 'css-loader',
                 'less-loader',
             ]
-        }
-        ]
-    },
-    plugins:[],
-    mode:"development",
+        }]
+    }
 })
