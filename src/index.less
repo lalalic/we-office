@@ -1,3 +1,5 @@
+@import (reference,less) "~qili-app/index.less";
+
 .nav {
 	a {
 		text-decoration:none;
@@ -15,5 +17,30 @@
 	background:transparent;
 	&.inactive{
 		visibility:hidden;
+	}
+}
+.whatis{
+	.what{
+		height:250px;
+		display:flex;
+
+		div{
+			flex:1;
+		}
+
+		div.chart{
+			text-align: center;
+
+			img{
+				width:150px;
+			}
+		}
+	}
+}
+
+@media screen and (min-width:@maxWidth){
+    .whatis{
+		width:500px;
+		margin:auto;
 	}
 }

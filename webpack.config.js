@@ -18,7 +18,8 @@ module.exports=env=>{
 		output:{
 			filename:"[name].js",
 			path:path.resolve(__dirname, 'dist'),
-			chunkFilename: '[name].js'
+			chunkFilename: '[name].js',
+			devtoolNamespace:"we-office"
 		},
 		devtool:false,
 		module:{
@@ -26,6 +27,7 @@ module.exports=env=>{
 				test: /.js?$/,
 				use: 'source-map-loader',
 				enforce:"pre",
+				exclude: /get\-system\-fonts/
 			},{
 				test: /.js?$/,
 				use: 'babel-loader',

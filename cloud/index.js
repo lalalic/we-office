@@ -50,7 +50,10 @@ Cloud.addModule({
 		},require("./persisted-query")),
 	indexes:{
 		Plugin:[{name:1}],
-	}
+	},
+	static(service){
+		service.on(/.*/,require("../src/www/server").default)
+	},
 })
 
 module.exports=Cloud

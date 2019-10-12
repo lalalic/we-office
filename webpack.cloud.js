@@ -15,7 +15,8 @@ module.exports=()=>({
     ],
     output:{
         path:`${__dirname}/cloud`,
-        filename:"__generated.js"
+        filename:"__generated.js",
+        devtoolNamespace:"we-office"
     },
     mode:"production",
     module: {

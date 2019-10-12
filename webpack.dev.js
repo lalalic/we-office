@@ -6,7 +6,8 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	return {
 		...base,
 		entry:{
-			index: ["./.dev.js","./src/index.js"],
+			index:["@babel/polyfill","./.test.www.js"],
+			app:["@babel/polyfill","./.test.js","./src/index.js"],
 		},
 		devtool: 'source-map',
 		devServer:{
@@ -27,6 +28,15 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 				})
 			},
 			historyApiFallback:true,
+			proxy:{
+				"/www":{
+					target:"http://localhost:9080",
+					pathRewrite:{
+						"/www":"/1/5b07b8571f6cab002e832d23/static",
+					},
+					changeOrigin:true
+				}
+			}
 		},
 		plugins:[
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
