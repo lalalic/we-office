@@ -6,7 +6,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	return {
 		...base,
 		entry:{
-			index:["@babel/polyfill","./.test.www.js"],
+			index:["@babel/polyfill","qili-app/index.less","./src/index.less","./.test.www.js"],
 			app:["@babel/polyfill","./.test.js","./src/index.js"],
 		},
 		devtool: 'source-map',
@@ -42,8 +42,18 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
-			new HtmlWebpackPlugin({...HTML}),
-			/*
+			new HtmlWebpackPlugin({
+				...HTML,
+				chunks:["app"]
+			}),
+			
+		
+			new HtmlWebpackPlugin({
+				template:require.resolve('./www.tmpl'),
+				filename:"./www1/index.html",
+				chunks:["index"]
+			}),
+/*			
 			new HtmlWebpackPlugin({
 				...HTML,
 				extra:'<script type="text/javascript" src="cordova.js"></script>',

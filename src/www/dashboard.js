@@ -1,9 +1,46 @@
 import React,{Fragment} from "react"
-import Tutorial from "qili-app/components/tutorial"
 import Helmet from "react-helmet"
-import What from "./what"
 
-export default ({children, routes:[root],location:{pathname},...props})=>{
+class ScrollFade extends React.Component{
+    static defaultProps={
+        max:200
+    }
+    constructor(){
+        super(...arguments)
+        this.state={}
+        this.scroll=this.scroll.bind(this)
+    }
+
+    get scroller(){
+        return this.props.scroller||window
+    }
+
+    scroll(){
+        this.setState({opacity:1-Math.min(window.scrollY/this.props.max,1)})
+    }
+
+    componentDidMount(){
+        this.scroller.addEventListener("scroll",this.scroll)
+    }
+
+    render(){
+        const {opacity=1}=this.state
+        const {children}=this.props
+        const child=React.Children.toArray(children)[0]
+        if(!child)
+            return child||null
+
+        const {style={}}=child.props
+        return React.cloneElement(child,{style:{...style,opacity}})
+    }
+
+    componentWillUnmount(){
+        this.scroller.removeEventListener("scroll",this.scroll)
+    }
+}
+
+export default ({children, ...props})=>{
+    const app="https://app.wenshubu.com"
     return (
         <Fragment>
             <Helmet>
@@ -11,89 +48,67 @@ export default ({children, routes:[root],location:{pathname},...props})=>{
 				<meta name="description" content="文书处理的云平台"/>
 				<meta name="keywords" content="document,file,convert,doc,docx,ppt,pptx,indd,文档,文书,文件,格式转换"/>
 			</Helmet>
-            <header style={{clear:"both",zIndex:2,position:"fixed",top:0,width:"100%",height:50,lineHeight:"50px",display:"flex",flexDirection:"row",backgroundColor:"#303848",color:"white"}}>
-                <div style={{flex:"none",paddingLeft:20,margin:"auto"}}>
-                    <a href="/">
-                        <img src="/images/logo.png" style={{width:30,height:30,padding:10}}/>
-                        <strong style={{float:"right"}}>文书部</strong>
-                    </a>
-                </div>
+            <ScrollFade max={400}>
+                <header style={{clear:"both",zIndex:2,position:"fixed",top:0,width:"100%",height:50,lineHeight:"50px",display:"flex",flexDirection:"row",backgroundColor:"#303848",color:"white"}}>
+                    <div style={{flex:"none",margin:"auto"}}>
+                        <a href="/">
+                            <img src="/images/logo.png" style={{width:30,height:30,paddingTop:10}}/>
+                            <strong style={{float:"right"}}>文书部</strong>
+                        </a>
+                    </div>
+                    <nav>
+                        
+                    </nav>
 
-                <div style={{flex:"none",paddingRight:20,margin:"auto"}}>
-                    <a href="https://app.wenshubu.com" style={{textDecoration:"none",padding:10,whiteSpace:"nowrap", borderRadius:5, border:"1px solid white",background:'transparent',color:"white"}}>
-                        登录/注册
-                    </a>
-                </div>
-            </header>
+                    <div style={{flex:"none",paddingRight:20,margin:"auto"}}>
+                        <a href={app}
+                            style={{textDecoration:"none",padding:10,whiteSpace:"nowrap", borderRadius:5, border:"1px solid white",background:'transparent',color:"white"}}>
+                            登录/注册
+                        </a>
+                    </div>
+                </header>
+            </ScrollFade>
+            {children}
+            <footer>
+                <nav>
+                    <div>
+                        <h4>动态</h4>
+                        <ul>
+                            <li><strong>{5}</strong>个扩展</li>
+                            <li>Blog</li>
+                            <li>微博</li>
+                            <li>微信公众号</li>
+                            <li>Slack</li>
+                        </ul>
+                    </div>
 
-            <Tutorial 
-                    style={{height:500,zIndex:"initial",position:"initial",marginTop:50}}
-                    label={null}
-                    slides={
-                        [
-                            {
-                                media:`/images/tutorial/time.png`,
-                                mediaBackgroundStyle:{
-                                    height:'calc(100% - 60px)'
-                                },
-                                title: "时间管理"
-                            },
-                            {
-                                media:`/images/tutorial/score.png`,
-                                mediaBackgroundStyle:{
-                                    height:'calc(100% - 60px)'
-                                },
-                                title:"激励积分"
-                            },
-                            {
-                                media:`/images/tutorial/knowledge.png`,
-                                mediaBackgroundStyle:{
-                                    height:'calc(100% - 60px)'
-                                },
-                                title:"发现分享"
-                            }
-                        ]
-                    }
-                    {...props}/>
-                    
-            <div style={{minHeight:"500px", background:"white"}} className="whatis">
-                <h1><center>文书部是什么?</center></h1>
-                {
-                    [
-                        ["","你需要的创作工具",""],
-                        ["","总是最新的",""],
-                        ["","在你所有的设备上都可以完成创作",""],
-                        ["","随时分享你的作品，在云上",""],
-                        ["","随你所需的扩展",""]
-                    ].map(([chart,title,desc],i)=>{
-                        const ichart=(
-                            <div className="chart">
-                                <img src={chart||"/images/logo.png"}/>
-                            </div>
-                        )
-                        const idesc=(
-                            <div className="desc">
-                                <h3>{title}</h3>
-                                <p>{desc}</p>
-                            </div>
-                        )
-                        return (
-                            <div key={title} className="what">
-                                {i%2==1 ? ichart : idesc}
-                                {i%2==0 ? ichart : idesc}
-                            </div>
-                        )
-                    })
-                }
-            </div>
+                    <div>
+                        <h4>开发者</h4>
+                        <ul>
+                            <li>如何成为开发者</li>
+                            <li>we-edit概念</li>
+                            <li>Office概念</li>
+                            <li>实战</li>
+                            <li>开发部落</li>
+                            <li>github</li>
+                        </ul>
+                    </div>
 
-            <footer style={{padding:10,background:"#303848",color:"white", display:"flex",flexDirection:"column"}}>
-                <div style={{flex:"1 1 100%"}}>
-
-                </div>
-                <div style={{flex:"none",borderTop:"1px solid gray", fontSize:"small"}}>
+                    <div>
+                        <h4>公司</h4>
+                        <ul>
+                            <li>关于我们</li>
+                            <li>加入我们</li>
+                            <li>公司新闻</li>
+                            <li>隐私政策</li>
+                            <li>欢迎投资</li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <div style={{flex:"none",borderTop:"1px solid gray"}}>
                     <p>
-                        <span>© 2019 文书部</span>
+                        <span>© {new Date().getFullYear()} 文书部</span>
                         <span style={{float:"right"}}>京ICP备15008710号-3</span>
                     </p>
                 </div>

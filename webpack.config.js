@@ -13,7 +13,8 @@ const HTML={
 module.exports=env=>{
 	const base={
 		entry:{
-			index:"./src/index.js",
+			index:["@babel/polyfill","./src/www/browser.js"],
+			app:["@babel/polyfill","./src/index.js"],
 		},
 		output:{
 			filename:"[name].js",
@@ -64,7 +65,7 @@ module.exports=env=>{
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
 			new HtmlWebpackPlugin({
 				...HTML,
-				inlineSource: 'index.js$'
+				inlineSource: 'app.js$'
 			}),
 
 			new HtmlWebpackInlineSourcePlugin()
