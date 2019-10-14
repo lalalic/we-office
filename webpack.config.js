@@ -65,7 +65,17 @@ module.exports=env=>{
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
 			new HtmlWebpackPlugin({
 				...HTML,
-				inlineSource: 'app.js$'
+				chunks:["app"],
+				inlineSource: 'app.js$',
+				minify:true,
+			}),
+
+			new HtmlWebpackPlugin({
+				...HTML,
+				chunks:["app"],
+				inlineSource: 'app.js$',
+				filename:"cordova.html",
+				extra:'<script type="text/javascript" src="cordova.js"></script>',
 			}),
 
 			new HtmlWebpackInlineSourcePlugin()
