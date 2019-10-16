@@ -32,7 +32,6 @@ module.exports={
 			return app.findEntity("Plugin",{author:user._id})
 		},
 		plugin(_,{_id,name},{app,user}){
-			debugger
 			let cond={}
 			if(_id)
 				cond._id=_id
@@ -120,6 +119,34 @@ module.exports={
 				.then(()=>({_id:user._id, isDeveloper:be}))
 		}
 	},
+	Anonymous:{
+		plugins(_,{type,searchText,first,after},{app}){
+			return app.nextPage("Plugin", {first,after}, cursor=>{
+				if(type && type.length){
+					cursor=cursor.filter({type:{$all:type}})
+				}
+				if(searchText){
+					cursor=cursor.filter({description: new RegExp(`${searchText}.*`,"i")})
+				}
+				return cursor
+			})
+		},
+		plugins_count(){
+			return 9
+		},
+
+		plugin(_,{_id,name},{app}){
+			let cond={}
+			if(_id)
+				cond._id=_id
+			else if(name)
+				cond.name=name
+			else
+				return null
+
+			return app.get1Entity("Plugin",cond)
+		}
+	},
 	Query:{
 		plugins(_,{type,searchText,mine,favorite,using,first,after},{app,user}){
 			if(using){
@@ -146,6 +173,9 @@ module.exports={
 				}
 				return cursor
 			})
+		},
+		anonymous(){
+			return {}
 		}
 	},
 	Plugin:{

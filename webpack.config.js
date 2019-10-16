@@ -19,10 +19,10 @@ module.exports=env=>{
 		output:{
 			filename:"[name].js",
 			path:path.resolve(__dirname, 'dist'),
-			chunkFilename: '[name].js',
 			devtoolNamespace:"we-office"
 		},
 		devtool:false,
+		mode:"production",
 		module:{
 			rules:[{
 				test: /.js?$/,
@@ -52,7 +52,11 @@ module.exports=env=>{
 			},{
 				test:require.resolve("./cloud/index.js"),
 				use: "imports-loader?Cloud=qili-app/makeOfflineSchema"//path relative to test
-			}]
+			},{
+				test:/.md$/,
+				use:'raw-loader'
+			}
+			]
 		},
 		externals:{
 			"module":"{}",

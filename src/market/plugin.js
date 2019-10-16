@@ -6,10 +6,11 @@ import {withFragment,withMutation} from "qili-app/graphql"
 import CommandBar from "qili-app/components/command-bar"
 import TextField from "material-ui/TextField"
 import {ACTION} from "../state"
+import Markdown from "react-markdown"
 
 export class Plugin extends Component{
 	render(){
-		const {buy, withdraw, plugin:{isMine,using, name,description,version}}=this.props
+		const {buy, withdraw, plugin:{isMine,using, readme,name,description,version}}=this.props
 
 
 		const cmdBuy={
@@ -55,7 +56,7 @@ export class Plugin extends Component{
 					)}
 				</div>
 
-				<div style={{flex:"1 100%", overflow: "scroll"}}></div>
+				<Markdown source={readme}/>
 
 				<CommandBar
 					style={{flex:1}}
@@ -70,10 +71,12 @@ export default compose(
 	withFragment({plugin:graphql`fragment plugin_plugin on Plugin{
 		id
 		name
+		type
 		description
 		version
 		config
-		code
+		readme
+
 		history{
 			version
 		}

@@ -1,5 +1,6 @@
 import React,{Fragment} from "react"
 import Helmet from "react-helmet"
+import {Link} from "react-router"
 
 class ScrollFade extends React.Component{
     static defaultProps={
@@ -39,7 +40,7 @@ class ScrollFade extends React.Component{
     }
 }
 
-export default ({children, ...props})=>{
+export default ({children,routes:[{path:root}], ...props})=>{
     const app="https://app.wenshubu.com"
     return (
         <Fragment>
@@ -57,7 +58,8 @@ export default ({children, ...props})=>{
                         </a>
                     </div>
                     <nav>
-                        
+                        <span><Link to={`${root}market`} activeClassName="activeLink">市场</Link></span>
+                        <span><Link to={`${root}docs/dev`} activeClassName="activeLink">开发文档</Link></span>
                     </nav>
 
                     <div style={{flex:"none",paddingRight:20,margin:"auto"}}>
@@ -68,7 +70,9 @@ export default ({children, ...props})=>{
                     </div>
                 </header>
             </ScrollFade>
+            <div style={{minHeight:"800px",paddingTop:50}}>
             {children}
+            </div>
             <footer>
                 <nav>
                     <div>
@@ -86,11 +90,8 @@ export default ({children, ...props})=>{
                         <h4>开发者</h4>
                         <ul>
                             <li>如何成为开发者</li>
-                            <li>we-edit概念</li>
-                            <li>Office概念</li>
+                            <li><Link to={`${root}docs/dev`}>开发文档</Link></li>
                             <li>实战</li>
-                            <li>开发部落</li>
-                            <li>github</li>
                         </ul>
                     </div>
 

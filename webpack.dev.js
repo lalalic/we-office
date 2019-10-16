@@ -10,6 +10,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			app:["@babel/polyfill","./.test.js","./src/index.js"],
 		},
 		devtool: 'source-map',
+		mode:"development",
 		devServer:{
 			contentBase: path.join(__dirname, "dist"),
 			port,
@@ -27,7 +28,9 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
                 	res.send(require("fs").readFileSync(path.join(__dirname, 'node_modules/we-edit/Arial')));
 				})
 			},
-			historyApiFallback:true,
+			historyApiFallback:{
+				verbose:true,
+			},
 			proxy:{
 				"/www":{
 					target:"http://localhost:9080",
@@ -50,16 +53,13 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 		
 			new HtmlWebpackPlugin({
 				template:require.resolve('./www.tmpl'),
-				filename:"./www1/index.html",
+				filename:"./d/index.html",
 				chunks:["index"]
 			}),
-/*			
-			new HtmlWebpackPlugin({
-				...HTML,
-				extra:'<script type="text/javascript" src="cordova.js"></script>',
-				filename:"cordova.html",
-			}),
-			*/
-		]
+			
+		],
+		watchOptions:{
+			ignored: /node_modules(?!qili\-app|we\-edit)/
+		}
 	}
 }

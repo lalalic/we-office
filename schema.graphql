@@ -1,3 +1,9 @@
+type Anonymous {
+  plugins(type: [PluginType], searchText: String, first: Int, after: JSON): PluginConnection
+  plugin(_id: ObjectID, name: String): Plugin
+  plugins_count: Int
+}
+
 interface Comment {
   id: ID!
   content: String!
@@ -140,6 +146,7 @@ type Query {
   me: User!
   file_upload_token(key: String): FileToken
   plugins(type: [PluginType], mine: Boolean, favorite: Boolean, using: Boolean, searchText: String, first: Int, after: JSON): PluginConnection
+  anonymous: Anonymous!
   plugin_comments(parent: ObjectID, last: Int, before: JSON): PluginCommentConnection
 }
 

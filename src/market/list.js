@@ -9,10 +9,10 @@ import IconUsing from "material-ui/svg-icons/navigation/check"
 
 import QuickSearch,{toText} from "./quick-search"
 
-class Plugins extends Component{
+export class Plugins extends Component{
 	state={searchText:"",conditionAnchor:undefined}
 	render(){
-		const {plugins, refresh, loadMore, qs, search,toPlugin}=this.props
+		const {plugins, refresh, loadMore, qs, search,toPlugin,anonymous}=this.props
 		const {searchText,conditionAnchor}=this.state
 		return (
 			<Fragment>
@@ -32,6 +32,7 @@ class Plugins extends Component{
 					anchorEl={conditionAnchor}
 					anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
 					targetOrigin={{horizontal: 'left', vertical: 'top'}}
+					anonymous={anonymous}
 					search={condition=>{
 						this.setState({conditionAnchor:undefined})
 						search(condition)

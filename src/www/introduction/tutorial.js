@@ -11,7 +11,7 @@ export default props=>{
     }
     return (
         <Tutorial
-            style={{height:500,zIndex:"initial",position:"initial",marginTop:50,backgroundColor:"cornflowerblue"}}
+            style={{height:500,zIndex:"initial",position:"initial",backgroundColor:"cornflowerblue"}}
             label="立即使用"
             onStart={()=>location="https://app.wenshubu.com"}
             slides={

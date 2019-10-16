@@ -23,11 +23,12 @@ const style={
 }
 export const QuickSearch=({
 	mine,using,favorite,ph={mine,using,favorite},
-	type=[],toggle, toggleType, search,
+	type=[],toggle, toggleType, search, anonymous,
 	...others})=>(
 	<Popover {...others} onRequestClose={()=>{
 			search({mine,favorite,using,type})
 		}}>
+		{!anonymous && 
 		<div>
 			<Subheader>Common Used</Subheader>
 			<div style={style.wrapper}>
@@ -41,6 +42,7 @@ export const QuickSearch=({
 				}
 			</div>
 		</div>
+		}
 		<div>
 			<Subheader>Plugin Type</Subheader>
 			<div style={style.wrapper}>

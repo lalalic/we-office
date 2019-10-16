@@ -3,6 +3,9 @@ module.exports=()=>({
     target:"node",
     externals: [
         function(context, request, callback){
+            if(request.startsWith("./docs")){
+                return callback(null, "commonjs "+request)
+            }
             switch(request){
                 case "react":
                 case "react-dom/server":
@@ -37,5 +40,5 @@ module.exports=()=>({
                 'less-loader',
             ]
         }]
-    }
+    },
 })
