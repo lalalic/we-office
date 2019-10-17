@@ -15,7 +15,7 @@
     "react-helmet": "^5.2.1",
     "react-markdown": "^4.2.2",
     "react-router": "^3.0.0",
-    "we-edit": "^3.4.42"
+    "we-edit": "^3.4.46"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
