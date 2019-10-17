@@ -1,16 +1,15 @@
+const path = require('path')
+
 module.exports=(base)=>{
 	return {
-		entry:{
-			"code-mirror":`./examples/src/code-mirror.js`
-		},
-		//devtool:"inline-source-map",
+		entry:"src/index.js",
+		devtool:"inline-source-map",
 		mode:"production",
 		output:{
-			path:`${__dirname}/dist/example/plugins`,
+			path:`${__dirname}/dist`,
 			filename:"[name].js",
 			libraryTarget:"commonjs2"
 		},
-		module:base.module,
 		externals:"react,react-dom,material-ui,prop-types,we-edit,react-redux,recompose,stream, readable-stream"
 				.split(",")
 				.reduce((cols,a)=>{

@@ -83,6 +83,7 @@
   "homepage": "https://www.wenshubu.com",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples"
   ]
 }

@@ -1,4 +1,4 @@
-import React,{Fragment} from "react"
+import React,{Fragment, Component} from "react"
 import PropTypes from "prop-types"
 
 import {graphql} from "react-relay"
@@ -82,6 +82,35 @@ export const WeOffice = compose(
 	}),
 )(QiliApp)
 
+class OfficeEx extends Component{
+	constructor(){
+		super(...arguments)
+		this.state={}
+	}
+
+	render(){
+		const {error}=this.state
+		const {recovery, ...props}=this.props
+		if(error){
+			return (
+				<Office {...props} workspaces={[]}>
+					{recovery || <pre>{error.stack}</pre>}
+				</Office>
+			)
+		}
+
+		return <Office {...props}/>
+	}
+
+	componentDidCatch(error){
+		this.setState({error})
+	}
+
+	static getDerivedStateFromError(error){
+		return {error}
+	}
+}
+
 const _=id=>id.split(":").pop()
 
 export const routes=(
@@ -96,7 +125,7 @@ export const routes=(
 						return (
 							<Fragment>
 								<Portal container={document.querySelector("#wo")}>
-									<Office
+									<OfficeEx
 										dashboard={
 											<Dashboard
 												avatar={
@@ -125,7 +154,7 @@ export const routes=(
 												<PluginDebugger mini={true} style={{position:"fixed",bottom:50,right:20}} />
 											</Portal>
 										</PluginLoader>
-									</Office>
+									</OfficeEx>
 								</Portal>
 
 								<Portal.Web container={document.querySelector("#app")}>

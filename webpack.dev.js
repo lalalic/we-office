@@ -59,7 +59,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			
 		],
 		watchOptions:{
-			ignored: /node_modules(?!qili\-app|we\-edit)/
+			ignored: /node_modules\/(?!qili\-app|we\-edit)/
 		}
 	}
 }

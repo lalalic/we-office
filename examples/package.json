@@ -1,0 +1,22 @@
+{
+  "description": "we-office plugin",
+  "peerDependencies": {
+    "we-edit": "latest"
+  },
+  "dependencies": {
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0"
+  },
+  "resolutions": {
+    "react": "16.5.1",
+    "react-dom": "16.5.1"
+  },
+  "scripts": {},
+  "engines": {
+    "node": ">= 8"
+  },
+  "name": "examples",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT"
+}

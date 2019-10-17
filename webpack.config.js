@@ -40,7 +40,7 @@ module.exports=env=>{
 				enforce:"post",
 				include: /(linebreak|unicode-properties|fontkit|pdfkit)/
 			},{
-				test:/.less?$/,
+				test:/.(css|less)$/,
 				use: [
 					'style-loader',
 					'css-loader',

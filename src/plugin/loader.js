@@ -33,13 +33,10 @@ function install(plugin){
 		.then(code=>{
 			const compiled=new Function("module,exports,require",code)
 			const module={exports:{}}
-			let  returned=compiled(module, module.exports, requirex)
-			if(returned){//webpack module
-				if(returned.default)
-					return returned.default
-				return returned
-			}
-			return module.exports
+			let  returned=compiled(module, module.exports, requirex)||module.exports
+			if(returned.default)
+				return returned.default
+			return returned
 		})
 		.then(exports=>{
 			if(imported[name]){
