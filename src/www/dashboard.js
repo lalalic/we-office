@@ -58,7 +58,8 @@ export default ({children,routes:[{path:root}], ...props})=>{
                         </a>
                     </div>
                     <nav>
-                        <span><Link to={`${root}market`} activeClassName="activeLink">市场</Link></span>
+                        <span><Link to={`${root}product`} activeClassName="activeLink">创意作品市场</Link></span>
+                        <span><Link to={`${root}market`} activeClassName="activeLink">创作工具市场</Link></span>
                         <span><Link to={`${root}docs/dev`} activeClassName="activeLink">开发文档</Link></span>
                     </nav>
 
@@ -76,9 +77,20 @@ export default ({children,routes:[{path:root}], ...props})=>{
             <footer>
                 <nav>
                     <div>
+                        <h4>行业</h4>
+                        <ul>
+                            <li>IT</li>
+                            <li>电子</li>
+                            <li>教育</li>
+                            <li>服装</li>
+                            <li>机械</li>
+                        </ul>
+                    </div>
+
+                    <div>
                         <h4>动态</h4>
                         <ul>
-                            <li><strong>{5}</strong>个扩展</li>
+                            <li><Link to={`${root}market`}><strong>{5}</strong>个扩展</Link></li>
                             <li>Blog</li>
                             <li>微博</li>
                             <li>微信公众号</li>

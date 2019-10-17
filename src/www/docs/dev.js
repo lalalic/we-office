@@ -9,7 +9,7 @@ export default class Dev extends PureComponent{
     }
 
     render(){
-        const {readme={},active=""}=this.state
+        const {readme={},active="core"}=this.state
         const Li=({children,m})=><li className={m==active ? "activeLink" :""} onClick={e=>this.setState({active:m})}>{children}</li>
         return (
             <div className="dev" style={{display:"flex",flexDirection:"row"}}>

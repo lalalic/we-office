@@ -11,6 +11,7 @@ import Plugin from "./plugin"
 import Dashboard from "./dashboard"
 import Introduction from "./introduction"
 import Dev from "./docs/dev"
+import Products from "./product"
 
 
 export const App=({children, req, ...theme})=>{
@@ -117,5 +118,9 @@ export default (
                 withProps(({data})=>({plugin:data.anonymous.plugin})),
             )(Plugin)}/>
         </Route>
+                
+        <Route path="product">
+            <IndexRoute component={Products}/>
+        </Route>        
     </Route>
 )
