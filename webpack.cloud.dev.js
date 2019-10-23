@@ -3,7 +3,7 @@ module.exports=()=>({
     ...cloud(),
     plugins:[
         new (require("webpack")).EvalSourceMapDevToolPlugin({
-            exclude:/node_modules(?!\/qili\-app)/,
+            exclude:/node_modules/,//(?!\/qili\-app)/,
             moduleFilenameTemplate: 'webpack://we-office/[resource-path]?[loaders]'
         })
     ]

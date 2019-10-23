@@ -7,7 +7,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 		...base,
 		entry:{
 			index:["@babel/polyfill","qili-app/index.less","./src/index.less","./.test.www.js"],
-			app:["@babel/polyfill","./.test.js","./src/index.js"],
+			app:["@babel/polyfill","./.test.js","./src/index.js"]
 		},
 		devtool: 'source-map',
 		mode:"development",

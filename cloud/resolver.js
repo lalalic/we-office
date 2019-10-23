@@ -196,5 +196,20 @@ module.exports={
 			}
 			return null
 		}
+	},
+	Subscription:{
+		edit_session:{
+			subscribe(_,{id},{app:{pubsub},user}){
+				
+				return withFilter(()=>pubsub.asyncIterator(),(payload,variables)=>{
+					return payload.edit_session.id==variables.id
+				})
+			},
+			resolve(_,{},{app,user}){
+				return _.document
+			}
+		}
 	}
 }
+
+const 	DOCUMENT_CHANGED="CHANGED"

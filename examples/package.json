@@ -5,7 +5,8 @@
   },
   "dependencies": {
     "react": "^16.5.0",
-    "react-dom": "^16.5.0"
+    "react-dom": "^16.5.0",
+    "lodash.defaultsdeep": "^4.6.0"
   },
   "resolutions": {
     "react": "16.5.1",

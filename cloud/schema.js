@@ -50,4 +50,13 @@ extend type User{
     plugin(_id:ObjectID, name:String): Plugin
     isDeveloper: Boolean
 }
+
+extend type Subscription{
+    edit_session(_id:ObjectID): EditSession
+}
+
+type EditSession{
+    creator:User,
+    authors:[User]
+}
 `

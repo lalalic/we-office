@@ -33,7 +33,6 @@ module.exports=env=>{
 				test: /.js?$/,
 				use: 'babel-loader',
 				exclude: /node_modules/,
-				include: /src/,
 			},{
 				test: /\.js?$/,
 				use: ["transform-loader/cacheable?brfs"],
