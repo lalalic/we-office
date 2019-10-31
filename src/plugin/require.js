@@ -20,8 +20,12 @@ const requires={
 	"we-edit/representation-plain":require("we-edit/representation-plain"),
 	"we-edit/loader-stream-browser":require("we-edit/loader-stream-browser"),
 	"we-edit/loader-stream-file":require("we-edit/loader-stream-file"),
+	"we-edit/input-docx":require("we-edit/input-docx"),
+	"we-edit/input-json":require("we-edit/input-json"),
 	"stream":require("readable-stream"),
 	"readable-stream":require("readable-stream"),
+	"docx4js":require("docx4js"),
+	"lodash":require("lodash"),
 }
 
 export default window.require=function(a){

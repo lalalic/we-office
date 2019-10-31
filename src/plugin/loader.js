@@ -20,7 +20,7 @@ function install(plugin){
 			return res.text()
 		}) : Promise.resolve(code))
 		.then(raw=>{
-			if(name==="test" && id==="test"){
+			if(name==="test" && id==="test" && raw.substring(0,100).indexOf("module.exports")==-1){
 				return import(/* webpackChunkName: "plugin-compiler" */"./transform")
 					.then(({transform})=>{
 						const {code,map}=transform(raw,{sourceFileName:`debugging/${localName}`})

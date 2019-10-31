@@ -14,7 +14,7 @@
     "react-helmet": "^5.2.1",
     "react-markdown": "^4.2.2",
     "react-router": "^3.0.0",
-    "we-edit": "^3.4.47"
+    "we-edit": "^3.4.49"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -42,7 +42,8 @@
     "transform-loader": "^0.2.4",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "webpack-dev-server": "^3.8.0",
+    "webpack-visualizer-plugin": "^0.1.11"
   },
   "resolutions": {
     "react": "16.5.1",

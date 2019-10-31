@@ -2035,6 +2035,10 @@ cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/cyclist/download/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
 
+d3@^3.5.6:
+  version "3.5.17"
+  resolved "https://registry.npm.taobao.org/d3/download/d3-3.5.17.tgz?cache=0&sync_timestamp=1567828689921&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fd3%2Fdownload%2Fd3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
@@ -5242,7 +5246,7 @@ rc@^1.2.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@16.5.1, react-dom@^16.5.0, react-dom@^16.5.1:
+react-dom@16.5.1, react-dom@^0.14.0, react-dom@^16.5.0, react-dom@^16.5.1:
   version "16.5.1"
   resolved "https://registry.npm.taobao.org/react-dom/download/react-dom-16.5.1.tgz#29d0c5a01ed3b6b4c14309aa91af6ec4eb4f292c"
   dependencies:
@@ -5433,7 +5437,7 @@ react-waypoint@^9.0.0:
     prop-types "^15.0.0"
     react-is "^16.6.3"
 
-react@16.5.1, react@^16.5.0, react@^16.5.1:
+react@16.5.1, react@^0.14.0, react@^16.5.0, react@^16.5.1:
   version "16.5.1"
   resolved "https://registry.npm.taobao.org/react/download/react-16.5.1.tgz#8cb8e9f8cdcb4bde41c9a138bfbf907e66132372"
   dependencies:
@@ -6894,9 +6898,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@^3.4.47:
-  version "3.4.47"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.4.47.tgz#9da4f53aa0287c43248204f87792c0a73278bce9"
+we-edit@^3.4.49:
+  version "3.4.49"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.4.49.tgz#a8149a224f280b1cef7dcc2c599a753a72d08ab2"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
@@ -7010,6 +7014,15 @@ webpack-sources@^1.4.0, webpack-sources@^1.4.1:
   dependencies:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
+
+webpack-visualizer-plugin@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.npm.taobao.org/webpack-visualizer-plugin/download/webpack-visualizer-plugin-0.1.11.tgz#b8770ad86b4f652612c68b1b782253faf9f8a34e"
+  dependencies:
+    d3 "^3.5.6"
+    mkdirp "^0.5.1"
+    react "^0.14.0"
+    react-dom "^0.14.0"
 
 webpack@^4.39.3:
   version "4.40.2"

@@ -7,7 +7,7 @@ type Plugin implements Node{
     author: User!
     config: JSON
     code: URL!
-    readme: String!
+    readme: String
     keywords: [String]
     history: [Plugin]
     type:[PluginType]

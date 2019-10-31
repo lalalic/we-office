@@ -1,6 +1,7 @@
 const path = require('path')
 const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const Visualizer=require("webpack-visualizer-plugin")
 
 module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	return {
@@ -56,7 +57,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 				filename:"./d/index.html",
 				chunks:["index"]
 			}),
-			
+			new Visualizer(),
 		],
 		watchOptions:{
 			ignored: /node_modules\/(?!qili\-app|we\-edit)/

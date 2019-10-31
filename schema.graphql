@@ -21,6 +21,11 @@ enum CommentType {
 
 scalar Date
 
+type EditSession {
+  creator: User
+  authors: [User]
+}
+
 type File {
   id: ID!
   url: String
@@ -93,7 +98,7 @@ type Plugin implements Node {
   author: User!
   config: JSON
   code: URL!
-  readme: String!
+  readme: String
   keywords: [String]
   history: [Plugin]
   type: [PluginType]
@@ -161,6 +166,7 @@ type Role implements Node {
 
 type Subscription {
   ping: Boolean
+  edit_session(_id: ObjectID): EditSession
 }
 
 scalar URL
