@@ -7,7 +7,7 @@ const chalk=require("chalk")
 const cwd=process.cwd()
 
 module.exports=class extends Cloud{
-	constructor(service){
+	constructor(service="https://api.wenshubu.com/1/graphql"){
 		super(service, "5b07b8571f6cab002e832d23")
 	}
 
@@ -91,6 +91,7 @@ module.exports=class extends Cloud{
 
 	upload4Test(filePath, token, key, extra, url,dir){
 		try{
+			console.log(`syncing ${key} plugin to ${dir} at ${url}`)
 			dir=path.resolve(cwd,`${dir}/${key}`)
 			mkdirp.sync(path.dirname(dir))
 			fs.writeFileSync(dir,fs.readFileSync(filePath))

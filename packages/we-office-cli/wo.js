@@ -75,6 +75,7 @@ program
 				try{
 					console.log('trying to build before publish')
 					execSync("npm run build",{studio:"ignore"})
+					console.log("plugin built")
 				}catch(e){
 					console.log(chalk.yellow("build error:"+e.message))
 					console.log(chalk.blue("but we will continue publish"))

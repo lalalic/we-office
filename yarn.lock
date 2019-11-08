@@ -6898,9 +6898,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@^3.4.49:
-  version "3.4.49"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.4.49.tgz#a8149a224f280b1cef7dcc2c599a753a72d08ab2"
+we-edit@^3.4.53:
+  version "3.4.53"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.4.53.tgz#58c07b08e9f465df4fea31fa011267ba3ed16959"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"

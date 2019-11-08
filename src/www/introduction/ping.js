@@ -4,6 +4,7 @@ import {withSubscription} from "qili-app/graphql"
 
 export default compose(
     setDisplayName("ping"),
+    /*
     withSubscription({
         subscription:graphql`subscription ping_ping_Subscription{
             ping
@@ -18,5 +19,5 @@ export default compose(
         onUpdate(){
             console.log("subscription updated")
         }
-    })
+    })*/
 )(({ping})=><div>ping subscription:{ping}</div>)
