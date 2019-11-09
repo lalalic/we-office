@@ -38,3 +38,5 @@ dist/plugins
 cloud/persisted-query.js
 
 .*rc
+
+dist/stats.html
