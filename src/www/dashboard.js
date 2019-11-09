@@ -49,7 +49,7 @@ export default ({children,routes:[{path:root}], ...props})=>{
 				<meta name="description" content="文书处理的云平台"/>
 				<meta name="keywords" content="document,file,convert,doc,docx,ppt,pptx,indd,文档,文书,文件,格式转换"/>
 			</Helmet>
-            <ScrollFade max={400}>
+            <ScrollFade max={200}>
                 <header style={{clear:"both",zIndex:2,position:"fixed",top:0,width:"100%",height:50,lineHeight:"50px",display:"flex",flexDirection:"row",backgroundColor:"#303848",color:"white"}}>
                     <div style={{flex:"none",margin:"auto"}}>
                         <a href="/">

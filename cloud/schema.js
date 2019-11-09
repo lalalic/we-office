@@ -37,8 +37,7 @@ extend type Query{
 }
 
 extend type Mutation{
-    plugin_update(_id:ObjectID!,code:URL!,name:String,readme:String,keywords:[String],type:[PluginType],
-        description:String,version:String,config:JSON):Plugin
+    plugin_update(_id:ObjectID!,code:URL!,name:String,readme:String,keywords:[String],type:[PluginType],description:String,version:String,config:JSON):Plugin
     buy_plugin(_id:ObjectID!, version:String, config:JSON):User
     withdraw_plugin(_id:ObjectID!, version:String, config:JSON):User
     user_setDeveloper(be:Boolean!):User

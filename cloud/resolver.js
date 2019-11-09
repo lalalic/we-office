@@ -46,45 +46,42 @@ module.exports={
 	Mutation:{
 		plugin_update(_,{_id, code, name, ...info},{app,user}){
 			debugger
-			if(!user.isDeveloper)
-				return Promise.reject(new Error("you are not developer"))
-
-			try{
-				return app
-					.get1Entity("Plugin",{_id,author:user._id})
-					.then(a=>{
-						if(a){
-							if(name && a.name!=name){
-								return Promise.reject(new Error("name can't be changed in new version"))
-							}
-
-							let _history=a.history||[]
-
-							return app
-								.patchEntity(
-									"Plugin",
-									{_id,author:user._id},
-									{...info,
-										code,
-										history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
-									}
-								)
-								.then(()=>app.get1Entity("Plugin",{_id}))
-						}else{
-							return app.get1Entity("Plugin",{name})
-								.then(b=>{
-									if(b){
-										return Promise.reject(`plugin[${name}] already exists.`)
-									}else{
-										return app.createEntity("Plugin",{...info,author:user._id,_id,code,name})
-									}
-								})
-
-						}
-					})
-			}catch(e){
-				return Promise.reject(e)
+			if(!user.isDeveloper){
+				return Promise.reject("you are not developer")
 			}
+
+			return app
+				.get1Entity("Plugin",{_id,author:user._id})
+				.then(a=>{
+					if(a){
+						if(name && a.name!=name){
+							return Promise.reject("name can't be changed in new version")
+						}
+
+						let _history=a.history||[]
+
+						return app
+							.patchEntity(
+								"Plugin",
+								{_id,author:user._id},
+								{...info,
+									code,
+									history:[..._history,{version:a.version,config:a.config,createdAt:a.updatedAt||a.createdAt}]
+								}
+							)
+							.then(()=>app.get1Entity("Plugin",{_id}))
+					}else{
+						return app.get1Entity("Plugin",{name})
+							.then(b=>{
+								if(b){
+									return Promise.reject(`plugin[${name}] already exists.`)
+								}else{
+									return app.createEntity("Plugin",{...info,author:user._id,_id,code,name})
+								}
+							})
+
+					}
+				})
 		},
 		buy_plugin(_,{_id,version, config},{app,user}){
 			let extensions=user.extensions||[]
@@ -199,15 +196,6 @@ module.exports={
 	},
 	Subscription:{
 		edit_session:{
-			subscribe(_,{id},{app:{pubsub},user}){
-				
-				return withFilter(()=>pubsub.asyncIterator(),(payload,variables)=>{
-					return payload.edit_session.id==variables.id
-				})
-			},
-			resolve(_,{},{app,user}){
-				return _.document
-			}
 		}
 	}
 }

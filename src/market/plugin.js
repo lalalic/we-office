@@ -35,7 +35,7 @@ export class Plugin extends Component{
 
 		return (
 			<Fragment>
-				<div style={{flex:1}}>
+				<div className="flexV">
 					<TextField name="name" floatingLabelText="name" disabled={true}
 						fullWidth={true} value={name}/>
 					<TextField name="description" floatingLabelText="description"  disabled={true}
@@ -54,14 +54,10 @@ export class Plugin extends Component{
 								/>
 						</Fragment>
 					)}
+					<Markdown source={readme}/>
 				</div>
 
-				<Markdown source={readme}/>
-
-				<CommandBar
-					style={{flex:1}}
-					items={actions}
-					/>
+				<CommandBar items={actions}/>
 			</Fragment>
 		)
 	}

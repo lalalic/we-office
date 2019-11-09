@@ -16,6 +16,8 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			contentBase: path.join(__dirname, "dist"),
 			port,
 			host:"0.0.0.0",
+			allowedHosts:["wenshubu.com","app.wenshubu.com"],
+			disableHostCheck:true,
 			before(app){
 				app.get("/app.apk.version",(req, res)=>res.json(require("./package.json").version))
 

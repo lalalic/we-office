@@ -59,8 +59,9 @@
     "relay": "relay-compiler --src ./src --schema ./schema.graphql",
     "persist": "qili persist src cloud",
     "cloud": "webpack --env=cloud",
+    "cloud.dev": "webpack --env=cloud.dev",
     "sync": "qili publish --service https://api.qili2.com/1/graphql",
-    "sync.dev": "webpack --env=cloud.dev && qili publish --no-build-cloud --service http://localhost:9080/1/graphql"
+    "sync.dev": "yarn cloud.dev && qili publish --no-build-cloud --service http://localhost:9080/1/graphql"
   },
   "keywords": [
     "qili"

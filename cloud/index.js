@@ -27,24 +27,9 @@ Cloud.addModule({
 			  $config: JSON
 			) {
 			  plugin_update(_id: $id, code: $code, name: $name, readme: $readme, keywords: $keywords, type: $type, description: $description, version: $version, config: $config) {
-				...plugin_plugin
-				id
-			  }
-			}
-	
-			fragment plugin_plugin on Plugin {
-			  id
-			  name
-			  description
-			  version
-			  config
-			  code
-			  history {
 				version
-				id
+				name
 			  }
-			  isMine
-			  using
 			}
 			`,
 		},require("./persisted-query")),
@@ -56,4 +41,7 @@ Cloud.addModule({
 	},
 })
 
+Cloud.logVariables=function(variables){
+	
+}
 module.exports=Cloud

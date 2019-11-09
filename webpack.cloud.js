@@ -7,10 +7,6 @@ module.exports=()=>({
                 return callback(null, "commonjs "+request)
             }
 
-            if(request.startsWith("./ping")){
-                return callback(null, "commonjs "+request)
-            }
-
             switch(request){
                 case "react":
                 case "react-dom/server":
