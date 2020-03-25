@@ -26,6 +26,7 @@ import Market,{Creator, Plugin} from "./market"
 import My from "./setting/my"
 import Profile from "./setting/profile"
 import WODashboard from "./dashboard"
+import Home from "./dashboard/home"
 
 import PluginLoader from "./plugin/loader"
 import Developer from "./developer"
@@ -133,7 +134,7 @@ export const routes=(
 														<Avatar/>
 													</Link>
 												}
-												children={
+												menus={
 													<MenuItem
 														primaryText={
 															<Link to="/market"
@@ -143,7 +144,9 @@ export const routes=(
 														}
 														/>
 												}
-												/>
+												>
+													<Home/>
+												</Dashboard>
 										}
 										titleBar={<TitleBar title="we-office"/>}
 										>

@@ -1,7 +1,12 @@
 import React from "react"
+import {version as WE} from "we-edit/package.json"
+import {version as Qili2} from "qili-app/package.json"
+import {version as Office} from "../../package.json"
+
 
 export default ({style={}})=>(
 	<div style={style}>
+		<center>qili2:{Qili2}, we-edit:{WE}, we-office:{Office}</center>
 		<p>
 			wenshubu is based on <a href="https://app.qili2.com">qili2</a>, a cloud platform, and <a href="https://github.com/lalalic/we-edit">we-edit</a>, a document editing library. 
 		</p>

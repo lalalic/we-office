@@ -47,7 +47,7 @@ module.exports={
 		plugin_update(_,{_id, code, name, ...info},{app,user}){
 			debugger
 			if(!user.isDeveloper){
-				return Promise.reject("you are not developer")
+				return Promise.reject("Please apply for as developer in your we-office account.")
 			}
 
 			return app

@@ -31,7 +31,7 @@ export class Web extends PureComponent{
 							</Link>
 						}
 						/>
-					<Paper zDepth={2} style={{flex:"1 100%",display:"flex", flexDirection:"column"}}>
+					<Paper zDepth={2} style={{flex:"1 100%",display:"flex", flexDirection:"column",overflow:'scroll'}}>
 					{children}
 					</Paper>
 				</Fragment>,

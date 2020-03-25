@@ -723,6 +723,14 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
 
+"@tokenizer/token@^0.1.0", "@tokenizer/token@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.npm.taobao.org/@tokenizer/token/download/@tokenizer/token-0.1.1.tgz#f0d92c12f87079ddfd1b29f614758b9696bc29e3"
+
+"@types/debug@^4.1.5":
+  version "4.1.5"
+  resolved "https://registry.npm.taobao.org/@types/debug/download/@types/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/@types/events/download/@types/events-3.0.0.tgz?cache=0&sync_timestamp=1567532284800&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fevents%2Fdownload%2F%40types%2Fevents-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -2213,9 +2221,9 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
-docx4js@latest:
-  version "3.2.0"
-  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.0.tgz#0ab3b7762ef0b2d15c6a8a6f2b763b92bb9415b4"
+docx4js@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.2.tgz#710d3b1037f0185fbdae38d3f7fdd846aec0b8b1"
   dependencies:
     cfb "^0.12.1"
     cheerio "^0.22.0"
@@ -2753,6 +2761,15 @@ fetchable@^1.0.4:
 figgy-pudding@^3.5.1:
   version "3.5.1"
   resolved "https://registry.npm.taobao.org/figgy-pudding/download/figgy-pudding-3.5.1.tgz#862470112901c727a0e495a80744bd5baa1d6790"
+
+file-type@^14.1.4:
+  version "14.1.4"
+  resolved "https://registry.npm.taobao.org/file-type/download/file-type-14.1.4.tgz#3ac109f2ea9e8f5573d000ec0c6bcdff07fd46de"
+  dependencies:
+    readable-web-to-node-stream "^2.0.0"
+    strtok3 "^6.0.0"
+    token-types "^2.0.0"
+    typedarray-to-buffer "^3.1.5"
 
 fill-range@^4.0.0:
   version "4.0.0"
@@ -3397,6 +3414,10 @@ icss-utils@^4.0.0, icss-utils@^4.1.1:
   dependencies:
     postcss "^7.0.14"
 
+ieee754@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.npm.taobao.org/ieee754/download/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
+
 ieee754@^1.1.4:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.11.tgz#c16384ffe00f5b7835824e67b6f2bd44a5229455"
@@ -3704,7 +3725,7 @@ is-symbol@^1.0.2:
   dependencies:
     has-symbols "^1.0.0"
 
-is-typedarray@~1.0.0:
+is-typedarray@^1.0.0, is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
 
@@ -4905,6 +4926,10 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+peek-readable@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/peek-readable/download/peek-readable-3.1.0.tgz#250b08b7de09db8573d7fd8ea475215bbff14348"
+
 performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npm.taobao.org/performance-now/download/performance-now-0.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fperformance-now%2Fdownload%2Fperformance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
@@ -5500,6 +5525,10 @@ readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.4.0:
     inherits "^2.0.3"
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
+
+readable-web-to-node-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/readable-web-to-node-stream/download/readable-web-to-node-stream-2.0.0.tgz#751e632f466552ac0d5c440cc01470352f93c4b7"
 
 readdirp@^2.2.1:
   version "2.2.1"
@@ -6354,6 +6383,15 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
+strtok3@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npm.taobao.org/strtok3/download/strtok3-6.0.0.tgz#d6b900863daeacfe6c1724c6e7bb36d7a58e83c8"
+  dependencies:
+    "@tokenizer/token" "^0.1.1"
+    "@types/debug" "^4.1.5"
+    debug "^4.1.1"
+    peek-readable "^3.1.0"
+
 style-loader@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/style-loader/download/style-loader-1.0.0.tgz#1d5296f9165e8e2c85d24eee0b7caf9ec8ca1f82"
@@ -6528,6 +6566,13 @@ toidentifier@1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/toidentifier/download/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
 
+token-types@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/token-types/download/token-types-2.0.0.tgz#b23618af744818299c6fbf125e0fdad98bab7e85"
+  dependencies:
+    "@tokenizer/token" "^0.1.0"
+    ieee754 "^1.1.13"
+
 toposort@^1.0.0:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
@@ -6596,6 +6641,12 @@ type-is@~1.6.17, type-is@~1.6.18:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.24"
+
+typedarray-to-buffer@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.npm.taobao.org/typedarray-to-buffer/download/typedarray-to-buffer-3.1.5.tgz#a97ee7a9ff42691b9f783ff1bc5112fe3fca9080"
+  dependencies:
+    is-typedarray "^1.0.0"
 
 typedarray@^0.0.6:
   version "0.0.6"
@@ -6898,9 +6949,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@^3.4.53:
-  version "3.4.53"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.4.53.tgz#58c07b08e9f465df4fea31fa011267ba3ed16959"
+we-edit@^3.5.7:
+  version "3.5.7"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.7.tgz#9a408995f50e3257146b659cf10dc4d5f0e809c6"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
@@ -6921,8 +6972,9 @@ we-edit@^3.4.53:
     shortid "^2.2.8"
   optionalDependencies:
     cheerio "^1.0.0-rc.2"
-    docx4js latest
+    docx4js "^3.2.2"
     fetchable "^1.0.4"
+    file-type "^14.1.4"
     fontkit "^1.8.0"
     get-system-fonts "^1.0.0"
     htmlparser2 "^3.9.2"

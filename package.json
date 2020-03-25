@@ -14,7 +14,7 @@
     "react-helmet": "^5.2.1",
     "react-markdown": "^4.2.2",
     "react-router": "^3.0.0",
-    "we-edit": "^3.4.53"
+    "we-edit": "^3.5.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -71,7 +71,7 @@
   },
   "name": "we-office",
   "description": "* Apply for QiliApp on http://app.qili2.com, and get appId * set appId in src/index.js * Define graphql schema in cloud/index.js on Cloud.typeDefs * npm run cloud * submit cloud/__generated.js content on http://app.qili2.com for your QiliApp * copy graphql schema on app.qili2.com, and save to schema.graphql",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "main": "index.js",
   "author": "lalalic",
   "license": "ISC",
