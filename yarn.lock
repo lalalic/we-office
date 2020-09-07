@@ -2196,6 +2196,19 @@ dfa@^1.0.0:
   dependencies:
     babel-runtime "^6.11.6"
 
+diff2html@^3.1.6:
+  version "3.1.12"
+  resolved "https://registry.npm.taobao.org/diff2html/download/diff2html-3.1.12.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdiff2html%2Fdownload%2Fdiff2html-3.1.12.tgz#47178e9277f2d2c797558a232f45d8fbdaa7bb92"
+  dependencies:
+    diff "4.0.2"
+    hogan.js "3.0.2"
+  optionalDependencies:
+    highlight.js "10.1.2"
+
+diff@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.npm.taobao.org/diff/download/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
+
 diffie-hellman@^5.0.0:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/diffie-hellman/-/diffie-hellman-5.0.3.tgz#40e8ee98f55a2149607146921c63e1ae5f3d2875"
@@ -2203,6 +2216,12 @@ diffie-hellman@^5.0.0:
     bn.js "^4.1.0"
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
+
+difflib@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.npm.taobao.org/difflib/download/difflib-0.2.4.tgz#b5e30361a6db023176d562892db85940a718f47e"
+  dependencies:
+    heap ">= 0.2.0"
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -2221,9 +2240,9 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
-docx4js@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.2.tgz#710d3b1037f0185fbdae38d3f7fdd846aec0b8b1"
+docx4js@^3.2.8:
+  version "3.2.8"
+  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.8.tgz#a061a6040dfb62635e1ecbc64fdde8054b11fd89"
   dependencies:
     cfb "^0.12.1"
     cheerio "^0.22.0"
@@ -3174,6 +3193,14 @@ he@1.2.x:
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/he/download/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
 
+"heap@>= 0.2.0":
+  version "0.2.6"
+  resolved "https://registry.npm.taobao.org/heap/download/heap-0.2.6.tgz#087e1f10b046932fc8594dd9e6d378afc9d1e5ac"
+
+highlight.js@10.1.2:
+  version "10.1.2"
+  resolved "https://registry.npm.taobao.org/highlight.js/download/highlight.js-10.1.2.tgz#c20db951ba1c22c055010648dfffd7b2a968e00c"
+
 history@^3.0.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/history/-/history-3.3.0.tgz#fcedcce8f12975371545d735461033579a6dae9c"
@@ -3194,6 +3221,13 @@ hmac-drbg@^1.0.0:
 hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
+
+hogan.js@3.0.2:
+  version "3.0.2"
+  resolved "https://registry.npm.taobao.org/hogan.js/download/hogan.js-3.0.2.tgz#4cd9e1abd4294146e7679e41d7898732b02c7bfd"
+  dependencies:
+    mkdirp "0.3.0"
+    nopt "1.0.10"
 
 hoist-non-react-statics@^2.3.1:
   version "2.5.5"
@@ -4358,6 +4392,10 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
+mkdirp@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npm.taobao.org/mkdirp/download/mkdirp-0.3.0.tgz#1bbf5ab1ba827af23575143490426455f481fe1e"
+
 mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
@@ -4523,6 +4561,12 @@ node-releases@^1.1.29:
   resolved "https://registry.npm.taobao.org/node-releases/download/node-releases-1.1.30.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-releases%2Fdownload%2Fnode-releases-1.1.30.tgz#35eebf129c63baeb6d8ddeda3c35b05abfd37f7f"
   dependencies:
     semver "^5.3.0"
+
+nopt@1.0.10:
+  version "1.0.10"
+  resolved "https://registry.npm.taobao.org/nopt/download/nopt-1.0.10.tgz?cache=0&sync_timestamp=1597649908392&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnopt%2Fdownload%2Fnopt-1.0.10.tgz#6ddd21bd2a31417b92727dd585f8a6f37608ebee"
+  dependencies:
+    abbrev "1"
 
 nopt@^4.0.1:
   version "4.0.1"
@@ -5301,6 +5345,15 @@ react-fast-compare@^2.0.2:
   version "2.0.4"
   resolved "https://registry.npm.taobao.org/react-fast-compare/download/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
 
+react-gh-like-diff@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.npm.taobao.org/react-gh-like-diff/download/react-gh-like-diff-2.0.2.tgz#9a0f91511d7af20407666e5950d2056db0600d62"
+  dependencies:
+    diff2html "^3.1.6"
+    difflib "^0.2.4"
+    prop-types "^15.7.2"
+    recompose "^0.30.0"
+
 react-hammerjs@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/react-hammerjs/download/react-hammerjs-1.0.1.tgz#bc1ed9e9ef7da057163fb169ce12917b6d6ca7d8"
@@ -5561,6 +5614,17 @@ recompose@^0.27.0:
   resolved "https://registry.npm.taobao.org/recompose/download/recompose-0.27.1.tgz#1a49e931f183634516633bbb4f4edbfd3f38a7ba"
   dependencies:
     babel-runtime "^6.26.0"
+    change-emitter "^0.1.2"
+    fbjs "^0.8.1"
+    hoist-non-react-statics "^2.3.1"
+    react-lifecycles-compat "^3.0.2"
+    symbol-observable "^1.0.4"
+
+recompose@^0.30.0:
+  version "0.30.0"
+  resolved "https://registry.npm.taobao.org/recompose/download/recompose-0.30.0.tgz#82773641b3927e8c7d24a0d87d65aeeba18aabd0"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
     change-emitter "^0.1.2"
     fbjs "^0.8.1"
     hoist-non-react-statics "^2.3.1"
@@ -6949,9 +7013,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@^3.5.7:
-  version "3.5.7"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.7.tgz#9a408995f50e3257146b659cf10dc4d5f0e809c6"
+we-edit@^3.5.25:
+  version "3.5.25"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.25.tgz#77bc222c7959ed6eaaf56d8651d405e2241af57d"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
@@ -6972,7 +7036,7 @@ we-edit@^3.5.7:
     shortid "^2.2.8"
   optionalDependencies:
     cheerio "^1.0.0-rc.2"
-    docx4js "^3.2.2"
+    docx4js "^3.2.8"
     fetchable "^1.0.4"
     file-type "^14.1.4"
     fontkit "^1.8.0"
@@ -6984,10 +7048,12 @@ we-edit@^3.5.7:
     minimatch "^3.0.4"
     mouse-event-offset "^3.0.2"
     parse-svg-path "^0.1.2"
+    react-gh-like-diff "^2.0.0"
     simplify-path "^1.1.0"
     svg-path-contours "^2.0.0"
     svgpath "^2.2.1"
     vm-browserify "^1.1.0"
+    xml-formatter "^1.2.0"
 
 webpack-cli@^3.3.7:
   version "3.3.8"
@@ -7179,6 +7245,18 @@ ws@^6.2.1:
 x-is-string@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npm.taobao.org/x-is-string/download/x-is-string-0.1.0.tgz#474b50865af3a49a9c4657f05acd145458f77d82"
+
+xml-formatter@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.npm.taobao.org/xml-formatter/download/xml-formatter-1.2.1.tgz#64177b767ca54572ce511dc325cde7a359028bbe"
+  dependencies:
+    xml-parser-xo "^2.1.1"
+
+xml-parser-xo@^2.1.1:
+  version "2.2.1"
+  resolved "https://registry.npm.taobao.org/xml-parser-xo/download/xml-parser-xo-2.2.1.tgz#fa096be59e2a6079011e6ff2f90f4021c28acdfb"
+  dependencies:
+    debug "^4.1.1"
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.1"

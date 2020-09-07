@@ -2,6 +2,7 @@ const PluginComment=Cloud.buildComment("Plugin")
 const PluginPagination=Cloud.buildPagination("Plugin")
 
 Cloud.addModule({
+	name:"we-office",
 	typeDefs:`
 		${require("./schema")}
 		${PluginComment.typeDefs}
