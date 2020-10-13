@@ -2240,9 +2240,9 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
-docx4js@^3.2.8:
-  version "3.2.8"
-  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.8.tgz#a061a6040dfb62635e1ecbc64fdde8054b11fd89"
+docx4js@^3.2.9:
+  version "3.2.9"
+  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.9.tgz#41bdceb8f275359758b9fa42b60ef16438e4ef86"
   dependencies:
     cfb "^0.12.1"
     cheerio "^0.22.0"
@@ -3822,6 +3822,10 @@ iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
 
+jasmine-core@^3.5.0:
+  version "3.6.0"
+  resolved "https://registry.npm.taobao.org/jasmine-core/download/jasmine-core-3.6.0.tgz#491f3bb23941799c353ceb7a45b38a950ebc5a20"
+
 js-levenshtein@^1.1.3:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/js-levenshtein/download/js-levenshtein-1.1.6.tgz#c6cee58eb3550372df8deb85fad5ce66ce01d59d"
@@ -5315,14 +5319,14 @@ rc@^1.2.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@16.5.1, react-dom@^0.14.0, react-dom@^16.5.0, react-dom@^16.5.1:
-  version "16.5.1"
-  resolved "https://registry.npm.taobao.org/react-dom/download/react-dom-16.5.1.tgz#29d0c5a01ed3b6b4c14309aa91af6ec4eb4f292c"
+react-dom@16.7.0, react-dom@^0.14.0, react-dom@^16.5.0, react-dom@^16.5.1:
+  version "16.7.0"
+  resolved "https://registry.npm.taobao.org/react-dom/download/react-dom-16.7.0.tgz?cache=0&sync_timestamp=1600732012940&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-dom%2Fdownload%2Freact-dom-16.7.0.tgz#a17b2a7ca89ee7390bc1ed5eb81783c7461748b8"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    schedule "^0.4.0"
+    scheduler "^0.12.0"
 
 react-event-listener@^0.5.1:
   version "0.5.10"
@@ -5515,14 +5519,14 @@ react-waypoint@^9.0.0:
     prop-types "^15.0.0"
     react-is "^16.6.3"
 
-react@16.5.1, react@^0.14.0, react@^16.5.0, react@^16.5.1:
-  version "16.5.1"
-  resolved "https://registry.npm.taobao.org/react/download/react-16.5.1.tgz#8cb8e9f8cdcb4bde41c9a138bfbf907e66132372"
+react@16.7.0, react@^0.14.0, react@^16.5.0, react@^16.5.1:
+  version "16.7.0"
+  resolved "https://registry.npm.taobao.org/react/download/react-16.7.0.tgz?cache=0&sync_timestamp=1600733652285&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact%2Fdownload%2Freact-16.7.0.tgz#b674ec396b0a5715873b350446f7ea0802ab6381"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    schedule "^0.4.0"
+    scheduler "^0.12.0"
 
 read-pkg-up@^2.0.0:
   version "2.0.0"
@@ -5926,10 +5930,11 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-schedule@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.npm.taobao.org/schedule/download/schedule-0.4.0.tgz#fa20cfd0bfbf91c47d02272fd7096780d3170bbb"
+scheduler@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.npm.taobao.org/scheduler/download/scheduler-0.12.0.tgz?cache=0&sync_timestamp=1600731943151&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fscheduler%2Fdownload%2Fscheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
   dependencies:
+    loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
 scheduler@^0.13.6:
@@ -7013,9 +7018,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@^3.5.25:
-  version "3.5.25"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.25.tgz#77bc222c7959ed6eaaf56d8651d405e2241af57d"
+we-edit@^3.5.31:
+  version "3.5.31"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.31.tgz#9caa5d6ef61b258fd6de37d386a2937a8f69ac10"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
@@ -7036,12 +7041,13 @@ we-edit@^3.5.25:
     shortid "^2.2.8"
   optionalDependencies:
     cheerio "^1.0.0-rc.2"
-    docx4js "^3.2.8"
+    docx4js "^3.2.9"
     fetchable "^1.0.4"
     file-type "^14.1.4"
     fontkit "^1.8.0"
     get-system-fonts "^1.0.0"
     htmlparser2 "^3.9.2"
+    jasmine-core "^3.5.0"
     linebreak "^0.3.0"
     lodash.invoke "^4.5.2"
     material-ui "^0.19.4"

@@ -14,7 +14,7 @@
     "react-helmet": "^5.2.1",
     "react-markdown": "^4.2.2",
     "react-router": "^3.0.0",
-    "we-edit": "^3.5.25"
+    "we-edit": "^3.5.31"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -46,8 +46,8 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "resolutions": {
-    "react": "16.5.1",
-    "react-dom": "16.5.1",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
     "graphql": "^14.0.0",
     "immutable": "3.8.2"
   },
