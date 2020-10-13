@@ -11,7 +11,7 @@ before_install:
  - npm install yarn -g
 
 install:
- - yarn install
+ - yarn install --ignore-engines
 
 script:
  - yarn relay
