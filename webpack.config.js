@@ -28,7 +28,7 @@ module.exports=env=>{
 				test: /.js?$/,
 				use: 'source-map-loader',
 				enforce:"pre",
-				exclude: /get\-system\-fonts/
+				include: /(we-edit|docx4js)/
 			},{
 				test: /.js?$/,
 				use: 'babel-loader',
