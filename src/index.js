@@ -4,4 +4,4 @@ import {QiliApp} from "qili-app"
 
 import {WeOffice,routes} from "./we-office"
 
-QiliApp.render(<WeOffice>{routes}</WeOffice>)
+QiliApp.render(<WeOffice debug={true}>{routes}</WeOffice>)

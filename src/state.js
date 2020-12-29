@@ -13,6 +13,11 @@ export const ACTION={
 	OfficeChanged: payload=>({
 		type:`@@${DOMAIN}/OfficeChanged`,
 		payload
+	}),
+
+	PluginReady: payload=>({
+		type:`@@${DOMAIN}/PluginReady`,
+		payload
 	})
 }
 
@@ -30,6 +35,8 @@ export function reducer(state={
 			return {...state, qs:{...state.qs,...payload}}
 		case `@@${DOMAIN}/OfficeChanged`:
 			return {...state, officeChanged:Date.now()}
+		case `@@${DOMAIN}/PluginReady`:
+			return {...state, pluginLoaded:Date.now()}
 	}
 
 	return state

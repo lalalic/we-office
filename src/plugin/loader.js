@@ -3,6 +3,7 @@ import {connect} from "react-redux"
 import requirex from "./require"
 import {Dialog} from "material-ui"
 import immutable from "immutable"
+import {ACTION} from "../state"
 
 const isLocalTest=a=>a.startsWith("data:application/javascript;base64,")
 
@@ -116,7 +117,7 @@ export default connect(state=>({
 		componentDidUpdate(prev){
 			const {loading}=this.state
 			if(loading===null){
-				const {plugins}=this.props
+				const {plugins, dispatch}=this.props
 				if(plugins!=prev.plugins
 					&& !immutable.List(plugins).equals(immutable.List(prev.plugins))){
 					prev.plugins
@@ -133,9 +134,7 @@ export default connect(state=>({
 					this.tried=0
 					this.tryInstall(plugins)
 				}
-
-				const {onLoaded=a=>a}=this.props
-				onLoaded()
+				dispatch(ACTION.PluginReady())
 			}
 		}
 

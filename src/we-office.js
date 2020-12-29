@@ -2,7 +2,7 @@ import React,{Fragment, Component} from "react"
 import PropTypes from "prop-types"
 
 import {graphql} from "react-relay"
-import {compose, withProps,getContext} from "recompose"
+import {compose, withProps,getContext, setDisplayName} from "recompose"
 import {connect} from "react-redux"
 import {Router, Route, IndexRoute, browserHistory, Link} from "react-router"
 
@@ -34,6 +34,7 @@ import Developer from "./developer"
 FontManager.asService()
 
 export const WeOffice = compose(
+	setDisplayName("we-office"),
 	withProps(props=>({
 		project,
 		title:"we-office",

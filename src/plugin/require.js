@@ -25,13 +25,19 @@ const requires={
 	"stream":require("readable-stream"),
 	"readable-stream":require("readable-stream"),
 	"docx4js":require("docx4js"),
-	"lodash":require("lodash"),
+	"lodash":require("lodash")
 }
 
 export default window.require=function(a){
-	const required=requires[a]||window.require.imported[a]
+	const imported=window.require.imported
+	if(a==="dashboard"){
+		const k=Object.keys(imported).find(k=>imported[k]?.isDashboard)
+		return imported[k]
+	}
+	const required=requires[a]||imported[a]
 	if(!required){
 		throw new Error(`are you depend on plugin ${a}, but you don't buy it?`)
 	}
+	
 	return required
 }

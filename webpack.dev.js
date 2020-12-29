@@ -2,8 +2,9 @@ const path = require('path')
 const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const Visualizer=require("webpack-visualizer-plugin")
-
+process.env.NODE_ENV="local"
 module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
+	console.log(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
 	return {
 		...base,
 		entry:{

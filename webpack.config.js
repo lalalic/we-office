@@ -28,7 +28,7 @@ module.exports=env=>{
 				test: /.js?$/,
 				use: 'source-map-loader',
 				enforce:"pre",
-				include: /(we-edit|docx4js)/
+				include: /(we-edit|docx4js|qili-app)/
 			},{
 				test: /.js?$/,
 				use: 'babel-loader',
