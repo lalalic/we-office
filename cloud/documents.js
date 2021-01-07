@@ -50,8 +50,19 @@ class DocumentSession{
 		this.workers=[]
 	}
 
-	getStream(app){
-		return require('fs').createReadStream(this.path)
+	getStream({app,user}){
+		return app.runQL(
+			`query ($doc:String){
+				me{
+					document(id:$doc){
+						url
+					}
+				}
+			}`,
+			{doc:this.name},{},{app,user}
+		).then(({data:{me:{document:{url}}}})=>{
+			return fetch(url).then(res=>res.body)
+		})
 	}
 
 

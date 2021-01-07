@@ -1,5 +1,3 @@
-const {withFilter}=require("graphql-subscriptions")
-
 module.exports={
 	User:{
 		extensions(_,{},{app,user}){
@@ -203,23 +201,19 @@ module.exports={
 					}
 					throw new Error(`checkouted by others`)
 				})
-				.then(({data:{file_upload_token:{token}}})=>{
-					debugger
-					return {token,id:_id}
-				})
+				.then(({data:{file_upload_token:{token}}})=>({token,id:_id}))
 		}
 	},
 	Anonymous:{
 		plugins(_,{type,searchText,first,after},{app}){
-			return app.nextPage("Plugin", {first,after}, cursor=>{
-				if(type && type.length){
-					cursor=cursor.filter({type:{$all:type}})
-				}
-				if(searchText){
-					cursor=cursor.filter({description: new RegExp(`${searchText}.*`,"i")})
-				}
-				return cursor
-			})
+			const query={first,after}
+			if(type && type.length){
+				query.type={$all:type}
+			}
+			if(searchText){
+				query.description=new RegExp(`${searchText}.*`,"i")
+			}
+			return app.nextPage("Plugin", query)
 		},
 		plugins_count(){
 			return 9
@@ -245,24 +239,22 @@ module.exports={
 					.then(all=>all.filter(a=>!!a))
 					.then(edges=>({edges,hasNextPage:false}))
 			}
+			const query={first,after}
+			if(type && type.length){
+				query.type={$all:type}
+			}
+			if(searchText){
+				query.description=new RegExp(`${searchText}.*`,"i")
+			}
 
-			return app.nextPage("Plugin", {first,after}, cursor=>{
-				if(type && type.length){
-					cursor=cursor.filter({type:{$all:type}})
-				}
-				if(searchText){
-					cursor=cursor.filter({description: new RegExp(`${searchText}.*`,"i")})
-				}
+			if(mine){
+				query.author=user._id
+			}
+			if(favorite){
 
-				if(mine){
-					cursor=cursor.filter({author:user._id})
-				}
+			}
 
-				if(favorite){
-
-				}
-				return cursor
-			})
+			return app.nextPage("Plugin", query)
 		},
 		anonymous(){
 			return {}
@@ -323,23 +315,37 @@ module.exports={
 	},
 	Subscription:{
 		document_session:{
-			subscribe:withFilter(
-				(_,{doc},{app,user})=>{
-					const pubsub=app.pubsub
-					
-					setTimeout(()=>{
-						pubsub.publish(doc,{
-							target:user._id, 
-							action:{
-								type:"we-edit/session-ready", 
-								payload:{
-									url:`/document/${doc}`,
-									id:pubsub.getDocumentSession(doc).id,
-									workers:pubsub.getDocumentSession(doc).workers.filter(a=>a._id!==user._id)
-								}
+			async subscribe(_,{doc},{app,user}){//can't use withFilter since it doesn't support async 
+				const pubsub=app.pubsub
+				const {data:{me:{document:{checkouted,checkoutByMe,url:fileUrl}}}}=await app.runQL(
+					`query ($doc:String){
+						me{
+							document(id:$doc){
+								checkouted
+								checkoutByMe
+								url
 							}
-						})
-					}, 100)
+						}
+					}`,
+					{doc},_,{user}
+				)
+					
+				setTimeout(()=>{
+					pubsub.publish(doc,{
+						target:user._id, 
+						action:{
+							type:"we-edit/session-ready", 
+							payload:{
+								checkouted, checkoutByMe, 
+								url: checkouted ? fileUrl : `/document/${doc}`,
+								id:	 checkouted ? 1 : pubsub.getDocumentSession(doc).id,
+								workers:checkouted ? [] : pubsub.getDocumentSession(doc).workers.filter(a=>a._id!==user._id)
+							}
+						}
+					})
+				}, 100)
+
+				if(!checkouted){//don't need session
 					pubsub.getDocumentSession(doc).addWorker({_id:user._id, name:user.name||user.username})
 					pubsub.publish(doc,{
 						worker:user._id,
@@ -352,13 +358,13 @@ module.exports={
 							}
 						}
 					})
-					return pubsub.asyncIterator(doc)
-				},
-				({target, worker},vars,{user})=>{
-					return (!target || user._id==target) && worker!=user._id
 				}
-			),
-			resolve({worker,action},{},{app,user}){
+				return pubsub.asyncIterator(doc)
+			},
+			resolve({target, worker,action},{},{app,user}){
+				if(!((!target || user._id==target) && worker!=user._id)){//filter
+					return null
+				}
 				return (worker ? app.getDataLoader("User").load(worker) : Promise.resolve(worker))
 					.then(worker=>{
 						return Object.assign({action},{worker})

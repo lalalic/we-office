@@ -40,19 +40,7 @@ Cloud.addModule({
 	},
 	static(service){
 		service.on(/document\/(?<doc>.*)/,function({app,user,params:{doc}}, res){
-			app.runQL(`query document($doc:String){
-				me{
-					document(id:$doc){
-						url
-					}
-				}
-			}`,{doc},{},{user})
-				.then(data=>{
-					debugger
-					const url=data.data.me.document.url
-					res.redirect(url)
-				})
-			//res.reply(app.pubsub.getDocumentSession(doc).getStream(app))
+			app.pubsub.getDocumentSession(doc).getStream({app,user}).then(stream=>res.reply(stream))
 		})
 
 		service.on(/.*/,require("../src/www/server").default)
