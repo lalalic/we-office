@@ -1,8 +1,11 @@
 import ioFile from "we-edit/loader-stream-file"
 import ioBrowser from "we-edit/loader-stream-browser"
+import * as BuiltIn from "./built-in"
 
 ioFile.install()
 ioBrowser.install()
+BuiltIn.install()
+
 
 const requires={
 	"react":require("react"),

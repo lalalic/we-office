@@ -4,12 +4,13 @@ import requirex from "./require"
 import {Dialog} from "material-ui"
 import immutable from "immutable"
 import {ACTION} from "../state"
+import DefaultDashboard from "./built-in/dashboard-tasks"
 
 const isLocalTest=a=>a.startsWith("data:application/javascript;base64,")
 
 const isUrl=a=>/^http[s]?:\/\//i.test(a.trim())||isLocalTest(a)
 
-const imported=requirex.imported={}
+const imported=requirex.imported={DefaultDashboard}
 
 function install(plugin){
 	const {code,name,id, config,version, localName}=plugin

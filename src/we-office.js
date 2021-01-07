@@ -12,7 +12,7 @@ import {withInit, withQuery, withPagination} from "qili-app/graphql"
 import project from "../package.json"
 
 import {reducer as weReducer, DOMAIN as weDOMAIN,  Loader} from "we-edit"
-import {Office, TitleBar, Dashboard} from "we-edit/office"
+import {Office, TitleBar, Dashboard, reducer as officeReducer} from "we-edit/office"
 import {FontManager} from "we-edit/representation-pagination"
 
 import {MenuItem} from "material-ui"
@@ -118,9 +118,13 @@ const _=id=>id.split(":").pop()
 export const routes=(
 	<Router history={browserHistory}>
 		<Route path="/" component={({children})=>{
-						let officeWidget=null
-						if(children && children.props.route.path=="load/:type"){
+						let officeWidget=<WODashboard/>
+						const route=children?.props.route
+						const path=route?.path
+						if(path?.startsWith("load")){
 							officeWidget=children
+							children=null
+						}else if(path?.startsWith("documents")){
 							children=null
 						}
 
@@ -151,7 +155,6 @@ export const routes=(
 										}
 										titleBar={<TitleBar title="we-office"/>}
 										>
-										<WODashboard/>
 										<PluginLoader>
 											{officeWidget}
 											<Portal container={document.querySelector("#app").parentNode}>
@@ -174,11 +177,25 @@ export const routes=(
 				<IndexRoute component={Developer}/>
 			</Route>
 
-			<Route path="load/:type" component={({params:{type}, location:{query}})=>{
-					return <Loader {...{...query,type,now:true}}/>
-				}}>
+			<Route path="load/:type/:doc" component={compose(
+					getContext({router:PropTypes.object}),
+				)(({router, params:{type,doc}, location:{query}})=>
+					<Loader {...{
+						...query,type,doc, 
+						reducer(state, action){
+							state=officeReducer(...arguments)
+							switch(action.type){
+								case 'we-edit/CLOSE':
+									router.goBack()
+								break
+							}
+							return state
+						}}}
+						/>
+				)}
+			/>
 
-			</Route>
+			<Route path="documents(/:folder)" component={props=>null}/>
 
 			<Route path="market">
 				<IndexRoute component={compose(
