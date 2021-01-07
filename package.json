@@ -2,6 +2,7 @@
   "config": {
     "devPort": 9083,
     "service": "http://localhost:9080/1/graphql",
+    "ws":"ws://localhost:9080/1/graphql",
     "appId": "5b07b8571f6cab002e832d23"
   },
   "dependencies": {

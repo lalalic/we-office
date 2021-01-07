@@ -1,3 +1,4 @@
+const DocumentsPubSub=require("./documents").default
 const PluginComment=Cloud.buildComment("Plugin")
 const PluginPagination=Cloud.buildPagination("Plugin")
 
@@ -38,11 +39,32 @@ Cloud.addModule({
 		Plugin:[{name:1}],
 	},
 	static(service){
+		service.on(/document\/(?<doc>.*)/,function({app,user,params:{doc}}, res){
+			app.runQL(`query document($doc:String){
+				me{
+					document(id:$doc){
+						url
+					}
+				}
+			}`,{doc},{},{user})
+				.then(data=>{
+					debugger
+					const url=data.data.me.document.url
+					res.redirect(url)
+				})
+			//res.reply(app.pubsub.getDocumentSession(doc).getStream(app))
+		})
+
 		service.on(/.*/,require("../src/www/server").default)
 	},
+
+	init(cloud){
+		cloud.pubsub=new DocumentsPubSub(cloud.pubsub)
+	}
 })
 
 Cloud.logVariables=function(variables){
 	
 }
+
 module.exports=Cloud

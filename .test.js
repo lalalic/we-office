@@ -14,6 +14,7 @@ const _render=QiliApp.render
 QiliApp.render=function(app){
 	_render(React.cloneElement(app, {
 		service:project.config.service,
+		ws: project.config.ws,
 		isDev:false
 	}))
 }

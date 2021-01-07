@@ -34,7 +34,8 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			},
 			historyApiFallback:{
 				verbose:true,
-			},
+				disableDotRule: true,
+			},/*
 			proxy:{
 				"/www":{
 					target:"http://localhost:9080",
@@ -43,7 +44,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 					},
 					changeOrigin:true
 				}
-			}
+			}*/
 		},
 		plugins:[
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),

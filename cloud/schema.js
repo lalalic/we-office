@@ -23,6 +23,7 @@ enum PluginType{
     Stream
     Representation
     Office
+    Dashboard
 }
 
 type Anonymous{
@@ -41,6 +42,13 @@ extend type Mutation{
     buy_plugin(_id:ObjectID!, version:String, config:JSON):User
     withdraw_plugin(_id:ObjectID!, version:String, config:JSON):User
     user_setDeveloper(be:Boolean!):User
+    document_session(doc:String!,action:JSON!):Boolean
+    checkout_document(id:String!):Document
+    checkin_document(id:String!):Document
+    share_document(id:String!, to:String!):Document
+    delete_document(id:String!):Boolean
+    save_document(id:String!):FileToken
+    unshare_document(id:String!, to:String):Document
 }
 
 extend type User{
@@ -48,14 +56,31 @@ extend type User{
     plugins:[Plugin]!
     plugin(_id:ObjectID, name:String): Plugin
     isDeveloper: Boolean
+    documents(filter:String): [Document]
+    document(id:String): Document
 }
 
 extend type Subscription{
-    edit_session(_id:ObjectID): EditSession
+    document_session(doc:String!):DocumentUpdate
 }
 
-type EditSession{
-    creator:User,
-    authors:[User]
+type DocumentUpdate{
+    doc: String
+    worker: User
+    action: JSON
+}
+
+type Document{
+    id: String
+    name: String
+    type: String
+    url: URL
+    checkoutBy: User
+    shareBy: User
+    isMine: Boolean
+    checkouted: Boolean
+    checkoutByMe: Boolean
+    shared: Boolean
+    workers: [User]
 }
 `

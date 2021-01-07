@@ -11,6 +11,8 @@ module.exports=()=>({
                 case "react":
                 case "react-dom/server":
                 case "react-router":
+                case "graphql-subscriptions":
+                case "fs":
                     return callback(null, 'commonjs '+request)
             }
 
