@@ -32,15 +32,28 @@ export default class SessionLoader extends Loader.Collaborative{
                 variables:{doc},
                 onNext:({document_session:{worker, action}})=>{
                     switch(action.type){
-                        case "we-edit/session-ready":
-                            this.context.client.static(action.payload.url)
+                        case "we-edit/session-ready":{
+                            this.docId=action.payload.id
+                            const {checkoutByMe, checkouted, url, ...payload}=action.payload
+                            const loaded={...payload, onClose:unsubscribe}
+                            if(checkouted){
+                                unsubscribe()
+                                delete loaded.onClose
+                                //don't create reducer
+                                this.createReducer=()=>state=>state
+
+                                loaded.noRemoteSave=!checkoutByMe
+                            }
+
+                            (checkouted ? fetch(url) : this.context.client.static(url))
                                 .then(response=>response.blob())
                                 .then(data=>{
-                                    this.docId=action.payload.id
-                                    return {data, ...action.payload, onClose:unsubscribe}
+                                    loaded.data=data
+                                    return loaded
                                 })
                                 .then(resolve,reject)
                             break
+                        }
                         default:
                             inited.then(()=>{
                                 this.onNext(action,{...worker,_id:worker.id.split(":")[1]})

@@ -177,10 +177,10 @@ export const routes=(
 				<IndexRoute component={Developer}/>
 			</Route>
 
-			<Route path="load/:type/:doc" component={compose(
+			<Route path="load/:type/*" component={compose(
 					getContext({router:PropTypes.object}),
-				)(({router, params:{type,doc}, location:{query}})=>
-					<Loader {...{
+				)(({router, params:{type,splat:doc}, location:{query}})=>{
+					return <Loader {...{
 						...query,type,doc, 
 						reducer(state, action){
 							state=officeReducer(...arguments)
@@ -192,7 +192,7 @@ export const routes=(
 							return state
 						}}}
 						/>
-				)}
+				})}
 			/>
 
 			<Route path="documents(/:folder)" component={props=>null}/>
