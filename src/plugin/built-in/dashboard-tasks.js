@@ -44,9 +44,8 @@ const Documents=compose(
             variables:{folder},
         }
     }),
-    withProps(({data,router:{params:{folder}}})=>({
+    withProps(({data})=>({
         documents:data.me.documents,
-        folder,
     })),
     withFragment({
         documents:graphql`fragment dashboardTasks_document on Document @relay(plural: true){
@@ -226,7 +225,7 @@ const Documents=compose(
         }
 
         render(){
-            const {state:{target}, props:{documents, router, linkStyle,commentStyle}}=this
+            const {props:{documents, router, linkStyle,commentStyle}}=this
             return (
                 <div style={{flex:1, display:"flex", flexDirection:"column"}} onClick={e=>this.setState({target:null})}>
                     <List style={{flex:1, marginRight:20, marginLeft:20}}>

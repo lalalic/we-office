@@ -43,7 +43,7 @@ module.exports={
 		},
 		async documents(_,{filter},{app,user}){
 			const folder=`documents/${filter||""}/`.replace("//","/"),i=folder.length, j="documents/".length
-			const files=await app.findEntity("File",{_id:{$regex:`^${folder}`}, ...myDocuments(user)}, undefined, DOCUMENT)
+			const files=await app.findEntity("File",{_id:{$regex:`^${folder}`}, ...myDocuments(user)}, DOCUMENT)
 			return files.reduce((docs,{_id,...document})=>{
 				const k=_id.indexOf("/",i)
 				if(k!=-1){
@@ -307,10 +307,17 @@ module.exports={
 		shared({sharedTo}){
 			return sharedTo && sharedTo.length>0
 		},
-		workers({id,type},{},{app}){
-			if(type=="folder")
-				return []
-			return app.pubsub.getDocumentSession(id).workers
+		workers({id},{},{app,user}){
+			if(app.pubsub.hasDocumentSession(id)){
+				return app.pubsub.getDocumentSession(id)
+					.workers.map(a=>{
+						if(user._id==a._id){
+							return {...a, name:"Yourself"}
+						}
+						return a
+					})
+			}
+			return []
 		}
 	},
 	Subscription:{
@@ -329,37 +336,25 @@ module.exports={
 					}`,
 					{doc},_,{user}
 				)
-					
-				setTimeout(()=>{
-					pubsub.publish(doc,{
-						target:user._id, 
-						action:{
-							type:"we-edit/session-ready", 
-							payload:{
-								checkouted, checkoutByMe, 
-								url: checkouted ? fileUrl : `/document/${doc}`,
-								id:	 checkouted ? 1 : pubsub.getDocumentSession(doc).id,
-								workers:checkouted ? [] : pubsub.getDocumentSession(doc).workers.filter(a=>a._id!==user._id)
-							}
+				
+				const asyncIterator=pubsub.asyncIterator(doc)
+				setTimeout(()=>pubsub.publish(doc,{
+					target:user._id, 
+					action:{
+						type:"we-edit/session-ready", 
+						payload:{
+							checkouted, checkoutByMe, 
+							url: checkouted ? fileUrl : `/document/${doc}`,
+							id:	 checkouted ? 1 : pubsub.getDocumentSession(doc).id,
+							workers:checkouted ? [] : pubsub.getDocumentSession(doc).workers.filter(a=>a._id!==user._id)
 						}
-					})
-				}, 100)
+					}
+				}),100)
 
-				if(!checkouted){//don't need session
-					pubsub.getDocumentSession(doc).addWorker({_id:user._id, name:user.name||user.username})
-					pubsub.publish(doc,{
-						worker:user._id,
-						action:{
-							type:"we-edit/selection/SELECTED",
-							payload:{
-								_id:user._id,
-								name:user.name||user.username,
-								selection:{}
-							}
-						}
-					})
+				if(!checkouted){
+					asyncIterator.user={_id:user._id, name:user.name||user.username}
 				}
-				return pubsub.asyncIterator(doc)
+				return asyncIterator
 			},
 			resolve({target, worker,action},{},{app,user}){
 				if(!((!target || user._id==target) && worker!=user._id)){//filter

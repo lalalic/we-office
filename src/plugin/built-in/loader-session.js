@@ -30,7 +30,10 @@ export default class SessionLoader extends Loader.Collaborative{
                     }
                 }`,
                 variables:{doc},
-                onNext:({document_session:{worker, action}})=>{
+                onNext:({document_session})=>{
+                    if(!document_session)
+                        return 
+                    const {worker, action}=document_session
                     switch(action.type){
                         case "we-edit/session-ready":{
                             this.docId=action.payload.id

@@ -5,28 +5,37 @@ export default class DocumentsPubSub{
 		this.documents={}
 	}
 
-	subscribe(name){
-		if(name=="ping"){
-			return this.pubsub.subscribe(...arguments)	
-		}
-		return this.pubsub.subscribe(...arguments)
-	}
-
-	unsubscribe(){
-		debugger
-		this.pubsub.unsubscribe(...arguments)
-	}
-
-	asyncIterator(){
-		return this.pubsub.asyncIterator(...arguments)
-	}
-
-	publish(name, action){
-		if(name!="ping"){
-			if(action.type=="we-edit/selection/selected"){
-				this.documents[name].selected(action.worker, action.payload)
+	asyncIterator(name){
+		const asyncIterator=this.pubsub.asyncIterator(...arguments)
+		const self=this
+		let user
+		Object.defineProperties(asyncIterator,{
+			user:{
+				set(v){
+					const session=self.getDocumentSession(name)
+					session.addWorker(user=v)
+				},
+				get(){
+					return user
+				}
 			}
-		}
+		});
+
+		(_return=>{
+			asyncIterator.return=function(){
+				const session=self.getDocumentSession(name)
+				session.removeWorker(user)
+				if(session.workers.length==0){
+					delete self.documents[name]
+				}
+				return _return()
+			}
+		})(asyncIterator.return.bind(asyncIterator));
+
+		return asyncIterator
+	}
+
+	publish(){
 		this.pubsub.publish(...arguments)
 	}
 
@@ -36,15 +45,14 @@ export default class DocumentsPubSub{
 		return this.documents[name]
 	}
 
-	unloadDocument(){
-		delete this.documents[name]
+	hasDocumentSession(name){
+		return this.documents[name]
 	}
 }
 
 var uuid=10
 class DocumentSession{
 	constructor(name){
-		this.path=`/Users/lir/Workspace/qili/docs/${name}`
 		this.name=name
 		this.id=(uuid++)*1000000
 		this.workers=[]
@@ -61,18 +69,29 @@ class DocumentSession{
 			}`,
 			{doc:this.name},{},{app,user}
 		).then(({data:{me:{document:{url}}}})=>{
-			return fetch(url).then(res=>res.body)
+			return fetch(encodeURI(url)).then(res=>res.body)
 		})
 	}
 
 
 	addWorker(worker){
-		if(!this.workers.find(a=>a._id==worker._id)){
-			this.workers.push(worker)
+		let found=this.workers.find(a=>a._id==worker._id)
+		if(!found){
+			this.workers.push(found={...worker,count:0})
 		}
+		found.count++
 	}
 
-	selected(worker, selection){
-		this.workers.find(a=>a._id==worker).selection=selection
+	removeWorker(worker){
+		const i=this.workers.findIndex(a=>a._id==worker._id)
+		const found=this.workers[i] 
+		found.count--
+		if(found.count<1){
+			this.workers.splice(i,1)
+		}
 	}
 }
+
+/**
+ * doc workers[{_id,name,counter}]
+ */

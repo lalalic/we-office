@@ -173,10 +173,6 @@ export const routes=(
 				}
 				>
 
-			<Route path="developer">
-				<IndexRoute component={Developer}/>
-			</Route>
-
 			<Route path="load/:type/*" component={compose(
 					getContext({router:PropTypes.object}),
 				)(({router, params:{type,splat:doc}, location:{query}})=>{
@@ -185,9 +181,15 @@ export const routes=(
 						reducer(state, action){
 							state=officeReducer(...arguments)
 							switch(action.type){
-								case 'we-edit/CLOSE':
-									router.goBack()
+								case 'we-edit/CLOSE':{
+									const {params:current}=router
+									if(current?.type==type && current?.splat==doc){
+										router.goBack()
+									}else{
+										//from history goBack, do nothing
+									}
 								break
+								}
 							}
 							return state
 						}}}
@@ -196,6 +198,10 @@ export const routes=(
 			/>
 
 			<Route path="documents(/:folder)" component={props=>null}/>
+
+			<Route path="developer">
+				<IndexRoute component={Developer}/>
+			</Route>
 
 			<Route path="market">
 				<IndexRoute component={compose(
