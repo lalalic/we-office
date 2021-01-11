@@ -54,8 +54,24 @@ module.exports=env=>{
 			},{
 				test:/.md$/,
 				use:'raw-loader'
-			}
-			]
+			},{
+				test:/dom-serializer\/index\.js$/,
+				loader:"string-replace-loader",
+				options:{
+					search:/function\s+formatAttrs\(/,
+					replace:`
+					function formatAttrs(attribs, opt){
+						if(!attribs)
+							return 
+						let out=_formatAttrs(...arguments)
+						if(globalThis.xxid && attribs.xxid){
+							out+='xxid="'+attribs.xxid+'"'
+						}
+						return out
+					}
+					function _formatAttrs(`
+				}
+			}]
 		},
 		externals:{
 			"module":"{}",

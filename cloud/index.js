@@ -40,7 +40,8 @@ Cloud.addModule({
 	},
 	static(service){
 		service.on(/document\/(?<doc>.*)/,function({app,user,params:{doc}}, res){
-			app.pubsub.getDocumentSession(doc).getStream({app,user}).then(stream=>res.reply(stream))
+			const stream=app.pubsub.getDocumentSession(doc).getStream({app,user})
+			res.reply(stream)
 		})
 
 		service.on(/.*/,require("../src/www/server").default)

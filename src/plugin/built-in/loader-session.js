@@ -1,17 +1,62 @@
+import React from "react"
 import PropTypes from "prop-types"
-import {Loader, ACTION} from "we-edit"
+import {Loader, Stream, ACTION} from "we-edit"
 import {requestSubscription} from "react-relay"
+import file from "qili-app/components/file"
+import {Toggle} from "material-ui"
+
+class SessionSaver extends Stream.Base{
+    static defaultProps={
+        ...super.defaultProps,
+        type:"session",
+        name:"Remote Save"
+    }
+
+    componentDidMount(){
+        this.doCreate()
+    }
+
+    write(chunk, encoding, callback){
+
+    }
+
+    onFinish(stream){
+        const {doc}=this.props
+        getToken(doc).then(({token})=>{
+            return file.upload(this.data,undefined,undefined,{key},token)
+        })
+    }
+}
 
 export default class SessionLoader extends Loader.Collaborative{
     static defaultProps={
         ...super.defaultProps,
         type:"session",
-        name:"cooperator session",
+        name:"Collaborative Session",
     }
     static contextTypes={
         ...super.contextTypes,
         store: PropTypes.any,
         client: PropTypes.any,
+    }
+
+    render(){
+        const {loaded, autoSave=true}=this.state
+        if(loaded){
+            return (
+                <div style={{position:"fixed",top:4, left:200,height:20}}>
+                    <Toggle 
+                        label="Auto Save" labelPosition="right" 
+                        value={autoSave} 
+                        style={{zoom:0.6}}
+                        onToggle={(e,autoSave)=>this.setState({autoSave},()=>{
+                            this.remoteDispatch({type:'we-edit/collaborative/autosave',payload:this.state.autoSave})
+                        })}
+                        />
+                </div>
+            )
+        }
+        return super.render()
     }
 
     load(){
@@ -37,8 +82,8 @@ export default class SessionLoader extends Loader.Collaborative{
                     switch(action.type){
                         case "we-edit/session-ready":{
                             this.docId=action.payload.id
-                            const {checkoutByMe, checkouted, url, ...payload}=action.payload
-                            const loaded={...payload, onClose:unsubscribe}
+                            const {checkoutByMe, checkouted, url, needPatchAll, ...payload}=action.payload
+                            const loaded={...payload, needPatchAll, onClose:unsubscribe}
                             if(checkouted){
                                 unsubscribe()
                                 delete loaded.onClose
@@ -47,8 +92,8 @@ export default class SessionLoader extends Loader.Collaborative{
 
                                 loaded.noRemoteSave=!checkoutByMe
                             }
-
-                            (checkouted ? fetch(url) : this.context.client.static(url))
+                            ;
+                            (checkouted||needPatchAll ? fetch(url) : this.context.client.static(url))
                                 .then(response=>response.blob())
                                 .then(data=>{
                                     loaded.data=data

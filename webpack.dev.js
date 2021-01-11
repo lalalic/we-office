@@ -64,7 +64,7 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 			new Visualizer(),
 		],
 		watchOptions:{
-			ignored: /node_modules\/(?!qili\-app|we\-edit)/
+			ignored: /node_modules\/(?!qili\-app|we\-edit|docx4js)/
 		}
 	}
 }

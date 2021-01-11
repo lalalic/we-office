@@ -2,20 +2,20 @@
   "config": {
     "devPort": 9083,
     "service": "http://localhost:9080/1/graphql",
-    "ws":"ws://localhost:9080/1/graphql",
+    "ws": "ws://localhost:9080/1/graphql",
     "appId": "5b07b8571f6cab002e832d23"
   },
   "dependencies": {
     "graphql": "^14.0.0",
     "immutable": "^3.8.2",
-    "qili-app": "^1.7.5",
+    "qili-app": "^1.7.8",
     "qili-cli": "^1.4.9",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-helmet": "^5.2.1",
     "react-markdown": "^4.2.2",
     "react-router": "^3.0.0",
-    "we-edit": "^3.5.34"
+    "we-edit": "3.5.43"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -39,9 +39,11 @@
     "raw-loader": "^3.1.0",
     "relay-compiler": "^5.0.0",
     "source-map-loader": "^0.2.4",
+    "string-replace-loader": "^3.0.1",
     "style-loader": "^1.0.0",
     "subscriptions-transport-ws": "^0.9.16",
     "transform-loader": "^0.2.4",
+    "trim-right": "^1.0.1",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
     "webpack-dev-server": "^3.8.0",

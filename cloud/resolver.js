@@ -135,7 +135,18 @@ module.exports={
 				.then(()=>({_id:user._id, isDeveloper:be}))
 		},
 		document_session(_,{doc,action},{app,user}){
-			app.pubsub.publish(doc,{worker:user._id,action})
+			switch(action.type){
+				case 'we-edit/collaborative/autosave':
+					app.pubsub.getDocumentSession(doc).setAutosave(action.payload, user)
+				break
+				case 'we-edit/collaborative/save':
+					app.pubsub.getDocumentSession(doc).applyPatch(action.payload, user)
+				break
+				default:
+					app.pubsub.publish(doc,{worker:user._id,action})
+				break
+			}
+			
 			return true
 		},
 		checkout_document(_,{id,_id=`documents/${id}`},{app,user}){
@@ -344,8 +355,10 @@ module.exports={
 						type:"we-edit/session-ready", 
 						payload:{
 							checkouted, checkoutByMe, 
-							url: checkouted ? fileUrl : `/document/${doc}`,
 							id:	 checkouted ? 1 : pubsub.getDocumentSession(doc).id,
+							uid: checkouted ? 1 : pubsub.getDocumentSession(doc).workerUid(user),
+							url: checkouted||!pubsub.getDocumentSession(doc).streamReady() ? fileUrl : `/document/${doc}`,
+							needPatchAll: !checkouted && !pubsub.getDocumentSession(doc).streamReady(),
 							workers:checkouted ? [] : pubsub.getDocumentSession(doc).workers.filter(a=>a._id!==user._id)
 						}
 					}
