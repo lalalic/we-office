@@ -47,7 +47,7 @@ export default class SessionLoader extends Loader.Collaborative{
                 <div style={{position:"fixed",top:4, left:200,height:20}}>
                     <Toggle 
                         label="Auto Save" labelPosition="right" 
-                        value={autoSave} 
+                        value={autoSave} defaultToggled={true}
                         style={{zoom:0.6}}
                         onToggle={(e,autoSave)=>this.setState({autoSave},()=>{
                             this.remoteDispatch({type:'we-edit/collaborative/autosave',payload:this.state.autoSave})
@@ -78,7 +78,7 @@ export default class SessionLoader extends Loader.Collaborative{
                 onNext:({document_session})=>{
                     if(!document_session)
                         return 
-                    const {worker, action}=document_session
+                    const {worker={}, action}=document_session
                     switch(action.type){
                         case "we-edit/session-ready":{
                             this.docId=action.payload.id
@@ -89,8 +89,6 @@ export default class SessionLoader extends Loader.Collaborative{
                                 delete loaded.onClose
                                 //don't create reducer
                                 this.createReducer=()=>state=>state
-
-                                loaded.noRemoteSave=!checkoutByMe
                             }
                             ;
                             (checkouted||needPatchAll ? fetch(url) : this.context.client.static(url))
@@ -104,7 +102,7 @@ export default class SessionLoader extends Loader.Collaborative{
                         }
                         default:
                             inited.then(()=>{
-                                this.onNext(action,{...worker,_id:worker.id.split(":")[1]})
+                                this.onNext(action,{...worker,_id:worker?.id.split(":")[1]})
                             })
                     }
                 }

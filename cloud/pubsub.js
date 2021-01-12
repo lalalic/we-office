@@ -27,6 +27,7 @@ export default class DocumentsPubSub{
 				session.removeWorker(user)
 				if(session.workers.length==0){
 					session.save()
+					session.close()
 					delete self.documents[name]
 				}
 				return _return()
@@ -65,7 +66,7 @@ class DocumentSession{
 		this.workers=[]
 		this.pubsub=pubsub
 
-		this.patchTimer=setInterval(this.pullPatch.bind(this), 60*1000)
+		this.patchTimer=setInterval(()=>this.pullPatch(), 60*1000)
 	}
 
 	streamReady(){
@@ -118,7 +119,7 @@ class DocumentSession{
 		const i=parseInt(Math.random()*10)%savers.length
 		const chosen=savers[i]
 		if(chosen){
-			this.pubsub.publish({target:chosen._id, action:{type:"we-edit/collaborative/save"}})
+			this.pubsub.publish(this.name, {target:chosen._id, action:{type:"we-edit/collaborative/save"}})
 		}
 	}
 
@@ -145,6 +146,10 @@ class DocumentSession{
 
 	save(){
 
+	}
+
+	close(){
+		this.patchTimer && clearInterval(this.patchTimer)
 	}
 }
 

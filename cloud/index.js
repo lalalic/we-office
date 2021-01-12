@@ -1,4 +1,4 @@
-const DocumentsPubSub=require("./documents").default
+const DocumentsPubSub=require("./pubsub").default
 const PluginComment=Cloud.buildComment("Plugin")
 const PluginPagination=Cloud.buildPagination("Plugin")
 
@@ -13,7 +13,8 @@ Cloud.addModule({
 	resolver:Cloud.merge(
 		PluginComment.resolver,
 		PluginPagination.resolver,
-		require("./resolver"),
+		require("./plugin"),
+		require("./document"),
 	),
 
 	persistedQuery:Object.assign({
