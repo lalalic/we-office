@@ -113,7 +113,7 @@ export default class SessionLoader extends Loader.Collaborative{
     }
 
     remoteDispatch(action){
-        this.context.client.send(
+        this.context.client.publish(
             graphql`mutation loaderSession_session_Mutation($doc:String!, $action:JSON!){
                 document_session(doc:$doc, action:$action)
             }`,
