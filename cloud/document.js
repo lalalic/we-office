@@ -1,22 +1,4 @@
-const withFilter=(asyncIteratorFn,filterFn)=>{
-	return function(a, ...args){
-		return Promise.resolve(asyncIteratorFn(...arguments))
-			.then(asyncIterator=>{
-				(_next=>{
-					const getNext =()=>_next().then(payload=>{
-						if(payload.done)
-							return payload
-						return Promise.resolve(filterFn(payload.value,...args)).catch(()=>false)
-							.then(filtered=>filtered===true ? payload : getNext())
-					})
-
-					asyncIterator.next=getNext
-				})(asyncIterator.next.bind(asyncIterator));
-				return asyncIterator
-			})
-	}
-}
-
+const {withFilter}=require("graphql-subscriptions")
 const myDocuments=user=>({$or:[{author:user._id},{sharedTo:{$elemMatch:{$eq:user._id}}}]})
 const getDocument=(...args)=>module.exports.User.document(...args)
 const DOCUMENT={_id:true, author:true,sharedTo:true,checkoutBy:true}
@@ -90,49 +72,20 @@ module.exports={
 	Subscription:{
 		document_session:{
 			subscribe:withFilter(
-				async function(_,{doc},{app,user}){//can't use withFilter since it doesn't support async 
-					const pubsub=app.pubsub
-					const {data:{me:{document:{checkouted,checkoutByMe,url:fileUrl,shared}}}}=await app.runQL(
-						`query ($doc:String){
-							me{
-								document(id:$doc){
-									shared
-									checkouted
-									checkoutByMe
-									url
-								}
-							}
-						}`,
-						{doc},_,{user}
-					)
-					
-					const asyncIterator=pubsub.asyncIterator(doc)
-					setTimeout(()=>pubsub.publish(doc,{
-						target:user._id, 
-						action:{
-							type:"we-edit/session-ready", 
-							payload:{
-								checkouted, checkoutByMe, shared,
-								id:	 checkouted||!shared ? 1 : pubsub.getDocumentSession(doc).id,
-								uid: checkouted||!shared ? 1 : pubsub.getDocumentSession(doc).workerUid(user),
-								url: !shared||checkouted||!pubsub.getDocumentSession(doc).streamReady() ? fileUrl : `/document/${doc}`,
-								needPatchAll: shared && !checkouted && !pubsub.getDocumentSession(doc).streamReady(),
-								workers:!shared ||checkouted ? [] : pubsub.getDocumentSession(doc).workers.filter(a=>a._id!==user._id)
-							}
-						}
-					}),100)
-
-					if(shared && !checkouted){
-						asyncIterator.user={_id:user._id, name:user.name||user.username}
+				(_,{doc},{app,user})=>app.pubsub.asyncIterator(doc,{app,user}),
+				({target, worker},{},{user})=>{
+					if(target){
+						return user._id==target
+					}else if(worker){
+						return worker!=user._id
 					}
-					return asyncIterator
-				},
-				({target, worker},{},{user})=>(!target || user._id==target) && worker!=user._id
+					return true
+				}
 			),
 			resolve({worker,action},{},{app}){
 				return (worker ? app.getDataLoader("User").load(worker) : Promise.resolve(worker))
 					.then(worker=>{
-						return Object.assign({action},{worker})
+						return worker ? {action,worker} : {action}
 					})
 			}
 		}

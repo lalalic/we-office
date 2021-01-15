@@ -181,6 +181,8 @@ export const routes=(
 						reducer(state, action){
 							state=officeReducer(...arguments)
 							switch(action.type){
+								case 'we-edit/init':
+									return officeReducer(state,{type:'we-edit/office',payload:{loader:{type,doc,query}}})
 								case 'we-edit/CLOSE':{
 									const {params:current}=router
 									if(current?.type==type && current?.splat==doc){
@@ -188,7 +190,7 @@ export const routes=(
 									}else{
 										//from history goBack, do nothing
 									}
-								break
+									break
 								}
 							}
 							return state

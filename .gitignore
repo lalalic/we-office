@@ -39,4 +39,4 @@ cloud/persisted-query.js
 
 .*rc
 
-dist/stats.html
+dist/*.html

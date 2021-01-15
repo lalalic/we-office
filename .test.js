@@ -1,12 +1,6 @@
 import React from "react"
 import project from "./package.json"
 import {QiliApp} from "qili-app"
-import File from "qili-app/components/file"
-
-const _upload=File.upload
-File.upload=function(){
-	return _upload(...arguments).catch(a=>a).then(a=>"images/icon.svg")
-}
 
 project.homepage="http://localhost:9083"
 
