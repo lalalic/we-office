@@ -5248,9 +5248,9 @@ punycode@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/punycode/download/punycode-2.1.0.tgz#5f863edc89b96db09074bad7947bf09056ca4e7d"
 
-qili-app@^1.7.8:
-  version "1.7.8"
-  resolved "https://registry.npm.taobao.org/qili-app/download/qili-app-1.7.8.tgz#0d0528a847caf056e28b6cbeea3932434de14f79"
+qili-app@^1.7.11:
+  version "1.7.11"
+  resolved "https://registry.npm.taobao.org/qili-app/download/qili-app-1.7.11.tgz#f710b8c492f08aeb613e940505819afe283a3beb"
   dependencies:
     graphql-tools "^4.0.0"
     graphql-type-json "^0.3.0"
@@ -7100,9 +7100,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@3.5.43:
-  version "3.5.43"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.43.tgz#d5946f9367776ca6352141f969f1a7c2b044e9bc"
+we-edit@^3.5.45:
+  version "3.5.45"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.45.tgz#3747d3d5456a42a501a327e04e5fd40b250a30cb"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
