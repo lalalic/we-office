@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Loader, Stream, ACTION} from "we-edit"
+import {Loader, Stream, ACTION, getFile, getActive} from "we-edit"
 import {reducer as officeReducer} from "we-edit/office"
 import {requestSubscription} from "react-relay"
 import file from "qili-app/components/file"
@@ -14,24 +14,11 @@ class SessionSaver extends Stream.Base{
         name:"Remote Save"
     }
 
-    componentDidMount(){
-        this.doCreate()
-    }
-
-    write(chunk, encoding, callback){
-        (this.data||(this.data=[])).push(chunk)
-        callback()
-    }
-
-    onFinish(stream){
-        this.props.save(this.data)
-    }
-
     doCreate(){
         return this.props.getDocInfo()
         .then(({checkouted, checkoutByMe, checkoutBy})=>{
             if(!checkouted || checkoutByMe){
-                return super.doCreate()
+                return this.props.save()
             }else{
                 throw new Error(`you can't save because ${checkoutBy.name} already checkouted`)
             }
@@ -55,25 +42,46 @@ class SessionLoader extends Loader.Collaborative{
         super(...arguments)
         this.save=this.save.bind(this)
         this.getDocInfo=this.getDocInfo.bind(this)
+        this.state={...this.state, autoSave:false}
     }
 
     render(){
-        const {loaded, autoSave=true}=this.state
-        if(loaded){
+        const {loaded, inited, autoSave}=this.state
+        if(loaded && inited){
             return (
                 <div style={{position:"fixed",top:4, left:200,height:20}}>
                     <Toggle 
-                        label="Auto Save1" labelPosition="right" 
-                        value={autoSave} defaultToggled={true}
+                        label="Auto Save" labelPosition="right" 
+                        value={autoSave} defaultToggled={false}
                         style={{zoom:0.6}}
-                        onToggle={(e,autoSave)=>this.setState({autoSave},()=>{
-                            this.remoteDispatch({type:'we-edit/collaborative/autosave',payload:this.state.autoSave})
-                        })}
+                        onToggle={(e,autoSave)=>this.setState({autoSave})}
                         />
                 </div>
             )
         }
         return super.render()
+    }
+
+    componentDidUpdate(){
+        const {state:{loaded, inited}, context:{store}, props:{interval=60}}=this
+        if(loaded && inited && !this.autosaver){
+            let changed=false, last
+            this.unsubscribeChangeState=store.subscribe(()=>{
+                const content=getActive(store.getState()).state.get('content')
+                if(!last)
+                    last=content
+                if(!changed && !content.equals(last)){
+                    changed=true
+                }
+            })
+            this.autosaver=setInterval(()=>{
+                if(!this.state.autoSave)
+                    return 
+                if(changed){
+                    this.save().then(a=>changed=false)
+                }
+            }, 1000*interval)
+        }
     }
 
     load(){
@@ -154,9 +162,9 @@ class SessionLoader extends Loader.Collaborative{
     }
 
     componentWillUnmount(){
-        if(this.docId){
-            this.context.store.dispatch(ACTION.CLOSE(this.docId))
-        }
+        this.autosaver && clearInterval(this.autosaver)
+        this.unsubscribeChangeState && this.unsubscribeChangeState()
+        this.docId && this.context.store.dispatch(ACTION.CLOSE(this.docId))
     }
 
     createReducer({office,needSession}){
@@ -187,17 +195,29 @@ class SessionLoader extends Loader.Collaborative{
         ).then(({data})=>data.me.document)
     }
 
-    save(data){
-        return this.context.client.runQL(
-            graphql`mutation loaderSession_doc_Mutation($doc:String!){
-                    save_document(id:$doc){
-                        token
-                        id
-                    }
-            }`,
-            {doc:this.props.doc},
-        ).then(({data:{save_document:{token,id:key}}})=>{
-            return file.upload({data:new Blob(data),key,lastModified:new Date(),token})
+    save(){
+        const {store, client}=this.context
+        return new Promise((resolve, reject)=>{
+            const state=getActive(store.getState()).state
+            const stream=getFile(state).stream(), data=[]
+            stream.on('readable',a=>{
+                while(a=stream.read())
+                    data.push(a)
+            })
+            stream.on('end',()=>resolve(data))
+            stream.on('error',reject)
+        }).then(data=>{
+            return client.runQL(
+                graphql`mutation loaderSession_doc_Mutation($doc:String!){
+                        save_document(id:$doc){
+                            token
+                            id
+                        }
+                }`,
+                {doc:this.props.doc},
+            ).then(({data:{save_document:{token,id:key}}})=>{
+                return file.upload({data:new Blob(data),key,lastModified:new Date(),token})
+            })
         })
     }
 }
