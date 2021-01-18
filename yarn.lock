@@ -2282,9 +2282,9 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
-docx4js@^3.2.14:
-  version "3.2.15"
-  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.15.tgz#a76ce6172337fb8f9f7bfeb869cf006e9439d2ba"
+docx4js@^3.2.16:
+  version "3.2.16"
+  resolved "https://registry.npm.taobao.org/docx4js/download/docx4js-3.2.16.tgz#3050d22b27a9208a8942c3d596b74614d835d0f7"
   dependencies:
     cfb "^0.12.1"
     cheerio "^0.22.0"
@@ -7100,9 +7100,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-we-edit@^3.5.46:
-  version "3.5.46"
-  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.46.tgz#cb7b9434c021a69b7f13447a9673fe55ab945fbd"
+we-edit@^3.5.47:
+  version "3.5.47"
+  resolved "https://registry.npm.taobao.org/we-edit/download/we-edit-3.5.47.tgz#6067a7bf7108db9da951470a98e744ef88b496b1"
   dependencies:
     extend "^3.0.2"
     fetch-any "^1.0.0"
@@ -7123,7 +7123,7 @@ we-edit@^3.5.46:
     shortid "^2.2.8"
   optionalDependencies:
     cheerio "^0.22.0"
-    docx4js "^3.2.14"
+    docx4js "^3.2.16"
     fetchable "^1.0.4"
     file-type "^14.1.4"
     fontkit "^1.8.0"
