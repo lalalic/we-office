@@ -67,11 +67,14 @@ class SessionLoader extends Loader.Collaborative{
         if(loaded && inited && !this.autosaver){
             let changed=false, last
             this.unsubscribeChangeState=store.subscribe(()=>{
-                const content=getActive(store.getState()).state.get('content')
-                if(!last)
-                    last=content
-                if(!changed && !content.equals(last)){
-                    changed=true
+                const active=getActive(store.getState())
+                if(active){
+                    const content=active.state.get('content')
+                    if(!last)
+                        last=content
+                    if(!changed && !content.equals(last)){
+                        changed=true
+                    }
                 }
             })
             this.autosaver=setInterval(()=>{
