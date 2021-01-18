@@ -170,8 +170,14 @@ class SessionLoader extends Loader.Collaborative{
     createReducer({office,needSession}){
         const reducer=super.createReducer(...arguments)
         return (state,action)=>{
-            if(!action.isRemote && action.type=='we-edit/init' && office){
-                state=officeReducer(state,{ type:'we-edit/office', payload:office})
+            if(!action.isRemote){
+                switch(action.type){
+                    case "we-edit/init":{
+                        office && (state=officeReducer(state,{ type:'we-edit/office', payload:office}));
+                        this.setState({inited:true})
+                        break
+                    }
+                }
             }
             return needSession ? reducer(state,action) : state
         }
