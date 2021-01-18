@@ -278,7 +278,7 @@ const Documents=compose(
                     return getToken(key).then(({token,_id})=>{
                         return upload(file,undefined, undefined,{key, name,size,lastModified},token)
                     }).then(a=>{
-                        this.context.client.runQL(graphql`
+                        this.props.client.runQL(graphql`
                             query dashboardTasks_document_Query($doc:String){
                                 me{
                                     document(id:$doc){
