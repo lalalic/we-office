@@ -217,16 +217,6 @@ const Documents=compose(
                                 const {name,size,lastModified}=data
                                 return upload(data,undefined, undefined,{key,name,size,lastModified},token)
                             })
-                        }).then(a=>{
-                            this.context.client.runQL(graphql`
-                                query dashboardTasks_document_Query($doc:String){
-                                    me{
-                                        document(id:$doc){
-                                            ...dashboardTasks_document
-                                        }
-                                    }
-                                }
-                            `,{doc:id})
                         })
                             
                     }}>Upload</MenuItem>
@@ -287,9 +277,18 @@ const Documents=compose(
                     const key=`documents/${folder}/${name}`.replace(/\/\//g,"/")
                     return getToken(key).then(({token,_id})=>{
                         return upload(file,undefined, undefined,{key, name,size,lastModified},token)
+                    }).then(a=>{
+                        this.context.client.runQL(graphql`
+                            query dashboardTasks_document_Query($doc:String){
+                                me{
+                                    document(id:$doc){
+                                        ...dashboardTasks_document
+                                    }
+                                }
+                            }
+                        `,{doc:`${folder}/${name}`})
                     })
-                }).then(a=>{
-                    this.context.client
+
                 })
         }
     }
