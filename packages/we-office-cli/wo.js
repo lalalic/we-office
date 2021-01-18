@@ -100,6 +100,17 @@ program
 			})
 	})
 
+program.command("dev [flag]")
+	.description("set/unset isDeveloper, support true[default]|false")
+	.action(async flag=>{
+		return (await getCloud())
+			.dev(flag=="false" ? false : true)
+			.catch(e=>{
+				console.debug(e)
+				console.error(chalk.red(e.message))
+			})
+	})
+
 program.parse(process.argv)
 
 if (!process.argv.slice(2).length) {

@@ -100,6 +100,10 @@ module.exports=class extends Cloud{
 			return Promise.reject(e)
 		}
 	}
+
+	dev(be){
+		return this.runQL("profile_setDeveloper_Mutation",{be})
+	}
 }
 
 module.exports.NAME="wo"
