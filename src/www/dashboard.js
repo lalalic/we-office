@@ -122,7 +122,7 @@ export default ({children,routes:[{path:root}], ...props})=>{
                 <div style={{flex:"none",borderTop:"1px solid gray"}}>
                     <p>
                         <span>© {new Date().getFullYear()} 文书部</span>
-                        <span style={{float:"right"}}>京ICP备15008710号-3</span>
+                        <a href="https://beian.miit.gov.cn/" target="_blank" style={{float:"right"}}>京ICP备15008710号-5</a>
                     </p>
                 </div>
             </footer>
