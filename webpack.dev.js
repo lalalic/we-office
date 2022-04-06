@@ -3,12 +3,14 @@ const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const Visualizer=require("webpack-visualizer-plugin")
 process.env.NODE_ENV="local"
+
+
 module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
 	console.log(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
 	return {
 		...base,
 		entry:{
-			index:["@babel/polyfill","qili-app/index.less","./src/index.less","./.test.www.js"],
+			"index":["@babel/polyfill","qili-app/index.less","./src/index.less","./.test.www.js"],
 			app:["@babel/polyfill","./.test.js","./src/index.js"]
 		},
 		devtool: 'source-map',
@@ -32,36 +34,44 @@ module.exports=(base,HTML,port=require("./package.json").config.devPort)=>{
                 	res.send(require("fs").readFileSync(path.join(__dirname, 'node_modules/we-edit/Arial')));
 				})
 			},
+			/*
 			historyApiFallback:{
 				verbose:true,
 				disableDotRule: true,
-			},/*
+			},
+			
 			proxy:{
-				"/www":{
+				"/":{
 					target:"http://localhost:9080",
 					pathRewrite:{
-						"/www":"/1/5b07b8571f6cab002e832d23/static",
+						"/":"/1/5b07b8571f6cab002e832d23/static/",
 					},
-					changeOrigin:true
+					changeOrigin:true,
 				}
-			}*/
+			},
+			*/
 		},
 		plugins:[
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
 			new ContextReplacementPlugin(/source-map[\/\\]lib/, /\.js$/),
+			//test for editor
 			new HtmlWebpackPlugin({
 				...HTML,
+				fillname:"app.html",
 				chunks:["app"]
 			}),
 			
-		
+			//test for site www
 			new HtmlWebpackPlugin({
+				filename: 'index.html',
 				template:require.resolve('./www.tmpl'),
-				filename:"./d/index.html",
 				chunks:["index"]
 			}),
-			new Visualizer(),
+			
+			new Visualizer({
+				filename: 'stats.html'
+			}),
 		],
 		watchOptions:{
 			ignored: /node_modules\/(?!qili\-app|we\-edit|docx4js)/

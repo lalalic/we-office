@@ -10,6 +10,30 @@ const HTML={
 	extra:'<div id="wo" style="position:fixed;top:0px;left:0px;width:100%;height:100%;"/>',
 }
 
+class MarkdownFile{
+	constructor(resourcePath){
+		this.resourcePath=resourcePath
+		const {groups}=/(?<isWE>we-edit)?(?:(?<project>[^/]*)\/src\/www\/(?<path>.*))?\/(?<hasDate>(?<year>\d{4})-(?<month>\d{1,2})-(?<day>\d{1,2})-)?(?<fileName>[^/]*)\.md$/.exec(resourcePath)||{}
+		if(groups){
+			Object.assign(this,groups)
+		}
+	}
+
+	name(){
+		return `${this.fileName}.[ext]`
+	}
+
+	outputPath(url,context){
+		const {path="docs"}=this
+		return `${path}/${url}`
+	}
+
+	publicPath(url,context){
+		const {path="docs"}=this
+		return `${path}/${url}`
+	}
+}
+
 module.exports=env=>{
 	const base={
 		entry:{
@@ -52,9 +76,6 @@ module.exports=env=>{
 				test:require.resolve("./cloud/index.js"),
 				use: "imports-loader?Cloud=qili-app/makeOfflineSchema"//path relative to test
 			},{
-				test:/.md$/,
-				use:'raw-loader'
-			},{
 				test:/dom-serializer\/index\.js$/,
 				loader:"string-replace-loader",
 				options:{
@@ -89,6 +110,7 @@ module.exports=env=>{
 				minify:true,
 			}),
 
+			/*
 			new HtmlWebpackPlugin({
 				...HTML,
 				chunks:["app"],
@@ -96,7 +118,7 @@ module.exports=env=>{
 				filename:"cordova.html",
 				extra:'<script type="text/javascript" src="cordova.js"></script>',
 			}),
-
+			*/
 			new HtmlWebpackInlineSourcePlugin()
 		]
 	}
@@ -107,3 +129,8 @@ module.exports=env=>{
 
 	return base
 }
+
+module.exports.MarkdownFile=MarkdownFile
+
+
+

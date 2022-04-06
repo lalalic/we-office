@@ -36,7 +36,9 @@ __generated__
 dist/plugins
 
 cloud/persisted-query.js
-
+cloud/*__generated.js
 .*rc
 
 dist/*.html
+dist/**/*.md
+cloud/**/*.md

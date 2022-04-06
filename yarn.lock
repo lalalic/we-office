@@ -2831,6 +2831,13 @@ figgy-pudding@^3.5.1:
   version "3.5.1"
   resolved "https://registry.npm.taobao.org/figgy-pudding/download/figgy-pudding-3.5.1.tgz#862470112901c727a0e495a80744bd5baa1d6790"
 
+file-loader@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.npmmirror.com/file-loader/-/file-loader-6.2.0.tgz#baef7cf8e1840df325e4390b4484879480eebe4d"
+  dependencies:
+    loader-utils "^2.0.0"
+    schema-utils "^3.0.0"
+
 file-type@^14.1.4:
   version "14.1.4"
   resolved "https://registry.npm.taobao.org/file-type/download/file-type-14.1.4.tgz#3ac109f2ea9e8f5573d000ec0c6bcdff07fd46de"
@@ -5248,9 +5255,9 @@ punycode@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/punycode/download/punycode-2.1.0.tgz#5f863edc89b96db09074bad7947bf09056ca4e7d"
 
-qili-app@^1.7.13:
-  version "1.7.13"
-  resolved "https://registry.npm.taobao.org/qili-app/download/qili-app-1.7.13.tgz#4f594d2fe798318befc5213b4e9c8428ac30b315"
+qili-app@^1.7.14:
+  version "1.7.14"
+  resolved "https://registry.npmmirror.com/qili-app/-/qili-app-1.7.14.tgz#f2c6ead20fc00fafe100c604ee8f322bdfb26e2a"
   dependencies:
     graphql-tools "^4.0.0"
     graphql-type-json "^0.3.0"
@@ -5286,7 +5293,7 @@ qili-cli@^1.4.3:
 
 qili-cli@^1.4.9:
   version "1.4.9"
-  resolved "https://registry.npm.taobao.org/qili-cli/download/qili-cli-1.4.9.tgz#44e58e4f3619c3faaad65e175d78c1591ec684b1"
+  resolved "https://registry.npmmirror.com/qili-cli/-/qili-cli-1.4.9.tgz#44e58e4f3619c3faaad65e175d78c1591ec684b1"
   dependencies:
     chalk "^2.4.0"
     commander "^2.15.1"

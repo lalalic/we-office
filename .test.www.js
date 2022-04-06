@@ -4,7 +4,7 @@ import routes, {App} from "./src/www/routes"
 import {config} from "./package.json"
 
 render(
-    React.cloneElement(routes,{path:window.rootPath||"/www/"}),
+    routes,//React.cloneElement(routes,{path:window.rootPath||"/www/"}),
     document.querySelector('#root'),
     {
         service:config.service,

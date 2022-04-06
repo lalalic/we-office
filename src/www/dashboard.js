@@ -58,9 +58,9 @@ export default ({children,routes:[{path:root}], ...props})=>{
                         </a>
                     </div>
                     <nav>
-                        <span><Link to={`${root}product`} activeClassName="activeLink">创意作品市场</Link></span>
+                        <span><Link to={`${root}blog`} activeClassName="activeLink">Blog</Link></span>
                         <span><Link to={`${root}market`} activeClassName="activeLink">创作工具市场</Link></span>
-                        <span><Link to={`${root}docs/dev`} activeClassName="activeLink">开发文档</Link></span>
+                        <span><Link to={`${root}docs`} activeClassName="activeLink">开发文档</Link></span>
                     </nav>
 
                     <div style={{flex:"none",paddingRight:20,margin:"auto"}}>
@@ -122,7 +122,7 @@ export default ({children,routes:[{path:root}], ...props})=>{
                 <div style={{flex:"none",borderTop:"1px solid gray"}}>
                     <p>
                         <span>© {new Date().getFullYear()} 文书部</span>
-                        <a href="https://beian.miit.gov.cn/" target="_blank" style={{float:"right"}}>京ICP备15008710号-5</a>
+                        <a href="https://beian.miit.gov.cn/" target="_blank" style={{float:"right",color:"white"}}>京ICP备15008710号-5</a>
                     </p>
                 </div>
             </footer>

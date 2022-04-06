@@ -1,3 +1,5 @@
+const {MarkdownFile}=require("./webpack.config")
+
 module.exports=()=>({
     entry:["@babel/polyfill","./cloud/index.js"],
     target:"node",
@@ -37,7 +39,7 @@ module.exports=()=>({
             use: "babel-loader",
             exclude: /node_modules/, 
         },{
-            test:/.less?$/,
+            test:/\.less?$/,
             use: [
                 'css-loader',
                 'less-loader',
