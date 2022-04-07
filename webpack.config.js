@@ -2,6 +2,7 @@ const path = require('path')
 const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
+const Visualizer=require("webpack-visualizer-plugin")
 
 const HTML={
 	template:require.resolve('qili-app/index.tmpl'),
@@ -120,6 +121,9 @@ module.exports=env=>{
 			}),
 			*/
 			new HtmlWebpackInlineSourcePlugin(),
+			new Visualizer({
+				filename: 'stats.html'
+			}),
 		]
 	}
 
