@@ -24,9 +24,10 @@ jobs:
         with:
           node-version: 14.x
           cache: 'yarn'
-      - run: yarn
+      - name: install dependencies
+        run: yarn
 
-      - name: sync cloud code to ali cloud
+      - name: sync cloud code to ali
         run: yarn sync --service $QILI --contact "$QILI_CONTACT" --token "$QILI_TOKEN"  --appId $QILI_APPID
 
       - name: build
@@ -43,7 +44,7 @@ jobs:
           tar cvfz a.tgz dist
           export SSHPASS=${{ secrets.DEPLOY_PASS }}
           sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null a.tgz "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
-          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "tar xvfz $DEPLOY_PATH/a.tgz -C $DEPLOY_PATH && rm $DEPLOY_PATH/a.tgz"
+          sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "tar xvfz $DEPLOY_PATH/a.tgz -C $DEPLOY_PATH"
       
       - name: publish we-office-cli
         uses: JS-DevTools/npm-publish@v1
