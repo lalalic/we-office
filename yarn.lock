@@ -5255,9 +5255,9 @@ punycode@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/punycode/download/punycode-2.1.0.tgz#5f863edc89b96db09074bad7947bf09056ca4e7d"
 
-qili-app@^1.7.14:
-  version "1.7.14"
-  resolved "https://registry.npmmirror.com/qili-app/-/qili-app-1.7.14.tgz#f2c6ead20fc00fafe100c604ee8f322bdfb26e2a"
+qili-app@^1.7.15:
+  version "1.7.15"
+  resolved "https://registry.npmmirror.com/qili-app/-/qili-app-1.7.15.tgz#7f4ad1b5d9475946bc98b212983736768ed981dc"
   dependencies:
     graphql-tools "^4.0.0"
     graphql-type-json "^0.3.0"
@@ -5280,9 +5280,9 @@ qili-app@^1.7.14:
   optionalDependencies:
     react-router "^3.0.0"
 
-qili-cli@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.npm.taobao.org/qili-cli/download/qili-cli-1.4.3.tgz#6ee40183b3b918b328f85129dd56e173d8713574"
+qili-cli@^1.4.10:
+  version "1.4.10"
+  resolved "https://registry.npmmirror.com/qili-cli/-/qili-cli-1.4.10.tgz#ac3e2cf9d18c1994e028111b7a4ad345a8b3afcf"
   dependencies:
     chalk "^2.4.0"
     commander "^2.15.1"
@@ -5291,9 +5291,9 @@ qili-cli@^1.4.3:
     prompts "^0.1.8"
     rc "^1.2.6"
 
-qili-cli@^1.4.9:
-  version "1.4.9"
-  resolved "https://registry.npmmirror.com/qili-cli/-/qili-cli-1.4.9.tgz#44e58e4f3619c3faaad65e175d78c1591ec684b1"
+qili-cli@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.npm.taobao.org/qili-cli/download/qili-cli-1.4.3.tgz#6ee40183b3b918b328f85129dd56e173d8713574"
   dependencies:
     chalk "^2.4.0"
     commander "^2.15.1"

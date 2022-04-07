@@ -8,8 +8,8 @@
   "dependencies": {
     "graphql": "^14.0.0",
     "immutable": "^3.8.2",
-    "qili-app": "^1.7.14",
-    "qili-cli": "^1.4.9",
+    "qili-app": "^1.7.15",
+    "qili-cli": "^1.4.10",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-helmet": "^5.2.1",
@@ -65,7 +65,7 @@
     "persist": "qili persist src cloud",
     "cloud": "webpack --env=cloud",
     "cloud.dev": "webpack --env=cloud.dev",
-    "sync": "qili publish --service https://api.qili2.com/1/graphql",
+    "sync": "qili publish",
     "sync.dev": "yarn cloud && qili publish --no-build-cloud --service http://localhost:9080/1/graphql"
   },
   "keywords": [
