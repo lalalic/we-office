@@ -34,7 +34,6 @@ jobs:
         run: |
           yarn relay
           yarn build -p
-      
       - name: zip and upload web pages
         run: | 
           rm dist/app.js
