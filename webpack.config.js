@@ -2,37 +2,12 @@ const path = require('path')
 const {ContextReplacementPlugin} = require("webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
-const Visualizer=require("webpack-visualizer-plugin")
 
 const HTML={
 	template:require.resolve('qili-app/index.tmpl'),
 	title:"we-office",
 	favicon: "./dist/favicon.ico",
 	extra:'<div id="wo" style="position:fixed;top:0px;left:0px;width:100%;height:100%;"/>',
-}
-
-class MarkdownFile{
-	constructor(resourcePath){
-		this.resourcePath=resourcePath
-		const {groups}=/(?<isWE>we-edit)?(?:(?<project>[^/]*)\/src\/www\/(?<path>.*))?\/(?<hasDate>(?<year>\d{4})-(?<month>\d{1,2})-(?<day>\d{1,2})-)?(?<fileName>[^/]*)\.md$/.exec(resourcePath)||{}
-		if(groups){
-			Object.assign(this,groups)
-		}
-	}
-
-	name(){
-		return `${this.fileName}.[ext]`
-	}
-
-	outputPath(url,context){
-		const {path="docs"}=this
-		return `${path}/${url}`
-	}
-
-	publicPath(url,context){
-		const {path="docs"}=this
-		return `${path}/${url}`
-	}
 }
 
 module.exports=env=>{
@@ -145,9 +120,6 @@ module.exports=env=>{
 			}),
 			*/
 			new HtmlWebpackInlineSourcePlugin(),
-			new Visualizer({
-				filename: 'stats.html'
-			}),
 		]
 	}
 
