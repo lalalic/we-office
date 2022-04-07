@@ -40,7 +40,9 @@ jobs:
           cp node_modules/we-edit/font-service.js dist
           cp node_modules/we-edit/Arial dist/fonts
           node -p "require('./package.json').version" > dist/app.apk.version
-          tar cvfz a.tgz dist
+          cd dist
+          tar cvfz ../a.tgz .
+          cd ..
           export SSHPASS=${{ secrets.DEPLOY_PASS }}
           sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null a.tgz "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
           sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "tar xvfz $DEPLOY_PATH/a.tgz -C $DEPLOY_PATH"
