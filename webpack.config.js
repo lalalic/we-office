@@ -130,7 +130,5 @@ module.exports=env=>{
 	return base
 }
 
-module.exports.MarkdownFile=MarkdownFile
-
 
 

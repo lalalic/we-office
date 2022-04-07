@@ -1,4 +1,3 @@
-const {MarkdownFile}=require("./webpack.config")
 
 module.exports=()=>({
     entry:["@babel/polyfill","./cloud/index.js"],
