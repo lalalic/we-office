@@ -27,7 +27,7 @@ jobs:
       - name: install dependencies
         run: yarn
 
-      - name: sync cloud code to ali
+      - name: sync cloud code to ali 
         run: yarn sync --service $QILI --contact "$QILI_CONTACT" --token "$QILI_TOKEN"  --appId $QILI_APPID
 
       - name: build
