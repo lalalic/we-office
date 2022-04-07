@@ -100,6 +100,30 @@ module.exports=env=>{
 			"net":"{}",
 			"fs":"{}"
 		},
+		optimization:{
+			splitChunks: {
+				chunks: 'async',
+				minSize: 30000,
+				maxSize: 0,
+				minChunks: 1,
+				maxAsyncRequests: 10,
+				maxInitialRequests: 5,
+				automaticNameDelimiter: '~',
+				automaticNameMaxLength: 30,
+				name: true,
+				cacheGroups: {
+				  vendors: {
+					test: /[\\/]node_modules[\\/]/,
+					priority: -10
+				  },
+				  default: {
+					minChunks: 2,
+					priority: -20,
+					reuseExistingChunk: true
+				  }
+				}
+			  }
+		},
 		plugins:[
 			new ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
 			new ContextReplacementPlugin(/transformation[\/\\]file/, /\.js$/),
